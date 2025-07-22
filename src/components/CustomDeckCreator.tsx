@@ -19,6 +19,8 @@ export function CustomDeckCreator({
 	const [showSaveDialog, setShowSaveDialog] = useState(false);
 	const [saveName, setSaveName] = useState("");
 	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+	const [apiKey, setApiKey] = useState("");
+	const [showApiKeyInput, setShowApiKeyInput] = useState(false);
 
 	const generateDeck = async () => {
 		if (!topic.trim()) {
@@ -30,7 +32,7 @@ export function CustomDeckCreator({
 		setError("");
 
 		try {
-			const cards = await generateDeckWithGemini(topic);
+			const cards = await generateDeckWithGemini(topic, apiKey);
 			setGeneratedCards(cards);
 		} catch (err) {
 			const errorMessage =
@@ -65,6 +67,23 @@ export function CustomDeckCreator({
 		setError("");
 	};
 
+	const handleGenerateClick = () => {
+		// Check if API key is available
+		const envApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+		if (!envApiKey && !apiKey) {
+			setShowApiKeyInput(true);
+			return;
+		}
+		generateDeck();
+	};
+
+	const handleApiKeySubmit = () => {
+		if (apiKey.trim()) {
+			setShowApiKeyInput(false);
+			generateDeck();
+		}
+	};
+
 	return (
 		<div className="custom-deck-creator">
 			<div className="creator-header">
@@ -95,7 +114,7 @@ export function CustomDeckCreator({
 					<button
 						type="button"
 						className="generate-button"
-						onClick={generateDeck}
+						onClick={handleGenerateClick}
 						disabled={isGenerating || !topic.trim()}
 					>
 						{isGenerating ? (
@@ -181,6 +200,75 @@ export function CustomDeckCreator({
 									You can be creative: "space exploration", "famous landmarks"
 								</li>
 							</ul>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* API Key Input Dialog */}
+			{showApiKeyInput && (
+				<div className="api-key-dialog-overlay">
+					<div className="api-key-dialog">
+						<div className="api-key-dialog-header">
+							<h3>🔑 API Key Required</h3>
+							<button
+								type="button"
+								className="close-dialog-btn"
+								onClick={() => setShowApiKeyInput(false)}
+							>
+								×
+							</button>
+						</div>
+						<div className="api-key-dialog-content">
+							<p>To generate custom decks, you need a Google Gemini API key.</p>
+							<div className="api-key-instructions">
+								<p>
+									<strong>How to get your API key:</strong>
+								</p>
+								<ol>
+									<li>
+										Go to{" "}
+										<a
+											href="https://makersuite.google.com/app/apikey"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											Google AI Studio
+										</a>
+									</li>
+									<li>Sign in with your Google account</li>
+									<li>Click "Create API Key"</li>
+									<li>Copy the generated key</li>
+								</ol>
+							</div>
+							<div className="input-group">
+								<label htmlFor="apiKey">API Key:</label>
+								<input
+									id="apiKey"
+									type="password"
+									value={apiKey}
+									onChange={(e) => setApiKey(e.target.value)}
+									placeholder="Enter your Gemini API key"
+									className="api-key-input"
+								/>
+							</div>
+							<div className="api-key-dialog-actions">
+								<button
+									type="button"
+									className="cancel-api-key-btn"
+									onClick={() => setShowApiKeyInput(false)}
+								>
+									Cancel
+								</button>
+								<button
+									type="button"
+									className="confirm-api-key-btn"
+									onClick={handleApiKeySubmit}
+									disabled={!apiKey.trim()}
+								>
+									Generate Deck
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>

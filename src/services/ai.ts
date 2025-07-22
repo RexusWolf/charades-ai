@@ -15,11 +15,11 @@ interface AIGeneratedCard {
     category: string;
 }
 
-export async function generateDeckWithGemini(topic: string): Promise<Card[]> {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+export async function generateDeckWithGemini(topic: string, userApiKey?: string): Promise<Card[]> {
+    const apiKey = userApiKey || import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
-        throw new Error('Gemini API key not found. Please set VITE_GEMINI_API_KEY in your environment variables.');
+        throw new Error('Gemini API key not found. Please set VITE_GEMINI_API_KEY in your environment variables or provide it in the app.');
     }
 
     const prompt = `Generate 15 charades cards for the topic "${topic}". 

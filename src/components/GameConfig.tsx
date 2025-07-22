@@ -4,9 +4,15 @@ import type { GameConfig } from "../types";
 
 interface GameConfigScreenProps {
 	onStartGame: (config: GameConfig) => void;
+	onCreateCustomDeck?: () => void;
+	onShowSavedDecks?: () => void;
 }
 
-export function GameConfigScreen({ onStartGame }: GameConfigScreenProps) {
+export function GameConfigScreen({
+	onStartGame,
+	onCreateCustomDeck,
+	onShowSavedDecks,
+}: GameConfigScreenProps) {
 	const [config, setConfig] = useState<GameConfig>(DEFAULT_CONFIG);
 	const [selectedPreset, setSelectedPreset] = useState<string>("standard");
 
@@ -98,8 +104,8 @@ export function GameConfigScreen({ onStartGame }: GameConfigScreenProps) {
 							<span className="config-value">{config.maxCards} cards</span>
 						</div>
 
-						<div className="config-item checkbox">
-							<label>
+						<div className="config-item">
+							<label className="checkbox-label">
 								<input
 									type="checkbox"
 									checked={config.enablePreparationPhase}
@@ -117,14 +123,14 @@ export function GameConfigScreen({ onStartGame }: GameConfigScreenProps) {
 						{config.enablePreparationPhase && (
 							<div className="config-item">
 								<label htmlFor="preparationTimeLimit">
-									Preparation Time Limit (0 = no limit):
+									Preparation Time Limit:
 								</label>
 								<input
 									id="preparationTimeLimit"
 									type="range"
 									min="0"
-									max="120"
-									step="15"
+									max="60"
+									step="5"
 									value={config.preparationTimeLimit}
 									onChange={(e) =>
 										handleConfigChange(
@@ -134,15 +140,13 @@ export function GameConfigScreen({ onStartGame }: GameConfigScreenProps) {
 									}
 								/>
 								<span className="config-value">
-									{config.preparationTimeLimit === 0
-										? "No limit"
-										: `${config.preparationTimeLimit}s`}
+									{config.preparationTimeLimit}s
 								</span>
 							</div>
 						)}
 
-						<div className="config-item checkbox">
-							<label>
+						<div className="config-item">
+							<label className="checkbox-label">
 								<input
 									type="checkbox"
 									checked={config.autoStartNextPlayer}
@@ -150,7 +154,7 @@ export function GameConfigScreen({ onStartGame }: GameConfigScreenProps) {
 										handleConfigChange("autoStartNextPlayer", e.target.checked)
 									}
 								/>
-								Auto-start next player (skip preparation)
+								Auto-start Next Player
 							</label>
 						</div>
 					</div>
@@ -187,13 +191,33 @@ export function GameConfigScreen({ onStartGame }: GameConfigScreenProps) {
 					</div>
 				</div>
 
-				<button
-					type="button"
-					className="start-button"
-					onClick={handleStartGame}
-				>
-					Continue to Team Setup
-				</button>
+				<div className="config-actions">
+					{onCreateCustomDeck && (
+						<button
+							type="button"
+							className="custom-deck-button"
+							onClick={onCreateCustomDeck}
+						>
+							🤖 Create Custom Deck
+						</button>
+					)}
+					{onShowSavedDecks && (
+						<button
+							type="button"
+							className="saved-decks-button"
+							onClick={onShowSavedDecks}
+						>
+							💾 Load Saved Deck
+						</button>
+					)}
+					<button
+						type="button"
+						className="start-button"
+						onClick={handleStartGame}
+					>
+						Continue to Team Setup
+					</button>
+				</div>
 			</div>
 		</div>
 	);

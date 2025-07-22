@@ -51,7 +51,7 @@ export function CustomDeckCreator({
 
 	const handleSaveDeck = () => {
 		if (generatedCards.length > 0) {
-			const savedDeck = saveDeck(generatedCards, topic, saveName || topic);
+			saveDeck(generatedCards, topic, saveName || topic);
 			setShowSaveDialog(false);
 			setSaveName("");
 			setShowSuccessMessage(true);

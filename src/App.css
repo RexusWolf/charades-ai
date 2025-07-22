@@ -1330,6 +1330,30 @@ h1 {
 	font-size: 1.8rem;
 }
 
+.modal-header-actions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.import-export-btn {
+	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.import-export-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 .close-button {
 	background: none;
 	border: none;
@@ -1363,6 +1387,176 @@ h1 {
 .empty-state p {
 	margin: 0.5rem 0;
 	font-size: 1rem;
+}
+
+.empty-state-actions {
+	margin-top: 2rem;
+}
+
+.import-decks-btn {
+	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.import-decks-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Import/Export Dialog Styles */
+.import-export-dialog-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1003;
+	backdrop-filter: blur(10px);
+}
+
+.import-export-dialog {
+	background: white;
+	border-radius: 20px;
+	padding: 2rem;
+	max-width: 600px;
+	width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.import-export-dialog-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
+}
+
+.import-export-dialog-header h3 {
+	margin: 0;
+	color: #333;
+	font-size: 1.5rem;
+}
+
+.import-export-dialog-content {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.export-section,
+.import-section {
+	padding: 1.5rem;
+	background: #f8f9fa;
+	border-radius: 15px;
+	border: 2px solid #e9ecef;
+}
+
+.export-section h4,
+.import-section h4 {
+	margin: 0 0 0.5rem 0;
+	color: #333;
+	font-size: 1.2rem;
+}
+
+.export-section p,
+.import-section p {
+	margin: 0 0 1rem 0;
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.export-btn {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.export-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.file-input {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid #e0e0e0;
+	border-radius: 10px;
+	font-size: 1rem;
+	background: white;
+	color: #333;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.file-input:focus {
+	outline: none;
+	border-color: #4ecdc4;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.file-input:hover {
+	border-color: #4ecdc4;
+}
+
+.import-message {
+	padding: 12px 16px;
+	border-radius: 8px;
+	margin-top: 1rem;
+	font-weight: bold;
+}
+
+.import-message.success {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+}
+
+.import-message.error {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+}
+
+.import-export-tips {
+	padding: 1.5rem;
+	background: #fff3cd;
+	border-radius: 15px;
+	border: 2px solid #ffeaa7;
+}
+
+.import-export-tips h4 {
+	margin: 0 0 0.5rem 0;
+	color: #856404;
+	font-size: 1.1rem;
+}
+
+.import-export-tips ul {
+	margin: 0;
+	padding-left: 1.5rem;
+	color: #856404;
+}
+
+.import-export-tips li {
+	margin-bottom: 0.25rem;
+	font-size: 0.9rem;
 }
 
 .stats-section {

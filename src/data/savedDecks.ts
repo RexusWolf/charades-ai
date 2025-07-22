@@ -99,4 +99,93 @@ export function getDeckStats(): { total: number; totalCards: number; mostUsed: S
     );
 
     return { total, totalCards, mostUsed };
+}
+
+// Export functionality
+export function exportDecks(): string {
+    const savedDecks = getSavedDecks();
+    const exportData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        decks: savedDecks
+    };
+    return JSON.stringify(exportData, null, 2);
+}
+
+// Import functionality
+export function importDecks(importData: string): { success: boolean; message: string; importedCount: number } {
+    try {
+        const data = JSON.parse(importData);
+
+        // Validate the import data structure
+        if (!data.decks || !Array.isArray(data.decks)) {
+            return { success: false, message: 'Invalid file format. Expected a JSON file with a "decks" array.', importedCount: 0 };
+        }
+
+        const existingDecks = getSavedDecks();
+        const importedDecks: SavedDeck[] = [];
+        let skippedCount = 0;
+
+        for (const importedDeck of data.decks) {
+            // Validate deck structure
+            if (!importedDeck.name || !importedDeck.topic || !importedDeck.cards || !Array.isArray(importedDeck.cards)) {
+                skippedCount++;
+                continue;
+            }
+
+            // Check for duplicate names
+            const isDuplicate = existingDecks.some(existing => existing.name === importedDeck.name);
+
+            if (isDuplicate) {
+                // Add suffix to duplicate names
+                let newName = importedDeck.name;
+                let counter = 1;
+                while (existingDecks.some(existing => existing.name === newName) ||
+                    importedDecks.some(imported => imported.name === newName)) {
+                    newName = `${importedDeck.name} (${counter})`;
+                    counter++;
+                }
+                importedDeck.name = newName;
+            }
+
+            // Create new deck with fresh ID and timestamps
+            const newDeck: SavedDeck = {
+                id: `deck-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                name: importedDeck.name,
+                topic: importedDeck.topic,
+                cards: importedDeck.cards.map((card: any, index: number) => ({
+                    id: Date.now() + index + Math.random(),
+                    word: card.word,
+                    category: card.category
+                })),
+                createdAt: new Date(),
+                useCount: 0
+            };
+
+            importedDecks.push(newDeck);
+        }
+
+        if (importedDecks.length === 0) {
+            return { success: false, message: 'No valid decks found in the import file.', importedCount: 0 };
+        }
+
+        // Save all decks
+        const allDecks = [...existingDecks, ...importedDecks];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allDecks));
+
+        const message = skippedCount > 0
+            ? `Imported ${importedDecks.length} decks. ${skippedCount} invalid decks were skipped.`
+            : `Successfully imported ${importedDecks.length} decks.`;
+
+        return { success: true, message, importedCount: importedDecks.length };
+
+    } catch (error) {
+        console.error('Error importing decks:', error);
+        return { success: false, message: 'Failed to parse the import file. Please check the file format.', importedCount: 0 };
+    }
+}
+
+// Clear all decks (for testing/reset purposes)
+export function clearAllDecks(): void {
+    localStorage.removeItem(STORAGE_KEY);
 } 

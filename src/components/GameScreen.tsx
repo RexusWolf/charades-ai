@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
-import { getAllPlayers } from "../data/teams";
+import { useCallback, useEffect, useState } from "react";
 import type {
 	Card as CardType,
 	GameConfig,
@@ -89,6 +88,24 @@ export function GameScreen({
 		setTurnState("playing");
 		setIsTimerRunning(true);
 	}, []);
+
+	const handleEndTurn = useCallback(() => {
+		// Save current round with remaining time
+		setRounds((prev) => [...prev, { ...currentRound, timeLeft }]);
+
+		// Move to next player in rotation order
+		const nextPlayerIndex = (currentPlayerIndex + 1) % rotationOrder.length;
+		setCurrentPlayerIndex(nextPlayerIndex);
+		setTimeLeft(config.secondsPerRound);
+		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
+		setIsTimerRunning(!config.enablePreparationPhase);
+	}, [
+		currentRound,
+		timeLeft,
+		currentPlayerIndex,
+		rotationOrder.length,
+		config,
+	]);
 
 	const handlePass = useCallback(() => {
 		if (currentCard && turnState === "playing") {
@@ -253,6 +270,18 @@ export function GameScreen({
 						/>
 					) : (
 						<NoCards />
+					)}
+
+					{turnState === "playing" && (
+						<div className="end-turn-container">
+							<button
+								type="button"
+								className="end-turn-button"
+								onClick={handleEndTurn}
+							>
+								End Turn Early
+							</button>
+						</div>
 					)}
 				</>
 			)}

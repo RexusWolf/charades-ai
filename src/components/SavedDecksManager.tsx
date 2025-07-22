@@ -110,36 +110,6 @@ export function SavedDecksManager({
 		}).format(date);
 	};
 
-	if (savedDecks.length === 0) {
-		return (
-			<div className="modal-overlay">
-				<div className="modal saved-decks-modal">
-					<div className="modal-header">
-						<h2>💾 Saved Decks</h2>
-						<button type="button" className="close-button" onClick={onClose}>
-							×
-						</button>
-					</div>
-					<div className="empty-state">
-						<div className="empty-icon">📚</div>
-						<h3>No Saved Decks</h3>
-						<p>You haven't saved any custom decks yet.</p>
-						<p>Generate a deck and save it to see it here!</p>
-						<div className="empty-state-actions">
-							<button
-								type="button"
-								className="import-decks-btn"
-								onClick={() => setShowImportExport(true)}
-							>
-								📥 Import Decks
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
-
 	return (
 		<div className="modal-overlay">
 			<div className="modal saved-decks-modal">
@@ -159,118 +129,139 @@ export function SavedDecksManager({
 					</div>
 				</div>
 
-				<div className="stats-section">
-					<div className="stat-item">
-						<span className="stat-label">Total Decks:</span>
-						<span className="stat-value">{stats.total}</span>
-					</div>
-					<div className="stat-item">
-						<span className="stat-label">Total Cards:</span>
-						<span className="stat-value">{stats.totalCards}</span>
-					</div>
-					{stats.mostUsed && (
-						<div className="stat-item">
-							<span className="stat-label">Most Used:</span>
-							<span className="stat-value">{stats.mostUsed.name}</span>
+				{savedDecks.length === 0 ? (
+					<div className="empty-state">
+						<div className="empty-icon">📚</div>
+						<h3>No Saved Decks</h3>
+						<p>You haven't saved any custom decks yet.</p>
+						<p>Generate a deck and save it to see it here!</p>
+						<div className="empty-state-actions">
+							<button
+								type="button"
+								className="import-decks-btn"
+								onClick={() => setShowImportExport(true)}
+							>
+								📥 Import Decks
+							</button>
 						</div>
-					)}
-				</div>
+					</div>
+				) : (
+					<>
+						<div className="stats-section">
+							<div className="stat-item">
+								<span className="stat-label">Total Decks:</span>
+								<span className="stat-value">{stats.total}</span>
+							</div>
+							<div className="stat-item">
+								<span className="stat-label">Total Cards:</span>
+								<span className="stat-value">{stats.totalCards}</span>
+							</div>
+							{stats.mostUsed && (
+								<div className="stat-item">
+									<span className="stat-label">Most Used:</span>
+									<span className="stat-value">{stats.mostUsed.name}</span>
+								</div>
+							)}
+						</div>
 
-				<div className="decks-list">
-					{savedDecks.map((deck) => (
-						<div key={deck.id} className="saved-deck-item">
-							<div className="deck-info">
-								<div className="deck-header">
-									{editingDeckId === deck.id ? (
-										<input
-											type="text"
-											value={editName}
-											onChange={(e) => setEditName(e.target.value)}
-											className="rename-input"
-										/>
-									) : (
-										<h3>{deck.name}</h3>
-									)}
-									<div className="deck-actions">
-										{editingDeckId === deck.id ? (
-											<>
-												<button
-													type="button"
-													className="save-rename-btn"
-													onClick={() => handleSaveRename(deck.id)}
-													disabled={!editName.trim()}
-												>
-													✓
-												</button>
-												<button
-													type="button"
-													className="cancel-rename-btn"
-													onClick={handleCancelRename}
-												>
-													✗
-												</button>
-											</>
-										) : (
-											<>
-												<button
-													type="button"
-													className="rename-btn"
-													onClick={() => handleStartRename(deck)}
-												>
-													✏️
-												</button>
-												<button
-													type="button"
-													className="delete-btn"
-													onClick={() => handleDeleteDeck(deck.id)}
-												>
-													🗑️
-												</button>
-											</>
-										)}
+						<div className="decks-list">
+							{savedDecks.map((deck) => (
+								<div key={deck.id} className="saved-deck-item">
+									<div className="deck-info">
+										<div className="deck-header">
+											{editingDeckId === deck.id ? (
+												<input
+													type="text"
+													value={editName}
+													onChange={(e) => setEditName(e.target.value)}
+													className="rename-input"
+												/>
+											) : (
+												<h3>{deck.name}</h3>
+											)}
+											<div className="deck-actions">
+												{editingDeckId === deck.id ? (
+													<>
+														<button
+															type="button"
+															className="save-rename-btn"
+															onClick={() => handleSaveRename(deck.id)}
+															disabled={!editName.trim()}
+														>
+															✓
+														</button>
+														<button
+															type="button"
+															className="cancel-rename-btn"
+															onClick={handleCancelRename}
+														>
+															✗
+														</button>
+													</>
+												) : (
+													<>
+														<button
+															type="button"
+															className="rename-btn"
+															onClick={() => handleStartRename(deck)}
+														>
+															✏️
+														</button>
+														<button
+															type="button"
+															className="delete-btn"
+															onClick={() => handleDeleteDeck(deck.id)}
+														>
+															🗑️
+														</button>
+													</>
+												)}
+											</div>
+										</div>
+										<div className="deck-details">
+											<p className="deck-topic">Topic: {deck.topic}</p>
+											<p className="deck-cards">{deck.cards.length} cards</p>
+											<p className="deck-created">
+												Created: {formatDate(deck.createdAt)}
+											</p>
+											{deck.lastUsed && (
+												<p className="deck-used">
+													Last used: {formatDate(deck.lastUsed)}
+												</p>
+											)}
+											<p className="deck-uses">
+												Used {deck.useCount} time
+												{deck.useCount !== 1 ? "s" : ""}
+											</p>
+										</div>
+									</div>
+									<div className="deck-preview">
+										<div className="preview-cards">
+											{deck.cards.slice(0, 3).map((card) => (
+												<div key={card.id} className="preview-card">
+													<div className="card-category">{card.category}</div>
+													<div className="card-word">{card.word}</div>
+												</div>
+											))}
+											{deck.cards.length > 3 && (
+												<div className="more-cards">
+													+{deck.cards.length - 3} more
+												</div>
+											)}
+										</div>
+										<button
+											type="button"
+											className="use-deck-btn"
+											onClick={() => handleUseDeck(deck.id)}
+										>
+											Use This Deck
+										</button>
 									</div>
 								</div>
-								<div className="deck-details">
-									<p className="deck-topic">Topic: {deck.topic}</p>
-									<p className="deck-cards">{deck.cards.length} cards</p>
-									<p className="deck-created">
-										Created: {formatDate(deck.createdAt)}
-									</p>
-									{deck.lastUsed && (
-										<p className="deck-used">
-											Last used: {formatDate(deck.lastUsed)}
-										</p>
-									)}
-									<p className="deck-uses">
-										Used {deck.useCount} time{deck.useCount !== 1 ? "s" : ""}
-									</p>
-								</div>
-							</div>
-							<div className="deck-preview">
-								<div className="preview-cards">
-									{deck.cards.slice(0, 3).map((card) => (
-										<div key={card.id} className="preview-card">
-											<div className="card-category">{card.category}</div>
-											<div className="card-word">{card.word}</div>
-										</div>
-									))}
-									{deck.cards.length > 3 && (
-										<div className="more-cards">
-											+{deck.cards.length - 3} more
-										</div>
-									)}
-								</div>
-								<button
-									type="button"
-									className="use-deck-btn"
-									onClick={() => handleUseDeck(deck.id)}
-								>
-									Use This Deck
-								</button>
-							</div>
+							))}
 						</div>
-					))}
-				</div>
+					</>
+				)}
 
 				{/* Import/Export Dialog */}
 				{showImportExport && (

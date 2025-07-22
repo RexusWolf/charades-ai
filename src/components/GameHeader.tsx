@@ -1,12 +1,12 @@
 interface GameHeaderProps {
 	timeLeft: number;
-	currentCardIndex: number;
+	cardsLeftToGuess: number;
 	totalCards: number;
 }
 
 export function GameHeader({
 	timeLeft,
-	currentCardIndex,
+	cardsLeftToGuess,
 	totalCards,
 }: GameHeaderProps) {
 	const formatTime = (seconds: number) => {
@@ -24,9 +24,9 @@ export function GameHeader({
 				</span>
 			</div>
 			<div className="progress">
-				<span className="progress-label">Cards:</span>
+				<span className="progress-label">Cards Left:</span>
 				<span className="progress-value">
-					{currentCardIndex + 1} / {totalCards}
+					{cardsLeftToGuess} / {totalCards}
 				</span>
 			</div>
 		</div>

@@ -229,11 +229,19 @@ export function GameScreen({
 
 	const totalRounds = Math.ceil(gameDeck.length / rotationOrder.length);
 
+	// Calculate total correct cards from all rounds plus current round
+	const totalCorrectCards =
+		rounds.reduce((sum, round) => sum + round.correctCards.length, 0) +
+		currentRound.correctCards.length;
+
+	// Calculate cards left to be guessed correctly
+	const cardsLeftToGuess = gameDeck.length - totalCorrectCards;
+
 	return (
 		<div className="app">
 			<GameHeader
 				timeLeft={timeLeft}
-				currentCardIndex={currentCardIndex}
+				cardsLeftToGuess={cardsLeftToGuess}
 				totalCards={gameDeck.length}
 			/>
 

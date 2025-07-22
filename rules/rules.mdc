@@ -1,0 +1,230 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# Guía de Arquitectura para Aplicaciones React/Vite
+
+Esta guía documenta los patrones de arquitectura, estructura y buenas prácticas observadas en el proyecto, para servir como referencia en futuros desarrollos.
+
+## Estructura de Directorios
+
+```
+src/
+├── app/                  # Rutas y layouts de Tansktack Router
+│   ├── (authenticated-pages)/    # Grupo de rutas que requieren autenticación
+│   ├── (unauthenticated-pages)/  # Grupo de rutas públicas
+│   ├── layout.tsx        # Layout principal de la aplicación
+│   └── globals.css       # Estilos globales y variables CSS
+├── components/           # Componentes de UI reutilizables a nivel de aplicación
+│   ├── Component/
+│   │   ├── Component.tsx # Implementación del componente
+│   │   ├── Component.module.css # Estilos encapsulados
+│   │   └── components/   # Subcomponentes específicos
+├── views/                # Componentes de vista (páginas) organizados por características
+│   ├── FeatureName/
+│   │   ├── FeatureName.tsx       # Componente principal de la vista
+│   │   ├── FeatureName.module.css # Estilos específicos de la vista
+│   │   ├── components/   # Componentes específicos de la vista
+│   │   ├── hooks/        # Hooks específicos de la vista
+│   │   ├── domain/       # Modelos y lógica de dominio
+│   │   └── contexts/     # Contextos React específicos de la vista
+├── shared/               # Código compartido entre características
+│   ├── hooks/            # Hooks reutilizables a nivel de aplicación
+│   ├── context/          # Contextos globales de la aplicación
+│   └── libs/             # Utilidades, wrappers de APIs, servicios
+└── mocks/                # Datos mock para testing/desarrollo
+```
+
+## Componentes
+
+### Reglas de Componentes
+
+1. **Encapsulación**: Cada componente debe estar en su propio directorio con su archivo de estilos.
+2. **Subcomponentes**: Los componentes específicos para un componente padre deben estar en un subdirectorio `components/`.
+3. **Prop Types**: Utilizar TypeScript para definir las props de los componentes.
+4. **Modularidad**: Extraer la lógica compleja a hooks personalizados.
+5. **Componentes de Presentación**: Preferir componentes funcionales con hooks.
+6. **Estructura del Archivo**:
+
+   ```tsx
+   import { useState } from 'react';
+   import styles from './Component.module.css';
+
+   type ComponentProps = {
+     // Props definidas aquí
+   };
+
+   export function Component({ prop1, prop2 }: ComponentProps) {
+     // Lógica del componente
+     return (
+       <div className={styles.container}>
+         {/* UI del componente */}
+       </div>
+     );
+   }
+   ```
+
+## Estilos
+
+### Reglas de Estilos
+
+1. **CSS Modules**: Utilizar CSS Modules para encapsular estilos por componente.
+2. **Variables CSS**: Definir variables globales en `globals.css` y utilizarlas en los módulos.
+3. **Nombrado BEM**: Seguir una nomenclatura tipo BEM para las clases CSS.
+4. **Responsive Design**: Usar media queries para adaptar el diseño a diferentes tamaños.
+5. **Estructura de CSS Module**:
+
+   ```css
+   .container {
+     display: flex;
+     align-items: center;
+     gap: var(--spacing-xl);
+   }
+
+   .item {
+     /* Estilos específicos */
+   }
+
+   @media (max-width: calc(var(--layout-max-width) + 8px)) {
+     .container {
+       padding: 0 var(--layout-padding-small-devices);
+     }
+   }
+   ```
+
+## Vistas (Feature-First)
+
+### Reglas de Vistas
+
+1. **Autosuficiencia**: Cada vista debe contener todos sus componentes, hooks y lógica específicos.
+2. **Domain-Driven Design**: Separar la lógica de negocio en modelos de dominio.
+3. **Hooks Específicos**: Crear hooks personalizados para cada necesidad específica de la vista.
+4. **Contextos Locales**: Utilizar contextos React para estados compartidos entre componentes de la vista.
+5. **Modelos como Clases**: Implementar modelos de dominio como clases con métodos que encapsulen comportamiento.
+6. **Estructura Recomendada**:
+
+   ```
+   ViewName/
+   ├── ViewName.tsx            # Componente principal
+   ├── ViewName.module.css     # Estilos
+   ├── components/             # Componentes específicos
+   ├── hooks/                  # Hooks específicos
+   │   ├── useData.ts          # Para fetching de datos
+   │   └── useFeature.ts       # Para lógica específica
+   ├── domain/                 # Modelos y lógica de negocio
+   │   └── Entity.ts           # Clases de dominio
+   └── contexts/               # Contextos específicos
+   ```
+
+## Manejo de Estado
+
+### Reglas de Estado
+
+1. **Estado Local**: Utilizar `useState` para estado de componente específico.
+2. **Estado Compartido**: Utilizar Context API para estado compartido entre componentes.
+3. **Custom Hooks**: Encapsular lógica de estado en hooks personalizados.
+4. **Persistencia**: Utilizar hooks específicos para persistencia (localStorage, sessionStorage).
+5. **Separación de Responsabilidades**: Separar estado UI del estado de dominio.
+6. **Ejemplo de Hook para Estado**:
+
+   ```tsx
+   export function useFeatureState() {
+     const [state, setState] = useState(initialState);
+
+     function updateState(newData) {
+       // Lógica para actualizar el estado
+       setState(prevState => ({ ...prevState, ...newData }));
+     }
+
+     return { state, updateState };
+   }
+   ```
+
+## Patrones de Datos
+
+### Reglas de Acceso a Datos
+
+1. **Hooks de API**: Encapsular llamadas a API en hooks personalizados.
+2. **Modelos Tipados**: Convertir respuestas de API a modelos tipados con TypeScript.
+3. **Clases de Dominio**: Utilizar clases para encapsular lógica de negocio sobre los datos.
+4. **Transformación de Datos**: Transformar datos de API en el nivel de hooks, no en los componentes.
+5. **Manejo de Errores**: Incluir manejo de errores en los hooks de API.
+6. **Ejemplo de Hook de API**:
+
+   ```tsx
+   export function useGetData() {
+     const [isLoading, setLoading] = useState(false);
+     const [error, setError] = useState<Error | null>(null);
+
+     async function getData(params) {
+       setLoading(true);
+       try {
+         const response = await fetch(`/api/endpoint?param=${params.value}`);
+         const data = await response.json();
+         return data.map(item => new EntityModel(item));
+       } catch (err) {
+         setError(err as Error);
+         return [];
+       } finally {
+         setLoading(false);
+       }
+     }
+
+     return { getData, isLoading, error };
+   }
+   ```
+
+## Integración con Vite
+
+### Reglas de Integración
+
+1. **Páginas Minimalistas**: Páginas de Vite deben ser simples importaciones de componentes de vistas.
+2. **Agrupación de Rutas**: Utilizar grupos de rutas para separar flujos autenticados y no autenticados.
+3. **Server vs. Client Components**: Usar `'use client'` solo cuando sea necesario.
+4. **Layouts Anidados**: Aprovechar los layouts anidados de Vite para estructura de UI común.
+5. **Ejemplo de Página Vite**:
+
+   ```tsx
+   'use client';
+
+   import FeatureView from '../../../views/FeatureName/FeatureName';
+
+   export default FeatureView;
+   ```
+
+## Testing
+
+### Reglas de Testing
+
+1. **Vitest**: Utilizar Vitest para testing unitario.
+2. **Testing Library**: Usar React Testing Library para pruebas de componentes.
+3. **MSW**: Utilizar MSW para mockear peticiones API en tests.
+4. **Cobertura**: Implementar tests que cubran lógica de negocio crítica.
+5. **Test por Característica**: Organizar tests junto a la característica que prueban.
+
+## Buenas Prácticas Generales
+
+1. **Consistencia**: Mantener consistencia en patrones, nombrado y estructura.
+2. **Cohesión**: Agrupar código relacionado junto (Feature-First).
+3. **Bajo Acoplamiento**: Minimizar dependencias entre módulos.
+4. **Inmutabilidad**: Preferir patrones inmutables en el manejo de estado.
+5. **TypeScript**: Utilizar TypeScript para tipado estático.
+6. **Componentes Pequeños**: Mantener componentes enfocados y pequeños.
+7. **Single Responsibility**: Cada archivo debe tener una única responsabilidad.
+8. **Convenciones de Nombrado**: Usar PascalCase para componentes, camelCase para funciones/variables.
+
+## Dependencias Principales
+
+- Vite/Tanstack Router para el framework
+- React 18+ para la UI
+- CSS Modules para estilos encapsulados
+- Titan React para sistema de diseño
+- TypeScript para tipado estático
+- Vitest para testing

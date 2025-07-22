@@ -45,6 +45,7 @@ export function GameScreen({
 	);
 	const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>(null);
 	const [isSwiping, setIsSwiping] = useState(false);
+	const [gameDeck, setGameDeck] = useState<CardType[]>(deck);
 
 	// Create rotation order: Team 1 Player 1, Team 2 Player 1, Team 3 Player 1, Team 1 Player 2, etc.
 	const createRotationOrder = useCallback(() => {
@@ -66,7 +67,7 @@ export function GameScreen({
 
 	const rotationOrder = createRotationOrder();
 	const currentPlayer = rotationOrder[currentPlayerIndex];
-	const currentCard = deck[currentCardIndex];
+	const currentCard = gameDeck[currentCardIndex];
 
 	// Initialize current round
 	useEffect(() => {
@@ -113,11 +114,22 @@ export function GameScreen({
 				...prev,
 				passedCards: [...prev.passedCards, currentCard],
 			}));
-			setCurrentCardIndex((prev) => prev + 1);
+
+			// Move the passed card to the bottom of the deck
+			setGameDeck((prevDeck) => {
+				const newDeck = [...prevDeck];
+				// Remove the current card from its position
+				newDeck.splice(currentCardIndex, 1);
+				// Add it to the bottom of the deck
+				newDeck.push(currentCard);
+				return newDeck;
+			});
+
+			// Don't increment currentCardIndex since the card was moved to the bottom
 			setSwipeDirection(null);
 			setIsSwiping(false);
 		}
-	}, [currentCard, turnState]);
+	}, [currentCard, turnState, currentCardIndex]);
 
 	const handleCorrect = useCallback(() => {
 		if (currentCard && turnState === "playing") {
@@ -195,7 +207,7 @@ export function GameScreen({
 
 	// Check if game is finished (all cards completed)
 	useEffect(() => {
-		if (currentCardIndex >= deck.length) {
+		if (currentCardIndex >= gameDeck.length) {
 			// Save final round
 			setRounds((prev) => [...prev, { ...currentRound, timeLeft }]);
 			setIsTimerRunning(false);
@@ -203,7 +215,7 @@ export function GameScreen({
 		}
 	}, [
 		currentCardIndex,
-		deck.length,
+		gameDeck.length,
 		currentRound,
 		timeLeft,
 		rounds,
@@ -215,14 +227,14 @@ export function GameScreen({
 		setCurrentRound((prev) => ({ ...prev, timeLeft }));
 	}, [timeLeft]);
 
-	const totalRounds = Math.ceil(deck.length / rotationOrder.length);
+	const totalRounds = Math.ceil(gameDeck.length / rotationOrder.length);
 
 	return (
 		<div className="app">
 			<GameHeader
 				timeLeft={timeLeft}
 				currentCardIndex={currentCardIndex}
-				totalCards={deck.length}
+				totalCards={gameDeck.length}
 			/>
 
 			{currentPlayer && (

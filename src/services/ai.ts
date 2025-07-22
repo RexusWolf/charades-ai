@@ -15,14 +15,14 @@ interface AIGeneratedCard {
     category: string;
 }
 
-export async function generateDeckWithGemini(topic: string, userApiKey?: string): Promise<Card[]> {
+export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 15): Promise<Card[]> {
     const apiKey = userApiKey || import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
         throw new Error('Gemini API key not found. Please set VITE_GEMINI_API_KEY in your environment variables or provide it in the app.');
     }
 
-    const prompt = `Generate 15 charades cards for the topic "${topic}". 
+    const prompt = `Generate ${cardCount} charades cards for the topic "${topic}". 
 	
 	IMPORTANT LANGUAGE INSTRUCTIONS:
 	- If the topic mentions a specific language (e.g., "Spanish", "French", "German", "Italian", "Portuguese", "Japanese", "Chinese", "Korean", "Russian", "Arabic", "Hindi", etc.), generate cards in that language
@@ -38,6 +38,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string)
 	- Keep words simple and well-known in the target language
 	- Avoid offensive or inappropriate content
 	- For language-specific topics, use common, recognizable words in that language
+	- Generate exactly ${cardCount} cards
 	
 	Examples:
 	For "animals" (English):

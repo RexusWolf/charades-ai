@@ -13,6 +13,7 @@ export function CustomDeckCreator({
 	onCancel,
 }: CustomDeckCreatorProps) {
 	const [topic, setTopic] = useState("");
+	const [cardCount, setCardCount] = useState(15);
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [generatedCards, setGeneratedCards] = useState<Card[]>([]);
 	const [error, setError] = useState("");
@@ -32,7 +33,7 @@ export function CustomDeckCreator({
 		setError("");
 
 		try {
-			const cards = await generateDeckWithGemini(topic, apiKey);
+			const cards = await generateDeckWithGemini(topic, apiKey, cardCount);
 			setGeneratedCards(cards);
 		} catch (err) {
 			const errorMessage =
@@ -106,6 +107,24 @@ export function CustomDeckCreator({
 						className="topic-input"
 						disabled={isGenerating}
 					/>
+				</div>
+
+				<div className="input-group">
+					<label htmlFor="cardCount">Number of Cards:</label>
+					<div className="card-count-selector">
+						<input
+							id="cardCount"
+							type="range"
+							min="5"
+							max="50"
+							step="5"
+							value={cardCount}
+							onChange={(e) => setCardCount(parseInt(e.target.value))}
+							className="card-count-slider"
+							disabled={isGenerating}
+						/>
+						<span className="card-count-value">{cardCount} cards</span>
+					</div>
 				</div>
 
 				{error && <div className="error-message">{error}</div>}

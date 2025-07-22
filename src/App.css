@@ -486,6 +486,236 @@ h1 {
 	font-weight: 500;
 }
 
+/* New Team Setup Styles */
+.setup-section {
+	margin-bottom: 2rem;
+}
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.section-header h2 {
+	margin: 0;
+	font-size: 1.5rem;
+	color: white;
+}
+
+.add-button {
+	background: linear-gradient(45deg, #4ecdc4, #44a08d);
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.add-form {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.input-field {
+	flex: 1;
+	padding: 10px 15px;
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.1);
+	color: white;
+	font-size: 1rem;
+	backdrop-filter: blur(10px);
+}
+
+.input-field::placeholder {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.input-field:focus {
+	outline: none;
+	border-color: #4ecdc4;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.save-button {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.save-button:hover:not(:disabled) {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.save-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.team-actions {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.add-player-btn {
+	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.add-player-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.remove-team-btn,
+.remove-player-btn {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.remove-team-btn:hover,
+.remove-player-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.no-players {
+	color: #999;
+	font-style: italic;
+	margin: 0;
+}
+
+.player-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.5rem 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	color: #333;
+}
+
+.player-item span {
+	flex: 1;
+}
+
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	backdrop-filter: blur(5px);
+}
+
+.modal {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 15px;
+	padding: 2rem;
+	min-width: 300px;
+	max-width: 90vw;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	text-align: center;
+}
+
+.modal h3 {
+	margin: 0 0 1rem 0;
+	color: #333;
+	font-size: 1.3rem;
+}
+
+.modal-actions {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-top: 1.5rem;
+}
+
+.cancel-button {
+	background: linear-gradient(45deg, #6c757d, #495057);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.setup-actions {
+	margin: 1rem 0;
+	text-align: center;
+}
+
+.balance-button {
+	background: linear-gradient(45deg, #ffd93d, #fcc419);
+	color: #333;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.balance-button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
 /* Player Turn Styles */
 .player-turn {
 	background: rgba(255, 255, 255, 0.1);

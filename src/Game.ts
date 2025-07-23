@@ -63,9 +63,10 @@ export class Game {
     }
 
     getCurrentPlayer(): Player | null {
+        console.log('getCurrentPlayer', this.currentTeamIndex, this.currentPlayerIndex);
         const currentTeam = this.teams[this.currentTeamIndex];
         if (!currentTeam || this.currentPlayerIndex >= currentTeam.players.length) {
-            return null;
+            return currentTeam.players[this.currentPlayerIndex % currentTeam.players.length];
         }
         return currentTeam.players[this.currentPlayerIndex];
     }
@@ -180,13 +181,12 @@ export class Game {
         // Save the current turn
         currentRound.addTurn({ ...this.currentTurn });
 
-        // Move to next player/team
-        this.currentPlayerIndex++;
+        // Move to next team
+        this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
 
-        // If we've gone through all players in the current team, move to next team
-        if (this.currentPlayerIndex >= this.teams[this.currentTeamIndex].players.length) {
-            this.currentPlayerIndex = 0;
-            this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
+        // If we've cycled through all teams, move to next player
+        if (this.currentTeamIndex === 0) {
+            this.currentPlayerIndex++;
         }
 
         // Check if round is finished (no remaining cards)
@@ -225,6 +225,8 @@ export class Game {
             team.players.some(player => player.id === playerId)
         ) || null;
     }
+
+
 
     getPlayerStats(playerId: string): {
         correctCards: number;

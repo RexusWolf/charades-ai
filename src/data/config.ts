@@ -1,14 +1,5 @@
 import type { GameConfig } from '../Game'
 
-export const DEFAULT_CONFIG: GameConfig = {
-    secondsPerRound: 60,
-    maxCards: 15,
-    enablePreparationPhase: true,
-    preparationTimeLimit: 0, // 0 means no limit
-    autoStartNextPlayer: false,
-    numberOfRounds: 1
-}
-
 export const PRESET_CONFIGS: Record<string, GameConfig> = {
     'quick': {
         secondsPerRound: 30,
@@ -45,5 +36,5 @@ export const PRESET_CONFIGS: Record<string, GameConfig> = {
 }
 
 export function getConfigByName(name: string): GameConfig {
-    return PRESET_CONFIGS[name] || DEFAULT_CONFIG
+    return PRESET_CONFIGS[name] || PRESET_CONFIGS.standard
 } 

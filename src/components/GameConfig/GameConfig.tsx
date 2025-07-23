@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DEFAULT_CONFIG, PRESET_CONFIGS } from "../../data/config";
+import { PRESET_CONFIGS } from "../../data/config";
 import type { GameConfig } from "../../Game";
 import styles from "./GameConfig.module.css";
 
@@ -16,7 +16,7 @@ export function GameConfigScreen({
 	onShowSavedDecks,
 	onShowDeckSelector,
 }: GameConfigScreenProps) {
-	const [config, setConfig] = useState<GameConfig>(DEFAULT_CONFIG);
+	const [config, setConfig] = useState<GameConfig>(PRESET_CONFIGS.standard);
 	const [selectedPreset, setSelectedPreset] = useState<string>("standard");
 
 	const handlePresetChange = (presetName: string) => {
@@ -57,6 +57,7 @@ export function GameConfigScreen({
 							<div className={styles.presetDetails}>
 								<p>{presetConfig.secondsPerRound}s per round</p>
 								<p>{presetConfig.maxCards} cards</p>
+								<p>{presetConfig.numberOfRounds} rounds</p>
 								<p>
 									{presetConfig.enablePreparationPhase
 										? "With prep"
@@ -103,6 +104,24 @@ export function GameConfigScreen({
 							}
 						/>
 						<span className={styles.configValue}>{config.maxCards} cards</span>
+					</div>
+
+					<div className={styles.configItem}>
+						<label htmlFor="numberOfRounds">Number of Rounds:</label>
+						<input
+							id="numberOfRounds"
+							type="range"
+							min="1"
+							max="10"
+							step="1"
+							value={config.numberOfRounds}
+							onChange={(e) =>
+								handleConfigChange("numberOfRounds", parseInt(e.target.value))
+							}
+						/>
+						<span className={styles.configValue}>
+							{config.numberOfRounds} rounds
+						</span>
 					</div>
 
 					<div className={`${styles.configItem} ${styles.checkbox}`}>
@@ -170,6 +189,12 @@ export function GameConfigScreen({
 					<div className={styles.summaryItem}>
 						<span className={styles.summaryLabel}>Total Cards:</span>
 						<span className={styles.summaryValue}>{config.maxCards} cards</span>
+					</div>
+					<div className={styles.summaryItem}>
+						<span className={styles.summaryLabel}>Number of Rounds:</span>
+						<span className={styles.summaryValue}>
+							{config.numberOfRounds} rounds
+						</span>
 					</div>
 					<div className={styles.summaryItem}>
 						<span className={styles.summaryLabel}>Preparation:</span>

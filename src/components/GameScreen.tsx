@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import type { SwipeEventData } from "react-swipeable";
 import { Game } from "../Game";
 import type { Card as CardType, GameConfig, Round, Team } from "../types";
 import { Card } from "./Card";
@@ -91,12 +92,12 @@ export function GameScreen({
 	}, [game, currentCard, turnState, onGameEnd]);
 
 	const handleSwiping = useCallback(
-		(eventData: any) => {
+		(eventData: SwipeEventData) => {
 			if (turnState === "playing") {
 				setIsSwiping(true);
-				if (eventData.deltaX < -50) {
+				if (eventData.deltaX < -150) {
 					setSwipeDirection("left");
-				} else if (eventData.deltaX > 50) {
+				} else if (eventData.deltaX > 150) {
 					setSwipeDirection("right");
 				} else {
 					setSwipeDirection(null);

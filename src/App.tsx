@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CustomDeckCreator } from "./components/CustomDeckCreator";
 import { EndScreen } from "./components/EndScreen";
 import { GameConfigScreen } from "./components/GameConfig";
@@ -7,6 +7,7 @@ import { SavedDecksManager } from "./components/SavedDecksManager";
 import { StartScreen } from "./components/StartScreen";
 import { TeamSetup } from "./components/TeamSetup";
 import { SAMPLE_DECK } from "./data/deck";
+import { Game } from "./Game";
 import type { Card, GameConfig, GameRound, GameState, Team } from "./types";
 import "./App.css";
 
@@ -18,6 +19,7 @@ function App() {
 	const [currentDeck, setCurrentDeck] = useState<Card[]>(SAMPLE_DECK);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
+	const [gameInstance, setGameInstance] = useState<Game | null>(null);
 
 	const startGame = useCallback(() => {
 		setGameState("config");
@@ -33,6 +35,16 @@ function App() {
 		setGameState("playing");
 	}, []);
 
+	// Create game instance when transitioning to playing state
+	useEffect(() => {
+		if (gameState === "playing" && gameConfig && selectedTeams.length > 0) {
+			// Limit the deck based on config
+			const limitedDeck = currentDeck.slice(0, gameConfig.maxCards);
+			const game = new Game(gameConfig, selectedTeams, limitedDeck);
+			setGameInstance(game);
+		}
+	}, [gameState, gameConfig, selectedTeams, currentDeck]);
+
 	const handleGameEnd = useCallback((rounds: GameRound[]) => {
 		setGameRounds(rounds);
 		setGameState("finished");
@@ -46,6 +58,7 @@ function App() {
 		setCurrentDeck(SAMPLE_DECK);
 		setShowDeckCreator(false);
 		setShowSavedDecks(false);
+		setGameInstance(null);
 	}, []);
 
 	const handleDeckCreated = useCallback((deck: Card[]) => {
@@ -98,15 +111,12 @@ function App() {
 		return <TeamSetup onStartGame={handleTeamSetup} />;
 	}
 
-	if (gameState === "playing" && gameConfig) {
-		// Limit the deck based on config
-		const limitedDeck = currentDeck.slice(0, gameConfig.maxCards);
-
+	if (gameState === "playing" && gameConfig && gameInstance) {
 		return (
 			<GameScreen
-				deck={limitedDeck}
-				teams={selectedTeams}
-				config={gameConfig}
+				deck={gameInstance.getDeck()}
+				teams={gameInstance.getTeams()}
+				config={gameInstance.getConfig()}
 				onGameEnd={handleGameEnd}
 			/>
 		);

@@ -1,30 +1,37 @@
 import { getPlayerById, getTeamById } from "../data/teams";
-import type { GameRound, Team } from "../types";
+import type { Round, Team, Turn } from "../types";
 
 interface EndScreenProps {
-	rounds: GameRound[];
+	rounds: Round[];
 	teams: Team[];
 	onPlayAgain: () => void;
 }
 
 export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
+	// Flatten all turns from all rounds
+	const allTurns: Turn[] = rounds.flatMap((round) => round.turns);
+	const initialTurnCards = rounds[0]?.remainingCards.length ?? 0;
+
 	// Calculate team scores
 	const teamScores = teams.map((team) => {
-		const teamRounds = rounds.filter((round) => round.teamId === team.id);
-		const totalCorrect = teamRounds.reduce(
-			(sum, round) => sum + round.correctCards.length,
+		const teamTurns = allTurns.filter((turn) => turn.teamId === team.id);
+		const totalCorrect = teamTurns.reduce(
+			(sum, turn) => sum + turn.correctCards.length,
 			0,
 		);
-		const totalPassed = teamRounds.reduce(
-			(sum, round) => sum + round.passedCards.length,
+		const totalSkipped = teamTurns.reduce(
+			(sum, turn) =>
+				sum +
+				(initialTurnCards -
+					turn.correctCards.length -
+					turn.remainingCards.length),
 			0,
 		);
 
 		return {
 			team,
 			totalCorrect,
-			totalPassed,
-			totalCards: totalCorrect + totalPassed,
+			totalSkipped,
 		};
 	});
 
@@ -34,21 +41,22 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 	);
 
 	// Calculate individual player stats
-	const playerStats = rounds.map((round) => {
-		const player = getPlayerById(round.playerId);
-		const team = getTeamById(round.teamId);
+	const playerStats = allTurns.map((turn) => {
+		const player = getPlayerById(turn.playerId);
+		const team = getTeamById(turn.teamId);
+		const skipped =
+			initialTurnCards - turn.correctCards.length - turn.remainingCards.length;
 
 		return {
 			player,
 			team,
-			correct: round.correctCards.length,
-			passed: round.passedCards.length,
-			total: round.correctCards.length + round.passedCards.length,
+			correct: turn.correctCards.length,
+			skipped,
 		};
 	});
 
-	const totalCards = rounds.reduce(
-		(sum, round) => sum + round.correctCards.length + round.passedCards.length,
+	const totalCards = allTurns.reduce(
+		(sum, turn) => sum + turn.correctCards.length,
 		0,
 	);
 
@@ -79,14 +87,14 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 										</span>
 									</div>
 									<div className="stat-item">
-										<span className="stat-label">Passed:</span>
-										<span className="stat-value passed">
-											{teamScore.totalPassed}
+										<span className="stat-label">Skipped:</span>
+										<span className="stat-value skipped">
+											{teamScore.totalSkipped}
 										</span>
 									</div>
 									<div className="stat-item">
 										<span className="stat-label">Total:</span>
-										<span className="stat-value">{teamScore.totalCards}</span>
+										<span className="stat-value">{teamScore.totalCorrect}</span>
 									</div>
 								</div>
 							</div>
@@ -110,7 +118,7 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 								</div>
 								<div className="player-stats">
 									<span className="stat correct">{stat.correct} correct</span>
-									<span className="stat passed">{stat.passed} passed</span>
+									<span className="stat skipped">{stat.skipped} skipped</span>
 								</div>
 							</div>
 						))}

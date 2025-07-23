@@ -4,7 +4,7 @@ A modern, interactive charades game built with React, TypeScript, and Vite. Feat
 
 ## ✨ Features
 
-- **🎮 Interactive Charades Game**: Swipe cards to mark as correct or passed
+- **🎮 Interactive Charades Game**: Swipe cards to mark as correct or skipped
 - **🤖 AI-Powered Custom Decks**: Generate custom decks using OpenAI GPT
 - **👥 Team Management**: Create and manage teams with custom players
 - **⚖️ Team Balancing**: Automatically balance players across teams
@@ -79,7 +79,7 @@ The AI deck generation uses Google's Gemini Pro model. Make sure to:
 1. **Setup**: Configure game settings and create teams
 2. **Team Setup**: Add players to teams or use the balance feature
 3. **Gameplay**: Players take turns acting out words/phrases
-4. **Scoring**: Track correct and passed cards for each player
+4. **Scoring**: Track correct and skipped cards for each player
 5. **Results**: View detailed statistics and team performance
 
 ## 🛠️ Development

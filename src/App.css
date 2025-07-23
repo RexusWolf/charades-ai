@@ -258,7 +258,7 @@ h1 {
 	color: #51cf66;
 }
 
-.stat-value.passed {
+.stat-value.skipped {
 	color: #ff6b6b;
 }
 
@@ -294,7 +294,7 @@ h1 {
 	color: #51cf66;
 }
 
-.result-value.passed {
+.result-value.skipped {
 	color: #ff6b6b;
 }
 
@@ -381,7 +381,7 @@ h1 {
 	animation: swipeTextPulse 0.5s ease-in-out;
 }
 
-.swipe-text.pass {
+.swipe-text.skip {
 	color: #ff6b6b;
 }
 

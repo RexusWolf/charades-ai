@@ -3,7 +3,7 @@ import type { Card as CardType } from "../types";
 
 interface CardProps {
 	card: CardType;
-	onPass: () => void;
+	onSkip: () => void;
 	onCorrect: () => void;
 	isSwiping: boolean;
 	swipeDirection: "left" | "right" | null;
@@ -13,7 +13,7 @@ interface CardProps {
 
 export function Card({
 	card,
-	onPass,
+	onSkip,
 	onCorrect,
 	isSwiping,
 	swipeDirection,
@@ -21,7 +21,7 @@ export function Card({
 	onSwiped,
 }: CardProps) {
 	const handlers = useSwipeable({
-		onSwipedLeft: onPass,
+		onSwipedLeft: onSkip,
 		onSwipedRight: onCorrect,
 		onSwiping,
 		onSwiped,
@@ -42,13 +42,13 @@ export function Card({
 				<div className="card-category">{card.category}</div>
 				<div className="card-word">{card.word}</div>
 				<div className="card-instructions">
-					<div className="swipe-hint left">← PASS</div>
+					<div className="swipe-hint left">← SKIP</div>
 					<div className="swipe-hint right">CORRECT →</div>
 				</div>
 				{isSwiping && (
 					<div className={`swipe-overlay ${swipeDirection}`}>
 						{swipeDirection === "left" && (
-							<span className="swipe-text pass">PASS</span>
+							<span className="swipe-text skip">SKIP</span>
 						)}
 						{swipeDirection === "right" && (
 							<span className="swipe-text correct">CORRECT</span>

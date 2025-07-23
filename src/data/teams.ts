@@ -14,7 +14,7 @@ export const SAMPLE_TEAMS: Team[] = [
     {
         id: 'team-2',
         name: 'Blue Team',
-        color: '#4ecdc4',
+        color: '#0527e2',
         players: [
             { id: 'player-4', name: 'Diana', teamId: 'team-2' },
             { id: 'player-5', name: 'Eve', teamId: 'team-2' },

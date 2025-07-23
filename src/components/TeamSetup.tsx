@@ -8,7 +8,7 @@ interface TeamSetupProps {
 
 const TEAM_COLORS = [
 	"#ff6b6b",
-	"#4ecdc4",
+	"#0527e2",
 	"#51cf66",
 	"#ffd93d",
 	"#6c5ce7",

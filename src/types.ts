@@ -17,10 +17,23 @@ export interface Team {
     players: Player[]
 }
 
+export interface Turn {
+    playerId: string
+    teamId: string
+    remainingCards: Card[]
+    correctCards: Card[]
+    timeLeft: number
+}
+
+export interface Round {
+    remainingCards: Card[]
+    turns: Turn[]
+}
+
 export interface GameRound {
     playerId: string
     teamId: string
-    passedCards: Card[]
+    remainingCards: Card[]
     correctCards: Card[]
     timeLeft: number
 }

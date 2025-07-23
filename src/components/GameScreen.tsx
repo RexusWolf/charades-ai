@@ -1,14 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import type {
-	Card as CardType,
-	GameConfig,
-	GameRound,
-	Player,
-	Team,
-} from "../types";
+import { Game } from "../Game";
+import type { Card as CardType, GameConfig, Round, Team } from "../types";
 import { Card } from "./Card";
 import { GameHeader } from "./GameHeader";
-import { GameStats } from "./GameStats";
 import { NoCards } from "./NoCards";
 import { PlayerTurn } from "./PlayerTurn";
 
@@ -16,11 +10,11 @@ interface GameScreenProps {
 	deck: CardType[];
 	teams: Team[];
 	config: GameConfig;
-	onGameEnd: (rounds: GameRound[]) => void;
+	onGameEnd: (rounds: Round[]) => void;
 }
 
-type SwipeDirection = "left" | "right" | null;
 type TurnState = "preparing" | "playing";
+type SwipeDirection = "left" | "right" | null;
 
 export function GameScreen({
 	deck,
@@ -28,62 +22,26 @@ export function GameScreen({
 	config,
 	onGameEnd,
 }: GameScreenProps) {
+	const [game] = useState(() => new Game(config, teams, deck));
 	const [timeLeft, setTimeLeft] = useState(config.secondsPerRound);
-	const [currentCardIndex, setCurrentCardIndex] = useState(0);
-	const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
-	const [rounds, setRounds] = useState<GameRound[]>([]);
-	const [currentRound, setCurrentRound] = useState<GameRound>({
-		playerId: "",
-		teamId: "",
-		passedCards: [],
-		correctCards: [],
-		timeLeft: config.secondsPerRound,
-	});
 	const [isTimerRunning, setIsTimerRunning] = useState(false);
 	const [turnState, setTurnState] = useState<TurnState>(
 		config.enablePreparationPhase ? "preparing" : "playing",
 	);
 	const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>(null);
 	const [isSwiping, setIsSwiping] = useState(false);
-	const [gameDeck, setGameDeck] = useState<CardType[]>(deck);
 
-	// Create rotation order: Team 1 Player 1, Team 2 Player 1, Team 3 Player 1, Team 1 Player 2, etc.
-	const createRotationOrder = useCallback(() => {
-		const rotationOrder: Player[] = [];
-		const maxPlayersPerTeam = Math.max(
-			...teams.map((team) => team.players.length),
-		);
-
-		for (let playerIndex = 0; playerIndex < maxPlayersPerTeam; playerIndex++) {
-			for (const team of teams) {
-				if (team.players[playerIndex]) {
-					rotationOrder.push(team.players[playerIndex]);
-				}
-			}
-		}
-
-		return rotationOrder;
-	}, [teams]);
-
-	const rotationOrder = createRotationOrder();
-	const currentPlayer = rotationOrder[currentPlayerIndex];
-	const currentCard = gameDeck[currentCardIndex];
-
-	// Initialize current round
+	// Initialize the game
 	useEffect(() => {
-		if (currentPlayer) {
-			setCurrentRound({
-				playerId: currentPlayer.id,
-				teamId: currentPlayer.teamId,
-				passedCards: [],
-				correctCards: [],
-				timeLeft: config.secondsPerRound,
-			});
-			setTimeLeft(config.secondsPerRound);
-			setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
-			setIsTimerRunning(!config.enablePreparationPhase);
-		}
-	}, [currentPlayer, config]);
+		game.startNewRound();
+		setTimeLeft(config.secondsPerRound);
+		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
+		setIsTimerRunning(!config.enablePreparationPhase);
+	}, [game, config]);
+
+	const currentPlayer = game.getCurrentPlayer();
+	const currentCard = game.getCurrentCard();
+	const currentRound = game.getCurrentRound();
 
 	const handleStartTurn = useCallback(() => {
 		setTurnState("playing");
@@ -92,56 +50,45 @@ export function GameScreen({
 
 	const handleEndTurn = useCallback(() => {
 		// Save current round with remaining time
-		setRounds((prev) => [...prev, { ...currentRound, timeLeft }]);
+		if (currentRound) {
+			game.updateTimeLeft(timeLeft);
+		}
 
-		// Move to next player in rotation order
-		const nextPlayerIndex = (currentPlayerIndex + 1) % rotationOrder.length;
-		setCurrentPlayerIndex(nextPlayerIndex);
+		game.endCurrentTurn();
 		setTimeLeft(config.secondsPerRound);
 		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
 		setIsTimerRunning(!config.enablePreparationPhase);
-	}, [
-		currentRound,
-		timeLeft,
-		currentPlayerIndex,
-		rotationOrder.length,
-		config,
-	]);
+	}, [game, currentRound, timeLeft, config]);
 
-	const handlePass = useCallback(() => {
+	const handleSkip = useCallback(() => {
 		if (currentCard && turnState === "playing") {
-			setCurrentRound((prev) => ({
-				...prev,
-				passedCards: [...prev.passedCards, currentCard],
-			}));
-
-			// Move the passed card to the bottom of the deck
-			setGameDeck((prevDeck) => {
-				const newDeck = [...prevDeck];
-				// Remove the current card from its position
-				newDeck.splice(currentCardIndex, 1);
-				// Add it to the bottom of the deck
-				newDeck.push(currentCard);
-				return newDeck;
-			});
-
-			// Don't increment currentCardIndex since the card was moved to the bottom
+			game.skipCard();
 			setSwipeDirection(null);
 			setIsSwiping(false);
+
+			// If no cards left, end turn and game
+			if (game.getRemainingCards() === 0) {
+				game.endCurrentTurn();
+				setIsTimerRunning(false);
+				onGameEnd(game.getRounds());
+			}
 		}
-	}, [currentCard, turnState, currentCardIndex]);
+	}, [game, currentCard, turnState, onGameEnd]);
 
 	const handleCorrect = useCallback(() => {
 		if (currentCard && turnState === "playing") {
-			setCurrentRound((prev) => ({
-				...prev,
-				correctCards: [...prev.correctCards, currentCard],
-			}));
-			setCurrentCardIndex((prev) => prev + 1);
+			game.markCardCorrect();
 			setSwipeDirection(null);
 			setIsSwiping(false);
+
+			// If no cards left, end turn and game
+			if (game.getRemainingCards() === 0) {
+				game.endCurrentTurn();
+				setIsTimerRunning(false);
+				onGameEnd(game.getRounds());
+			}
 		}
-	}, [currentCard, turnState]);
+	}, [game, currentCard, turnState, onGameEnd]);
 
 	const handleSwiping = useCallback(
 		(eventData: any) => {
@@ -173,12 +120,10 @@ export function GameScreen({
 				setTimeLeft((prev) => {
 					if (prev <= 1) {
 						// End current player's turn
-						setRounds((prev) => [...prev, { ...currentRound, timeLeft: 0 }]);
-
-						// Move to next player in rotation order
-						const nextPlayerIndex =
-							(currentPlayerIndex + 1) % rotationOrder.length;
-						setCurrentPlayerIndex(nextPlayerIndex);
+						if (currentRound) {
+							game.updateTimeLeft(0);
+						}
+						game.endCurrentTurn();
 						setTimeLeft(config.secondsPerRound);
 						setTurnState(
 							config.enablePreparationPhase ? "preparing" : "playing",
@@ -189,66 +134,49 @@ export function GameScreen({
 					}
 					return prev - 1;
 				});
-			}, 1000);
+			}, 1000) as unknown as number;
 		}
 
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [
-		isTimerRunning,
-		timeLeft,
-		currentPlayerIndex,
-		rotationOrder.length,
-		currentRound,
-		turnState,
-		config,
-	]);
+	}, [isTimerRunning, timeLeft, currentRound, game, turnState, config]);
 
-	// Check if game is finished (all cards completed)
+	// Check if game is finished
 	useEffect(() => {
-		if (currentCardIndex >= gameDeck.length) {
-			// Save final round
-			setRounds((prev) => [...prev, { ...currentRound, timeLeft }]);
+		if (game.isGameFinished()) {
+			// Save final round if there is one
+			if (currentRound) {
+				game.updateTimeLeft(timeLeft);
+			}
 			setIsTimerRunning(false);
-			onGameEnd(rounds);
+			onGameEnd(game.getRounds());
 		}
-	}, [
-		currentCardIndex,
-		gameDeck.length,
-		currentRound,
-		timeLeft,
-		rounds,
-		onGameEnd,
-	]);
+	}, [game, currentRound, timeLeft, onGameEnd]);
 
 	// Update current round when card changes
 	useEffect(() => {
-		setCurrentRound((prev) => ({ ...prev, timeLeft }));
-	}, [timeLeft]);
+		if (currentRound) {
+			game.updateTimeLeft(timeLeft);
+		}
+	}, [timeLeft, game, currentRound]);
 
-	const totalRounds = Math.ceil(gameDeck.length / rotationOrder.length);
-
-	// Calculate total correct cards from all rounds plus current round
-	const totalCorrectCards =
-		rounds.reduce((sum, round) => sum + round.correctCards.length, 0) +
-		currentRound.correctCards.length;
-
-	// Calculate cards left to be guessed correctly
-	const cardsLeftToGuess = gameDeck.length - totalCorrectCards;
+	const totalRounds = game.getTotalRounds();
+	const cardsLeftToGuess = game.getRemainingCards();
 
 	return (
 		<div className="app">
 			<GameHeader
 				timeLeft={timeLeft}
-				cardsLeftToGuess={cardsLeftToGuess}
-				totalCards={gameDeck.length}
+				cardsLeftToGuess={game.getCurrentTurn()?.remainingCards.length ?? 0}
+				totalCards={game.getTotalCards()}
 			/>
 
 			{currentPlayer && (
 				<PlayerTurn
 					currentPlayer={currentPlayer}
-					roundNumber={Math.floor(currentCardIndex / rotationOrder.length) + 1}
+					teams={teams}
+					roundNumber={game.getCurrentRoundNumber()}
 					totalRounds={totalRounds}
 					turnState={turnState}
 					onStartTurn={handleStartTurn}
@@ -281,7 +209,7 @@ export function GameScreen({
 					{currentCard ? (
 						<Card
 							card={currentCard}
-							onPass={handlePass}
+							onSkip={handleSkip}
 							onCorrect={handleCorrect}
 							isSwiping={isSwiping}
 							swipeDirection={swipeDirection}
@@ -305,11 +233,6 @@ export function GameScreen({
 					)}
 				</>
 			)}
-
-			<GameStats
-				correctCount={currentRound.correctCards.length}
-				passedCount={currentRound.passedCards.length}
-			/>
 		</div>
 	);
 }

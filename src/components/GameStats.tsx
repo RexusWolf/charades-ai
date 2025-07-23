@@ -1,9 +1,9 @@
 interface GameStatsProps {
 	correctCount: number;
-	passedCount: number;
+	skippedCount: number;
 }
 
-export function GameStats({ correctCount, passedCount }: GameStatsProps) {
+export function GameStats({ correctCount, skippedCount }: GameStatsProps) {
 	return (
 		<div className="game-stats">
 			<div className="stat">
@@ -11,8 +11,8 @@ export function GameStats({ correctCount, passedCount }: GameStatsProps) {
 				<span className="stat-value correct">{correctCount}</span>
 			</div>
 			<div className="stat">
-				<span className="stat-label">Passed:</span>
-				<span className="stat-value passed">{passedCount}</span>
+				<span className="stat-label">Skipped:</span>
+				<span className="stat-value skipped">{skippedCount}</span>
 			</div>
 		</div>
 	);

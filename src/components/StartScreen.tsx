@@ -8,7 +8,7 @@ export function StartScreen({ onStartGame }: StartScreenProps) {
 			<div className="container">
 				<h1>🎭 Charades</h1>
 				<p className="instructions">
-					Swipe left to PASS • Swipe right for CORRECT
+					Swipe left to SKIP • Swipe right for CORRECT
 				</p>
 				<button type="button" className="start-button" onClick={onStartGame}>
 					Start Round

@@ -1,4 +1,3 @@
-import type { Card } from "../components/Card/Card"
 import { ACT_IT_OUT_DECK } from "./Decks/english/ActItOutDeck";
 import { ANIMALS_DECK } from "./Decks/english/AnimalsDeck";
 import { SPORTS_DECK } from "./Decks/english/SportsDeck";
@@ -13,12 +12,6 @@ export const DECK_LIBRARY = {
     actualo: ACTUALO_DECK,
     "marvel-characters-spanish": MARVEL_CHARACTERS_SPANISH_DECK,
 };
-
-export const DEFAULT_DECK: Card[] = DECK_LIBRARY.animals.cards.map((card, index) => ({
-    id: Date.now() + index,
-    word: card,
-    deckId: DECK_LIBRARY.animals.id
-}));
 
 // Helper function to get all available decks
 export function getAllDecks() {

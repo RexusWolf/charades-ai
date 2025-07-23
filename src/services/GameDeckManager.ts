@@ -1,5 +1,4 @@
-import type { Card } from "../components/Card/Card";
-import { DeckCardMapper } from "../data/Decks/DeckCardMapper";
+import type { GameCard } from "../components/Card/GameCard";
 import { DECK_LIBRARY, getAllDecks } from "../data/deck";
 import type { Language } from "../data/language";
 import { getDeckCards, getSavedDecks } from "../data/savedDecks";
@@ -16,7 +15,7 @@ export interface GameDeckSelection {
 export interface GameDeckManagerState {
     selectedDecks: GameDeckSelection[]
     availableDecks: GameDeckSelection[]
-    mixedCards: Card[]
+    mixedCards: GameCard[]
     isMixed: boolean
 }
 
@@ -149,20 +148,28 @@ export class GameDeckManager {
             return;
         }
 
-        const allCards: Card[] = [];
+        const allCards: GameCard[] = [];
 
         for (const selectedDeck of this.state.selectedDecks) {
-            let deckCards: Card[] = [];
+            let deckCards: GameCard[] = [];
 
             // Check if it's a library deck
             const libraryDeck = DECK_LIBRARY[selectedDeck.deckId as keyof typeof DECK_LIBRARY];
             if (libraryDeck) {
-                deckCards = libraryDeck.cards.map((deckCard) => new DeckCardMapper().toCard({ deckCard, deckId: libraryDeck.id }));
+                deckCards = libraryDeck.cards.map((card) => ({
+                    id: Date.now(),
+                    word: card,
+                    deckId: libraryDeck.id,
+                }));
             } else {
                 // Check if it's a saved deck
                 const savedDeckCards = getDeckCards(selectedDeck.deckId);
                 if (savedDeckCards) {
-                    deckCards = savedDeckCards;
+                    deckCards = savedDeckCards.map((card) => ({
+                        id: Date.now(),
+                        word: card,
+                        deckId: selectedDeck.deckId,
+                    }));
                 }
             }
 
@@ -179,7 +186,7 @@ export class GameDeckManager {
         this.state.isMixed = true;
     }
 
-    private shuffleCards(cards: Card[]): Card[] {
+    private shuffleCards(cards: GameCard[]): GameCard[] {
         const shuffled = [...cards];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -188,7 +195,7 @@ export class GameDeckManager {
         return shuffled;
     }
 
-    public getMixedCards(): Card[] {
+    public getMixedCards(): GameCard[] {
         return [...this.state.mixedCards];
     }
 

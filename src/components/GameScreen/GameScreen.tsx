@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import type { SwipeEventData } from "react-swipeable";
 import type { GameConfig, Round, Team } from "../../Game";
 import { Game } from "../../Game";
-import type { Card } from "../Card/Card";
 import { CardComponent } from "../Card/CardComponent";
+import type { GameCard } from "../Card/GameCard";
 import { GameHeader } from "../GameHeader/GameHeader";
 import { NoCards } from "../NoCards/NoCards";
 import { PlayerTurn } from "../PlayerTurn/PlayerTurn";
 import styles from "./GameScreen.module.css";
 
 interface GameScreenProps {
-	deck: Card[];
+	deck: GameCard[];
 	teams: Team[];
 	config: GameConfig;
 	onGameEnd: (rounds: Round[]) => void;

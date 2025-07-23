@@ -1,4 +1,3 @@
-
 import { Language } from "../../language";
 import { Deck } from "../Deck";
 

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Language } from "../../data/language";
 import { GameDeckManager } from "../../services/GameDeckManager";
-import type { Card } from "../Card/Card";
+import type { GameCard } from "../Card/GameCard";
 import styles from "./DeckSelector.module.css";
 
 interface DeckSelectorProps {
-	onDeckSelectionChange: (cards: Card[]) => void;
+	onDeckSelectionChange: (cards: GameCard[]) => void;
 	onClose: () => void;
 }
 

@@ -1,7 +1,8 @@
-import type { Card, DeckCard } from "../../components/Card/Card";
+import type { DeckCard } from "../../components/Card/DeckCard";
+import type { GameCard } from "../../components/Card/GameCard";
 
 export class DeckCardMapper {
-    toCard({ deckCard, deckId }: { deckCard: DeckCard; deckId: string; }): Card {
+    toCard({ deckCard, deckId }: { deckCard: DeckCard; deckId: string; }): GameCard {
         return {
             id: Date.now(),
             word: deckCard,

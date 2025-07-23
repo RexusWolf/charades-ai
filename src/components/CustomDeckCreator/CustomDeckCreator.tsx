@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Language } from "../../data/language";
 import { saveDeck } from "../../data/savedDecks";
 import { generateDeckWithGemini } from "../../services/ai";
-import type { Card, DeckCard } from "../Card/Card";
+import type { DeckCard } from "../Card/DeckCard";
+import type { GameCard } from "../Card/GameCard";
 import styles from "./CustomDeckCreator.module.css";
 
 interface CustomDeckCreatorProps {
-	onDeckCreated: (deck: Card[]) => void;
+	onDeckCreated: (deck: GameCard[]) => void;
 	onCancel: () => void;
 }
 
@@ -60,7 +61,7 @@ export function CustomDeckCreator({
 				generatedCards.map((card) => ({
 					id: Date.now(),
 					word: card,
-					deckId: undefined,
+					deckId: `deck-${Date.now()}`,
 				})),
 			);
 		}
@@ -68,7 +69,11 @@ export function CustomDeckCreator({
 
 	const handleSaveDeck = () => {
 		if (generatedCards.length > 0) {
-			saveDeck(generatedCards, topic, saveName || topic, language);
+			saveDeck({
+				deckCards: generatedCards,
+				name: saveName || topic,
+				language,
+			});
 			setShowSaveDialog(false);
 			setSaveName("");
 			setShowSuccessMessage(true);

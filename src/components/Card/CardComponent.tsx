@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { type SwipeEventData, useSwipeable } from "react-swipeable";
-import type { Card } from "./Card";
 import styles from "./CardComponent.module.css";
+import type { GameCard } from "./GameCard";
 
 interface CardProps {
-	card: Card;
+	card: GameCard;
 	onSkip: () => void;
 	onCorrect: () => void;
 	isSwiping: boolean;

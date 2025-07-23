@@ -1,4 +1,4 @@
-import type { DeckCard } from "../components/Card/Card";
+import type { DeckCard } from "../components/Card/DeckCard";
 import { Language } from "../data/language";
 
 interface GeminiResponse {

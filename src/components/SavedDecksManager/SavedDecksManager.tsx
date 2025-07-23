@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import type { Deck } from "../../data/Decks/Deck";
 import {
 	deleteDeck,
 	exportDecks,
@@ -7,13 +8,12 @@ import {
 	getSavedDecks,
 	importDecks,
 	renameDeck,
-	type SavedDeck,
 } from "../../data/savedDecks";
-import type { Card } from "../Card/Card";
+import type { GameCard } from "../Card/GameCard";
 import styles from "./SavedDecksManager.module.css";
 
 interface SavedDecksManagerProps {
-	onDeckSelected: (deck: Card[]) => void;
+	onDeckSelected: (deck: GameCard[]) => void;
 	onClose: () => void;
 }
 
@@ -21,9 +21,7 @@ export function SavedDecksManager({
 	onDeckSelected,
 	onClose,
 }: SavedDecksManagerProps) {
-	const [savedDecks, setSavedDecks] = useState<SavedDeck[]>(() =>
-		getSavedDecks(),
-	);
+	const [savedDecks, setSavedDecks] = useState<Deck[]>(() => getSavedDecks());
 	const [editingDeckId, setEditingDeckId] = useState<string | null>(null);
 	const [editName, setEditName] = useState("");
 	const [stats] = useState(() => getDeckStats());
@@ -35,7 +33,13 @@ export function SavedDecksManager({
 	const handleUseDeck = (deckId: string) => {
 		const cards = getDeckCards(deckId);
 		if (cards) {
-			onDeckSelected(cards);
+			onDeckSelected(
+				cards.map((card) => ({
+					id: Date.now(),
+					word: card,
+					deckId,
+				})),
+			);
 			onClose();
 		}
 	};
@@ -46,7 +50,7 @@ export function SavedDecksManager({
 		}
 	};
 
-	const handleStartRename = (deck: SavedDeck) => {
+	const handleStartRename = (deck: Deck) => {
 		setEditingDeckId(deck.id);
 		setEditName(deck.name);
 	};
@@ -101,16 +105,6 @@ export function SavedDecksManager({
 		reader.readAsText(file);
 	};
 
-	const formatDate = (date: Date) => {
-		return new Intl.DateTimeFormat("en-US", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		}).format(date);
-	};
-
 	return (
 		<div className={styles.modalOverlay}>
 			<div className={`${styles.modal} ${styles.savedDecksModal}`}>
@@ -161,14 +155,6 @@ export function SavedDecksManager({
 								<span className={styles.statLabel}>Total Cards:</span>
 								<span className={styles.statValue}>{stats.totalCards}</span>
 							</div>
-							{stats.mostUsed && (
-								<div className={styles.statItem}>
-									<span className={styles.statLabel}>Most Used:</span>
-									<span className={styles.statValue}>
-										{stats.mostUsed.name}
-									</span>
-								</div>
-							)}
 						</div>
 
 						<div className={styles.decksList}>
@@ -226,32 +212,23 @@ export function SavedDecksManager({
 											</div>
 										</div>
 										<div className={styles.deckDetails}>
-											<p className={styles.deckTopic}>Topic: {deck.topic}</p>
+											<p className={styles.deckTopic}>Topic: {deck.name}</p>
 											<p className={styles.deckLanguage}>
 												Language: {deck.language.display}
 											</p>
 											<p className={styles.deckCards}>
 												{deck.cards.length} cards
 											</p>
-											<p className={styles.deckCreated}>
-												Created: {formatDate(deck.createdAt)}
-											</p>
-											{deck.lastUsed && (
-												<p className={styles.deckUsed}>
-													Last used: {formatDate(deck.lastUsed)}
-												</p>
-											)}
-											<p className={styles.deckUses}>
-												Used {deck.useCount} time
-												{deck.useCount !== 1 ? "s" : ""}
-											</p>
 										</div>
 									</div>
 									<div className={styles.deckPreview}>
 										<div className={styles.previewCards}>
 											{deck.cards.slice(0, 3).map((card) => (
-												<div key={card.id} className={styles.previewCard}>
-													<div className={styles.cardWord}>{card.word}</div>
+												<div
+													key={`${card}-${deck.id}`}
+													className={styles.previewCard}
+												>
+													<div className={styles.cardWord}>{card}</div>
 												</div>
 											))}
 											{deck.cards.length > 3 && (

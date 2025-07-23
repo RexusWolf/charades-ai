@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Card } from "./components/Card/Card";
+import type { GameCard } from "./components/Card/GameCard";
 import { CustomDeckCreator } from "./components/CustomDeckCreator/CustomDeckCreator";
 import { DeckSelector } from "./components/DeckSelector/DeckSelector";
 import { EndScreen } from "./components/EndScreen/EndScreen";
@@ -9,7 +9,6 @@ import { MainLayout } from "./components/MainLayout/MainLayout";
 import { SavedDecksManager } from "./components/SavedDecksManager/SavedDecksManager";
 import { StartScreen } from "./components/StartScreen/StartScreen";
 import { TeamSetup } from "./components/TeamSetup/TeamSetup";
-import { DEFAULT_DECK } from "./data/deck";
 import { migrateSavedDecks } from "./data/savedDecks";
 import type { GameConfig, GameState, Round, Team } from "./Game";
 import { Game } from "./Game";
@@ -24,7 +23,7 @@ function App() {
 	const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
 	const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
 	const [gameRounds, setGameRounds] = useState<Round[]>([]);
-	const [currentDeck, setCurrentDeck] = useState<Card[]>(DEFAULT_DECK);
+	const [currentDeck, setCurrentDeck] = useState<GameCard[]>([]);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
 	const [showDeckSelector, setShowDeckSelector] = useState(false);
@@ -64,14 +63,14 @@ function App() {
 		setGameConfig(null);
 		setSelectedTeams([]);
 		setGameRounds([]);
-		setCurrentDeck(DEFAULT_DECK);
+		setCurrentDeck([]);
 		setShowDeckCreator(false);
 		setShowSavedDecks(false);
 		setShowDeckSelector(false);
 		setGameInstance(null);
 	}, []);
 
-	const handleDeckCreated = useCallback((deck: Card[]) => {
+	const handleDeckCreated = useCallback((deck: GameCard[]) => {
 		setCurrentDeck(deck);
 		setShowDeckCreator(false);
 	}, []);
@@ -80,7 +79,7 @@ function App() {
 		setShowDeckCreator(false);
 	}, []);
 
-	const handleSavedDeckSelected = useCallback((deck: Card[]) => {
+	const handleSavedDeckSelected = useCallback((deck: GameCard[]) => {
 		setCurrentDeck(deck);
 		setShowSavedDecks(false);
 	}, []);
@@ -93,7 +92,7 @@ function App() {
 		setShowDeckSelector(false);
 	}, []);
 
-	const handleDeckSelectionChange = useCallback((cards: Card[]) => {
+	const handleDeckSelectionChange = useCallback((cards: GameCard[]) => {
 		setCurrentDeck(cards);
 	}, []);
 

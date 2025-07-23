@@ -1,11 +1,11 @@
-import type { Card } from "../src/components/Card/Card";
+import type { GameCard } from "../src/components/Card/GameCard";
 import type { GameConfig, Team } from '../src/Game';
 import { Game } from '../src/Game';
 
 describe('Game', () => {
     let config: GameConfig;
     let teams: Team[];
-    let deck: Card[];
+    let deck: GameCard[];
 
     beforeEach(() => {
         config = {

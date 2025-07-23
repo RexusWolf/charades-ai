@@ -1,4 +1,3 @@
-import type { DeckCard } from "../../../components/Card/Card";
 import { Language } from "../../language";
 import { Deck } from "../Deck";
 
@@ -37,5 +36,5 @@ export const ACT_IT_OUT_DECK = new Deck({
         "Waving",
         "Clapping",
         "High Five",
-    ] as DeckCard[]
+    ]
 });

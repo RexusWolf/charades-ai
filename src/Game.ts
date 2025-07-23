@@ -1,4 +1,4 @@
-import type { Card } from "./components/Card/Card";
+import type { GameCard } from "./components/Card/GameCard";
 
 // Game-related types
 export interface Player {
@@ -17,13 +17,13 @@ export interface Team {
 export interface Turn {
     playerId: string
     teamId: string
-    remainingCards: Card[]
-    correctCards: Card[]
+    remainingCards: GameCard[]
+    correctCards: GameCard[]
     timeLeft: number
 }
 
 export interface Round {
-    remainingCards: Card[]
+    remainingCards: GameCard[]
     turns: Turn[]
 }
 
@@ -101,14 +101,14 @@ export type GameState = 'idle' | 'config' | 'team-setup' | 'playing' | 'finished
 export class Game {
     private config: GameConfig;
     private teams: Team[];
-    private deck: Card[];
+    private deck: GameCard[];
     private rounds: Round[] = [];
     private currentRound: Round | null = null;
     private currentTurn: Turn | null = null;
     private currentPlayerIndex: number = 0;
     private rotationOrder: Player[] = [];
 
-    constructor(config: GameConfig, teams: Team[], deck: Card[]) {
+    constructor(config: GameConfig, teams: Team[], deck: GameCard[]) {
         this.config = config;
         this.teams = teams;
         this.deck = [...deck];
@@ -134,7 +134,7 @@ export class Game {
         return this.rotationOrder[this.currentPlayerIndex] || null;
     }
 
-    getCurrentCard(): Card | null {
+    getCurrentCard(): GameCard | null {
         if (!this.currentTurn || this.currentTurn.remainingCards.length === 0) {
             return null;
         }
@@ -166,7 +166,7 @@ export class Game {
         return [...this.teams];
     }
 
-    getDeck(): Card[] {
+    getDeck(): GameCard[] {
         return [...this.deck];
     }
 

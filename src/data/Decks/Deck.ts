@@ -1,4 +1,4 @@
-import type { DeckCard } from "../../components/Card/Card";
+import type { DeckCard } from "../../components/Card/DeckCard";
 import type { Language } from "../language";
 
 export class Deck {

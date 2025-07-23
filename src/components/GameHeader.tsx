@@ -1,3 +1,5 @@
+import styles from "./GameHeader.module.css";
+
 interface GameHeaderProps {
 	timeLeft: number;
 	cardsLeftToGuess: number;
@@ -16,16 +18,18 @@ export function GameHeader({
 	};
 
 	return (
-		<div className="game-header">
-			<div className="timer">
-				<span className="timer-label">Time:</span>
-				<span className={`timer-value ${timeLeft <= 10 ? "urgent" : ""}`}>
+		<div className={styles.gameHeader}>
+			<div className={styles.timer}>
+				<span className={styles.timerLabel}>Time:</span>
+				<span
+					className={`${styles.timerValue} ${timeLeft <= 10 ? styles.urgent : ""}`}
+				>
 					{formatTime(timeLeft)}
 				</span>
 			</div>
-			<div className="progress">
-				<span className="progress-label">Cards Left:</span>
-				<span className="progress-value">
+			<div className={styles.progress}>
+				<span className={styles.progressLabel}>Cards Left:</span>
+				<span className={styles.progressValue}>
 					{cardsLeftToGuess} / {totalCards}
 				</span>
 			</div>

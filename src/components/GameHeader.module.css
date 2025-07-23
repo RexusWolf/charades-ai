@@ -1,0 +1,50 @@
+/* Game header */
+.gameHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 500px;
+	margin-bottom: 2rem;
+	padding: 1rem;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 15px;
+	backdrop-filter: blur(10px);
+}
+
+.timer,
+.progress {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.timerLabel,
+.progressLabel {
+	font-size: 0.9rem;
+	opacity: 0.8;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.timerValue,
+.progressValue {
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.timerValue.urgent {
+	color: #ff6b6b;
+	animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}

@@ -85,7 +85,7 @@
 }
 
 .presetCard {
-	background: rgba(255, 255, 255, 0.1);
+	background: rgba(255, 255, 255, 0.95);
 	border: 2px solid transparent;
 	border-radius: 15px;
 	padding: 1.5rem;
@@ -102,18 +102,28 @@
 
 .presetCard.selected {
 	border-color: #4ecdc4;
-	background: rgba(78, 205, 196, 0.2);
+	background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.presetCard.selected h3 {
+	color: white;
+}
+
+.presetCard.selected .presetDetails {
+	color: rgba(255, 255, 255, 0.9);
 }
 
 .presetCard h3 {
 	margin: 0 0 1rem 0;
 	font-size: 1.2rem;
-	color: white;
+	font-weight: bold;
+	color: #333;
 }
 
 .presetDetails {
 	font-size: 0.9rem;
-	opacity: 0.8;
+	color: #666;
 }
 
 .presetDetails p {

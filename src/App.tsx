@@ -9,7 +9,6 @@ import { TeamSetup } from "./components/TeamSetup";
 import { SAMPLE_DECK } from "./data/deck";
 import { Game } from "./Game";
 import type { Card, GameConfig, GameState, Round, Team } from "./types";
-import "./App.css";
 
 function App() {
 	const [gameState, setGameState] = useState<GameState>("idle");

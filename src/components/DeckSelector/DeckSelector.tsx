@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Language } from "../../data/language";
 import { DeckManager } from "../../services/deckManager";
 import type { Card } from "../Card/Card";
 import styles from "./DeckSelector.module.css";
@@ -125,20 +126,19 @@ export function DeckSelector({
 
 					<div className={styles.languageFilter}>
 						<label htmlFor="languageFilter">Filter by Language:</label>
+
 						<select
 							id="languageFilter"
 							value={languageFilter}
 							onChange={(e) => setLanguageFilter(e.target.value)}
 							className={styles.languageSelect}
 						>
-							<option value="all">🌍 All Languages</option>
-							<option value="universal">🌍 Universal</option>
-							<option value="en">🇺🇸 English</option>
-							<option value="es">🇪🇸 Spanish</option>
-							<option value="fr">🇫🇷 French</option>
-							<option value="de">🇩🇪 German</option>
-							<option value="it">🇮🇹 Italian</option>
-							<option value="pt">🇵🇹 Portuguese</option>
+							<option value="all">All Languages</option>
+							{Language.getAll().map((language) => (
+								<option key={language.code} value={language.code}>
+									{language.display}
+								</option>
+							))}
 						</select>
 					</div>
 

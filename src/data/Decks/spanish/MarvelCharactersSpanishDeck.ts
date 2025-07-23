@@ -1,7 +1,7 @@
 import { Language } from "../../language";
 
 export const MARVEL_CHARACTERS_SPANISH_DECK = {
-    id: "marvel",
+    id: "marvel-characters-spanish",
     name: "🦸 Personajes de Marvel",
     language: Language.spanish(),
     cards: [

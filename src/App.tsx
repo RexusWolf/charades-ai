@@ -10,10 +10,16 @@ import { SavedDecksManager } from "./components/SavedDecksManager/SavedDecksMana
 import { StartScreen } from "./components/StartScreen/StartScreen";
 import { TeamSetup } from "./components/TeamSetup/TeamSetup";
 import { SAMPLE_DECK } from "./data/deck";
+import { migrateSavedDecks } from "./data/savedDecks";
 import type { GameConfig, GameState, Round, Team } from "./Game";
 import { Game } from "./Game";
 
 function App() {
+	// Run migration on app start
+	useEffect(() => {
+		migrateSavedDecks();
+	}, []);
+
 	const [gameState, setGameState] = useState<GameState>("idle");
 	const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
 	const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);

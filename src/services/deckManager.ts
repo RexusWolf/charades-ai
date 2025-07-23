@@ -1,6 +1,6 @@
 import type { Card } from "../components/Card/Card";
 import { DECK_LIBRARY, getAllDecks } from "../data/deck";
-import { type Language } from "../data/language";
+import type { Language } from "../data/language";
 import { getSavedDecks, loadDeck } from "../data/savedDecks";
 
 // Deck management types

@@ -12,7 +12,7 @@ export interface SavedDeck {
     useCount: number;
 }
 
-const STORAGE_KEY = 'charades-saved-decks';
+const SAVED_DECKS_STORAGE_KEY = 'charades-saved-decks';
 
 export function saveDeck(deck: Card[], topic: string, name?: string, language: Language = Language.universal()): SavedDeck {
     const savedDecks = getSavedDecks();
@@ -28,20 +28,21 @@ export function saveDeck(deck: Card[], topic: string, name?: string, language: L
     };
 
     savedDecks.push(newDeck);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedDecks));
+    localStorage.setItem(SAVED_DECKS_STORAGE_KEY, JSON.stringify(savedDecks));
 
     return newDeck;
 }
 
 export function getSavedDecks(): SavedDeck[] {
     try {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        const stored = localStorage.getItem(SAVED_DECKS_STORAGE_KEY);
         if (!stored) return [];
 
         const decks = JSON.parse(stored);
-        // Convert date strings back to Date objects
+        // Convert date strings back to Date objects and ensure language property exists
         return decks.map((deck: SavedDeck) => ({
             ...deck,
+            language: deck.language ? Language.fromCode(deck.language.code) || Language.universal() : Language.universal(),
             createdAt: new Date(deck.createdAt),
             lastUsed: deck.lastUsed ? new Date(deck.lastUsed) : undefined
         }));
@@ -65,7 +66,7 @@ export function loadDeck(deckId: string): Card[] | null {
     const updatedDecks = savedDecks.map(d =>
         d.id === deckId ? deck : d
     );
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDecks));
+    localStorage.setItem(SAVED_DECKS_STORAGE_KEY, JSON.stringify(updatedDecks));
 
     return deck.cards;
 }
@@ -78,7 +79,7 @@ export function deleteDeck(deckId: string): boolean {
         return false; // Deck not found
     }
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredDecks));
+    localStorage.setItem(SAVED_DECKS_STORAGE_KEY, JSON.stringify(filteredDecks));
     return true;
 }
 
@@ -89,7 +90,7 @@ export function renameDeck(deckId: string, newName: string): boolean {
     if (!deck) return false;
 
     deck.name = newName;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedDecks));
+    localStorage.setItem(SAVED_DECKS_STORAGE_KEY, JSON.stringify(savedDecks));
     return true;
 }
 
@@ -175,7 +176,7 @@ export function importDecks(importData: string): { success: boolean; message: st
 
         // Save all decks
         const allDecks = [...existingDecks, ...importedDecks];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(allDecks));
+        localStorage.setItem(SAVED_DECKS_STORAGE_KEY, JSON.stringify(allDecks));
 
         const message = skippedCount > 0
             ? `Imported ${importedDecks.length} decks. ${skippedCount} invalid decks were skipped.`
@@ -191,5 +192,47 @@ export function importDecks(importData: string): { success: boolean; message: st
 
 // Clear all decks (for testing/reset purposes)
 export function clearAllDecks(): void {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(SAVED_DECKS_STORAGE_KEY);
+}
+
+// Migration function to ensure all saved decks have a language property
+export function migrateSavedDecks(): void {
+    try {
+        console.log("Migrating saved decks");
+        const stored = localStorage.getItem(SAVED_DECKS_STORAGE_KEY);
+        if (!stored) return;
+
+        const decks = JSON.parse(stored);
+        let hasChanges = false;
+
+        const migratedDecks = decks.map((deck: any) => {
+            if (!deck.language) {
+                hasChanges = true;
+                return {
+                    ...deck,
+                    language: Language.universal()
+                };
+            } else if (deck.language && typeof deck.language === 'object' && deck.language.code) {
+                // Ensure existing language objects are properly reconstructed
+                const language = Language.fromCode(deck.language.code);
+                if (language) {
+                    hasChanges = true;
+                    return {
+                        ...deck,
+                        language: language
+                    };
+                }
+            }
+            return deck;
+        });
+
+        console.log("Migrated decks:", migratedDecks);
+
+        if (hasChanges) {
+            localStorage.setItem(SAVED_DECKS_STORAGE_KEY, JSON.stringify(migratedDecks));
+            console.log('Migrated saved decks to include language property');
+        }
+    } catch (error) {
+        console.error('Error migrating saved decks:', error);
+    }
 } 

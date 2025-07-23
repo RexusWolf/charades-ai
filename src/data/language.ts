@@ -25,7 +25,7 @@ export class Language {
 
     static getAll(): Language[] {
         return [
-            Language.create("universal", "🌍 Universal"),
+            Language.create("universal", "🌍 Universal (Language-independent)"),
             Language.create("en", "🇺🇸 English"),
             Language.create("es", "🇪🇸 Spanish"),
             Language.create("fr", "🇫🇷 French"),
@@ -49,7 +49,7 @@ export class Language {
     }
 
     static universal(): Language {
-        return Language.create("universal", "🌍 Universal");
+        return Language.create("universal", "🌍 Universal (Language-independent)");
     }
 
     static english(): Language {

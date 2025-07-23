@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SAMPLE_TEAMS } from "../data/teams";
 import type { Player, Team } from "../types";
+import styles from "./TeamSetup.module.css";
 
 interface TeamSetupProps {
 	onStartGame: (teams: Team[]) => void;
@@ -112,20 +113,20 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 	const teamsWithPlayers = teams.filter((team) => team.players.length > 0);
 
 	return (
-		<div className="app">
-			<div className="container">
-				<h1>🎭 Team Setup</h1>
-				<p className="instructions">
+		<div className={styles.app}>
+			<div className={styles.container}>
+				<h1 className={styles.title}>🎭 Team Setup</h1>
+				<p className={styles.instructions}>
 					Create teams and add players to get started
 				</p>
 
 				{/* Add Team Section */}
-				<div className="setup-section">
-					<div className="section-header">
+				<div className={styles.setupSection}>
+					<div className={styles.sectionHeader}>
 						<h2>Create Teams</h2>
 						<button
 							type="button"
-							className="add-button"
+							className={styles.addButton}
 							onClick={() => setShowAddTeam(!showAddTeam)}
 						>
 							{showAddTeam ? "Cancel" : "+ Add Team"}
@@ -133,17 +134,17 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 					</div>
 
 					{showAddTeam && (
-						<div className="add-form">
+						<div className={styles.addForm}>
 							<input
 								type="text"
 								placeholder="Enter team name..."
 								value={newTeamName}
 								onChange={(e) => setNewTeamName(e.target.value)}
-								className="input-field"
+								className={styles.inputField}
 							/>
 							<button
 								type="button"
-								className="save-button"
+								className={styles.saveButton}
 								onClick={addTeam}
 								disabled={!newTeamName.trim()}
 							>
@@ -154,19 +155,19 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 				</div>
 
 				{/* Teams Display */}
-				<div className="teams-grid">
+				<div className={styles.teamsGrid}>
 					{teams.map((team) => (
 						<div
 							key={team.id}
-							className="team-card"
+							className={styles.teamCard}
 							style={{ borderColor: team.color }}
 						>
-							<div className="team-header">
+							<div className={styles.teamHeader}>
 								<h3 style={{ color: team.color }}>{team.name}</h3>
-								<div className="team-actions">
+								<div className={styles.teamActions}>
 									<button
 										type="button"
-										className="add-player-btn"
+										className={styles.addPlayerBtn}
 										onClick={() => {
 											setSelectedTeamId(team.id);
 											setShowAddPlayer(true);
@@ -177,7 +178,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 									{teams.length > 1 && (
 										<button
 											type="button"
-											className="remove-team-btn"
+											className={styles.removeTeamBtn}
 											onClick={() => removeTeam(team.id)}
 										>
 											×
@@ -186,16 +187,16 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 								</div>
 							</div>
 
-							<div className="team-players">
+							<div className={styles.teamPlayers}>
 								{team.players.length === 0 ? (
-									<p className="no-players">No players yet</p>
+									<p className={styles.noPlayers}>No players yet</p>
 								) : (
 									team.players.map((player) => (
-										<div key={player.id} className="player-item">
+										<div key={player.id} className={styles.playerItem}>
 											<span>{player.name}</span>
 											<button
 												type="button"
-												className="remove-player-btn"
+												className={styles.removePlayerBtn}
 												onClick={() => removePlayer(team.id, player.id)}
 											>
 												×
@@ -205,7 +206,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 								)}
 							</div>
 
-							<div className="team-status">
+							<div className={styles.teamStatus}>
 								{team.players.length} player
 								{team.players.length !== 1 ? "s" : ""}
 							</div>
@@ -215,8 +216,8 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 
 				{/* Add Player Modal */}
 				{showAddPlayer && (
-					<div className="modal-overlay">
-						<div className="modal">
+					<div className={styles.modalOverlay}>
+						<div className={styles.modal}>
 							<h3>
 								Add Player to {teams.find((t) => t.id === selectedTeamId)?.name}
 							</h3>
@@ -225,12 +226,12 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 								placeholder="Enter player name..."
 								value={newPlayerName}
 								onChange={(e) => setNewPlayerName(e.target.value)}
-								className="input-field"
+								className={styles.inputField}
 							/>
-							<div className="modal-actions">
+							<div className={styles.modalActions}>
 								<button
 									type="button"
-									className="cancel-button"
+									className={styles.cancelButton}
 									onClick={() => {
 										setShowAddPlayer(false);
 										setNewPlayerName("");
@@ -240,7 +241,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 								</button>
 								<button
 									type="button"
-									className="save-button"
+									className={styles.saveButton}
 									onClick={addPlayer}
 									disabled={!newPlayerName.trim()}
 								>
@@ -252,11 +253,11 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 				)}
 
 				{/* Actions */}
-				<div className="setup-actions">
+				<div className={styles.setupActions}>
 					{teams.length > 1 && totalPlayers > 0 && (
 						<button
 							type="button"
-							className="balance-button"
+							className={styles.balanceButton}
 							onClick={balanceTeams}
 						>
 							⚖️ Balance Teams
@@ -265,7 +266,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 				</div>
 
 				{/* Summary */}
-				<div className="setup-summary">
+				<div className={styles.setupSummary}>
 					<p>Teams: {teamsWithPlayers.length}</p>
 					<p>Total Players: {totalPlayers}</p>
 					{teams.length > 0 && (
@@ -275,7 +276,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 
 				<button
 					type="button"
-					className="start-button"
+					className={styles.startButton}
 					onClick={handleStartGame}
 					disabled={teamsWithPlayers.length === 0}
 				>

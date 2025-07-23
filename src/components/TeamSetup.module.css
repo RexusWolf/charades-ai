@@ -1,0 +1,375 @@
+/* Team Setup Styles */
+.app {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	color: white;
+}
+
+.container {
+	text-align: center;
+	max-width: 500px;
+	width: 100%;
+}
+
+.title {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.instructions {
+	font-size: 1.1rem;
+	margin-bottom: 2rem;
+	opacity: 0.9;
+	line-height: 1.5;
+}
+
+.startButton {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+	border: none;
+	padding: 15px 40px;
+	font-size: 1.2rem;
+	font-weight: bold;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.startButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.startButton:active {
+	transform: translateY(0);
+}
+
+.teamsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 1.5rem;
+	margin: 2rem 0;
+}
+
+.teamCard {
+	background: rgba(255, 255, 255, 0.95);
+	border: 3px solid transparent;
+	border-radius: 15px;
+	padding: 1.5rem;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-align: left;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.teamCard:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.teamCard.selected {
+	border-color: currentColor;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.teamHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.teamHeader h3 {
+	margin: 0;
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+.teamColor {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+}
+
+.teamPlayers {
+	margin-bottom: 1rem;
+}
+
+.playerItem {
+	padding: 0.5rem 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	color: #333;
+}
+
+.playerItem:last-child {
+	border-bottom: none;
+}
+
+.teamStatus {
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: #666;
+	text-align: center;
+}
+
+.setupSummary {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 1rem;
+	border-radius: 15px;
+	margin: 1rem 0;
+	backdrop-filter: blur(10px);
+}
+
+.setupSummary p {
+	margin: 0.5rem 0;
+	font-weight: 500;
+}
+
+/* New Team Setup Styles */
+.setupSection {
+	margin-bottom: 2rem;
+}
+
+.sectionHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.sectionHeader h2 {
+	margin: 0;
+	font-size: 1.5rem;
+	color: white;
+}
+
+.addButton {
+	background: linear-gradient(45deg, #4ecdc4, #44a08d);
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.addButton:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.addForm {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.inputField {
+	flex: 1;
+	padding: 10px 15px;
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.9);
+	color: #333;
+	font-size: 1rem;
+	backdrop-filter: blur(10px);
+}
+
+.inputField::placeholder {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.inputField:focus {
+	outline: none;
+	border-color: #4ecdc4;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.saveButton {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.saveButton:hover:not(:disabled) {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.saveButton:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.teamActions {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.addPlayerBtn {
+	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.addPlayerBtn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.removeTeamBtn,
+.removePlayerBtn {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.removeTeamBtn:hover,
+.removePlayerBtn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.noPlayers {
+	color: #999;
+	font-style: italic;
+	margin: 0;
+}
+
+.playerItem {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.5rem 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	color: #333;
+}
+
+.playerItem span {
+	flex: 1;
+}
+
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	backdrop-filter: blur(5px);
+}
+
+.modal {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 15px;
+	padding: 2rem;
+	min-width: 300px;
+	max-width: 90vw;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	text-align: center;
+}
+
+.modal h3 {
+	margin: 0 0 1rem 0;
+	color: #333;
+	font-size: 1.3rem;
+}
+
+.modalActions {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-top: 1.5rem;
+}
+
+.cancelButton {
+	background: linear-gradient(45deg, #6c757d, #495057);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cancelButton:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.setupActions {
+	margin: 1rem 0;
+	text-align: center;
+}
+
+.balanceButton {
+	background: linear-gradient(45deg, #ffd93d, #fcc419);
+	color: #333;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.balanceButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+	.app {
+		padding: 10px;
+	}
+
+	.title {
+		font-size: 2.5rem;
+	}
+}

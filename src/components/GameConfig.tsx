@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DEFAULT_CONFIG, PRESET_CONFIGS } from "../data/config";
 import type { GameConfig } from "../types";
+import styles from "./GameConfig.module.css";
 
 interface GameConfigScreenProps {
 	onStartGame: (config: GameConfig) => void;
@@ -41,18 +42,18 @@ export function GameConfigScreen({
 					Customize your game settings or choose a preset
 				</p>
 
-				<div className="config-section">
+				<div className={styles.configSection}>
 					<h2>Presets</h2>
-					<div className="preset-grid">
+					<div className={styles.presetGrid}>
 						{Object.entries(PRESET_CONFIGS).map(([name, presetConfig]) => (
 							<button
 								key={name}
 								type="button"
-								className={`preset-card ${selectedPreset === name ? "selected" : ""}`}
+								className={`${styles.presetCard} ${selectedPreset === name ? styles.selected : ""}`}
 								onClick={() => handlePresetChange(name)}
 							>
 								<h3>{name.charAt(0).toUpperCase() + name.slice(1)}</h3>
-								<div className="preset-details">
+								<div className={styles.presetDetails}>
 									<p>{presetConfig.secondsPerRound}s per round</p>
 									<p>{presetConfig.maxCards} cards</p>
 									<p>
@@ -66,10 +67,10 @@ export function GameConfigScreen({
 					</div>
 				</div>
 
-				<div className="config-section">
+				<div className={styles.configSection}>
 					<h2>Custom Settings</h2>
-					<div className="config-grid">
-						<div className="config-item">
+					<div className={styles.configGrid}>
+						<div className={styles.configItem}>
 							<label htmlFor="secondsPerRound">Seconds per Round:</label>
 							<input
 								id="secondsPerRound"
@@ -85,10 +86,12 @@ export function GameConfigScreen({
 									)
 								}
 							/>
-							<span className="config-value">{config.secondsPerRound}s</span>
+							<span className={styles.configValue}>
+								{config.secondsPerRound}s
+							</span>
 						</div>
 
-						<div className="config-item">
+						<div className={styles.configItem}>
 							<label htmlFor="maxCards">Number of Cards:</label>
 							<input
 								id="maxCards"
@@ -101,10 +104,12 @@ export function GameConfigScreen({
 									handleConfigChange("maxCards", parseInt(e.target.value))
 								}
 							/>
-							<span className="config-value">{config.maxCards} cards</span>
+							<span className={styles.configValue}>
+								{config.maxCards} cards
+							</span>
 						</div>
 
-						<div className="config-item">
+						<div className={`${styles.configItem} ${styles.checkbox}`}>
 							<label className="checkbox-label">
 								<input
 									type="checkbox"
@@ -121,7 +126,7 @@ export function GameConfigScreen({
 						</div>
 
 						{config.enablePreparationPhase && (
-							<div className="config-item">
+							<div className={styles.configItem}>
 								<label htmlFor="preparationTimeLimit">
 									Preparation Time Limit:
 								</label>
@@ -139,13 +144,13 @@ export function GameConfigScreen({
 										)
 									}
 								/>
-								<span className="config-value">
+								<span className={styles.configValue}>
 									{config.preparationTimeLimit}s
 								</span>
 							</div>
 						)}
 
-						<div className="config-item">
+						<div className={`${styles.configItem} ${styles.checkbox}`}>
 							<label className="checkbox-label">
 								<input
 									type="checkbox"
@@ -160,30 +165,32 @@ export function GameConfigScreen({
 					</div>
 				</div>
 
-				<div className="config-summary">
+				<div className={styles.configSummary}>
 					<h3>Game Summary</h3>
-					<div className="summary-grid">
-						<div className="summary-item">
-							<span className="summary-label">Round Duration:</span>
-							<span className="summary-value">
+					<div className={styles.summaryGrid}>
+						<div className={styles.summaryItem}>
+							<span className={styles.summaryLabel}>Round Duration:</span>
+							<span className={styles.summaryValue}>
 								{config.secondsPerRound} seconds
 							</span>
 						</div>
-						<div className="summary-item">
-							<span className="summary-label">Total Cards:</span>
-							<span className="summary-value">{config.maxCards} cards</span>
+						<div className={styles.summaryItem}>
+							<span className={styles.summaryLabel}>Total Cards:</span>
+							<span className={styles.summaryValue}>
+								{config.maxCards} cards
+							</span>
 						</div>
-						<div className="summary-item">
-							<span className="summary-label">Preparation:</span>
-							<span className="summary-value">
+						<div className={styles.summaryItem}>
+							<span className={styles.summaryLabel}>Preparation:</span>
+							<span className={styles.summaryValue}>
 								{config.enablePreparationPhase ? "Enabled" : "Disabled"}
 							</span>
 						</div>
 						{config.enablePreparationPhase &&
 							config.preparationTimeLimit > 0 && (
-								<div className="summary-item">
-									<span className="summary-label">Prep Time Limit:</span>
-									<span className="summary-value">
+								<div className={styles.summaryItem}>
+									<span className={styles.summaryLabel}>Prep Time Limit:</span>
+									<span className={styles.summaryValue}>
 										{config.preparationTimeLimit} seconds
 									</span>
 								</div>
@@ -191,11 +198,11 @@ export function GameConfigScreen({
 					</div>
 				</div>
 
-				<div className="config-actions">
+				<div className={styles.configActions}>
 					{onCreateCustomDeck && (
 						<button
 							type="button"
-							className="custom-deck-button"
+							className={styles.customDeckButton}
 							onClick={onCreateCustomDeck}
 						>
 							🤖 Create Custom Deck
@@ -204,7 +211,7 @@ export function GameConfigScreen({
 					{onShowSavedDecks && (
 						<button
 							type="button"
-							className="saved-decks-button"
+							className={styles.savedDecksButton}
 							onClick={onShowSavedDecks}
 						>
 							💾 Load Saved Deck

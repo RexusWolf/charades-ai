@@ -3,6 +3,7 @@ import { CustomDeckCreator } from "./components/CustomDeckCreator";
 import { EndScreen } from "./components/EndScreen";
 import { GameConfigScreen } from "./components/GameConfig";
 import { GameScreen } from "./components/GameScreen";
+import { MainLayout } from "./components/MainLayout";
 import { SavedDecksManager } from "./components/SavedDecksManager";
 import { StartScreen } from "./components/StartScreen";
 import { TeamSetup } from "./components/TeamSetup";
@@ -79,17 +80,23 @@ function App() {
 	}, []);
 
 	if (gameState === "idle") {
-		return <StartScreen onStartGame={startGame} />;
+		return (
+			<MainLayout>
+				<StartScreen onStartGame={startGame} />
+			</MainLayout>
+		);
 	}
 
 	if (gameState === "config") {
 		return (
 			<>
-				<GameConfigScreen
-					onStartGame={handleConfigComplete}
-					onCreateCustomDeck={() => setShowDeckCreator(true)}
-					onShowSavedDecks={() => setShowSavedDecks(true)}
-				/>
+				<MainLayout>
+					<GameConfigScreen
+						onStartGame={handleConfigComplete}
+						onCreateCustomDeck={() => setShowDeckCreator(true)}
+						onShowSavedDecks={() => setShowSavedDecks(true)}
+					/>
+				</MainLayout>
 				{showDeckCreator && (
 					<CustomDeckCreator
 						onDeckCreated={handleDeckCreated}
@@ -107,27 +114,35 @@ function App() {
 	}
 
 	if (gameState === "team-setup") {
-		return <TeamSetup onStartGame={handleTeamSetup} />;
+		return (
+			<MainLayout>
+				<TeamSetup onStartGame={handleTeamSetup} />
+			</MainLayout>
+		);
 	}
 
 	if (gameState === "playing" && gameConfig && gameInstance) {
 		return (
-			<GameScreen
-				deck={gameInstance.getDeck()}
-				teams={gameInstance.getTeams()}
-				config={gameInstance.getConfig()}
-				onGameEnd={handleGameEnd}
-			/>
+			<MainLayout>
+				<GameScreen
+					deck={gameInstance.getDeck()}
+					teams={gameInstance.getTeams()}
+					config={gameInstance.getConfig()}
+					onGameEnd={handleGameEnd}
+				/>
+			</MainLayout>
 		);
 	}
 
 	if (gameState === "finished") {
 		return (
-			<EndScreen
-				rounds={gameRounds}
-				teams={selectedTeams}
-				onPlayAgain={handlePlayAgain}
-			/>
+			<MainLayout>
+				<EndScreen
+					rounds={gameRounds}
+					teams={selectedTeams}
+					onPlayAgain={handlePlayAgain}
+				/>
+			</MainLayout>
 		);
 	}
 

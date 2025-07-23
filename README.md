@@ -71,7 +71,7 @@ The game features AI-powered custom deck generation using Google's Gemini model:
 The AI deck generation uses Google's Gemini Pro model. Make sure to:
 - Set your `VITE_GEMINI_API_KEY` environment variable
 - Have sufficient API credits in your Google AI account
-- The API call generates 15 cards per request
+- The API call generates the specified number of cards per request
 - Gemini offers a generous free tier (60 requests/minute)
 
 ## 🎮 How to Play

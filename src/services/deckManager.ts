@@ -1,5 +1,6 @@
 import type { Card } from "../components/Card/Card";
 import { DECK_LIBRARY, getAllDecks } from "../data/deck";
+import { type Language } from "../data/language";
 import { getSavedDecks, loadDeck } from "../data/savedDecks";
 
 // Deck management types
@@ -7,6 +8,7 @@ export interface DeckSelection {
     deckId: string
     name: string
     cardCount: number
+    language: Language
     isSelected: boolean
 }
 
@@ -44,6 +46,7 @@ export class DeckManager {
             deckId: deck.id,
             name: deck.name,
             cardCount: deck.cards.length,
+            language: deck.language,
             isSelected: false
         }));
 
@@ -51,6 +54,7 @@ export class DeckManager {
             deckId: deck.id,
             name: deck.name,
             cardCount: deck.cards.length,
+            language: deck.language,
             isSelected: false
         }));
 
@@ -204,6 +208,7 @@ export class DeckManager {
             deckId: deck.id,
             name: deck.name,
             cardCount: deck.cards.length,
+            language: deck.language,
             isSelected: false
         }));
 
@@ -212,6 +217,7 @@ export class DeckManager {
             deckId: deck.id,
             name: deck.name,
             cardCount: deck.cards.length,
+            language: deck.language,
             isSelected: false
         }));
 

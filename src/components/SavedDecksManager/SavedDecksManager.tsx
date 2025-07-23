@@ -227,6 +227,9 @@ export function SavedDecksManager({
 										</div>
 										<div className={styles.deckDetails}>
 											<p className={styles.deckTopic}>Topic: {deck.topic}</p>
+											<p className={styles.deckLanguage}>
+												Language: {deck.language.display}
+											</p>
 											<p className={styles.deckCards}>
 												{deck.cards.length} cards
 											</p>

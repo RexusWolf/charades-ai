@@ -1,9 +1,11 @@
 import type { Card } from "../components/Card/Card";
+import { Language } from "./language";
 
 export interface SavedDeck {
     id: string;
     name: string;
     topic: string;
+    language: Language;
     cards: Card[];
     createdAt: Date;
     lastUsed?: Date;
@@ -12,13 +14,14 @@ export interface SavedDeck {
 
 const STORAGE_KEY = 'charades-saved-decks';
 
-export function saveDeck(deck: Card[], topic: string, name?: string): SavedDeck {
+export function saveDeck(deck: Card[], topic: string, name?: string, language: Language = Language.universal()): SavedDeck {
     const savedDecks = getSavedDecks();
 
     const newDeck: SavedDeck = {
         id: `deck-${Date.now()}`,
         name: name || topic,
         topic,
+        language,
         cards: deck,
         createdAt: new Date(),
         useCount: 0
@@ -153,6 +156,7 @@ export function importDecks(importData: string): { success: boolean; message: st
                 id: `deck-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                 name: importedDeck.name,
                 topic: importedDeck.topic,
+                language: importedDeck.language || "universal", // Ensure language is set
                 cards: importedDeck.cards.map((card: Card, index: number) => ({
                     id: Date.now() + index + Math.random(),
                     word: card.word,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Language } from "../../data/language";
 import { saveDeck } from "../../data/savedDecks";
 import { generateDeckWithGemini } from "../../services/ai";
 import type { Card } from "../Card/Card";
@@ -14,7 +15,8 @@ export function CustomDeckCreator({
 	onCancel,
 }: CustomDeckCreatorProps) {
 	const [topic, setTopic] = useState("");
-	const [cardCount, setCardCount] = useState(15);
+	const [cardCount, setCardCount] = useState(30);
+	const [language, setLanguage] = useState<Language>(Language.universal());
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [generatedCards, setGeneratedCards] = useState<Card[]>([]);
 	const [error, setError] = useState("");
@@ -34,7 +36,12 @@ export function CustomDeckCreator({
 		setError("");
 
 		try {
-			const cards = await generateDeckWithGemini(topic, apiKey, cardCount);
+			const cards = await generateDeckWithGemini(
+				topic,
+				apiKey,
+				cardCount,
+				language,
+			);
 			setGeneratedCards(cards);
 		} catch (err) {
 			const errorMessage =
@@ -55,7 +62,7 @@ export function CustomDeckCreator({
 
 	const handleSaveDeck = () => {
 		if (generatedCards.length > 0) {
-			saveDeck(generatedCards, topic, saveName || topic);
+			saveDeck(generatedCards, topic, saveName || topic, language);
 			setShowSaveDialog(false);
 			setSaveName("");
 			setShowSuccessMessage(true);
@@ -126,6 +133,30 @@ export function CustomDeckCreator({
 						/>
 						<span className={styles.cardCountValue}>{cardCount} cards</span>
 					</div>
+				</div>
+
+				<div className={styles.inputGroup}>
+					<label htmlFor="language">Language:</label>
+					<select
+						id="language"
+						value={language.code}
+						onChange={(e) => {
+							const selectedLanguage = Language.getAll().find(
+								(lang) => lang.code === e.target.value,
+							);
+							if (selectedLanguage) {
+								setLanguage(selectedLanguage);
+							}
+						}}
+						className={styles.languageSelect}
+						disabled={isGenerating}
+					>
+						{Language.getAll().map((lang) => (
+							<option key={lang.code} value={lang.code}>
+								{lang.display}
+							</option>
+						))}
+					</select>
 				</div>
 
 				{error && <div className={styles.errorMessage}>{error}</div>}

@@ -409,7 +409,8 @@
 .deckCards,
 .deckCreated,
 .deckUsed,
-.deckUses {
+.deckUses,
+.deckLanguage {
 	margin: 0;
 }
 

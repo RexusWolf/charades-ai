@@ -17,6 +17,7 @@ export function DeckSelector({
 	const [deckManager] = useState(() => new DeckManager());
 	const [state, setState] = useState(deckManager.getState());
 	const [activeTab, setActiveTab] = useState<TabType>("official");
+	const [languageFilter, setLanguageFilter] = useState<string>("all");
 
 	useEffect(() => {
 		// Notify parent of current mixed cards
@@ -55,6 +56,17 @@ export function DeckSelector({
 
 	const officialDecks = deckManager.getOfficialDecks();
 	const customDecks = deckManager.getCustomDecks();
+
+	// Filter decks by language
+	const filteredOfficialDecks =
+		languageFilter === "all"
+			? officialDecks
+			: officialDecks.filter((deck) => deck.language.code === languageFilter);
+
+	const filteredCustomDecks =
+		languageFilter === "all"
+			? customDecks
+			: customDecks.filter((deck) => deck.language.code === languageFilter);
 
 	return (
 		<div className={styles.overlay}>
@@ -111,6 +123,25 @@ export function DeckSelector({
 						</button>
 					</div>
 
+					<div className={styles.languageFilter}>
+						<label htmlFor="languageFilter">Filter by Language:</label>
+						<select
+							id="languageFilter"
+							value={languageFilter}
+							onChange={(e) => setLanguageFilter(e.target.value)}
+							className={styles.languageSelect}
+						>
+							<option value="all">🌍 All Languages</option>
+							<option value="universal">🌍 Universal</option>
+							<option value="en">🇺🇸 English</option>
+							<option value="es">🇪🇸 Spanish</option>
+							<option value="fr">🇫🇷 French</option>
+							<option value="de">🇩🇪 German</option>
+							<option value="it">🇮🇹 Italian</option>
+							<option value="pt">🇵🇹 Portuguese</option>
+						</select>
+					</div>
+
 					<div className={styles.tabs}>
 						<button
 							type="button"
@@ -119,7 +150,7 @@ export function DeckSelector({
 							}`}
 							onClick={() => setActiveTab("official")}
 						>
-							📚 Official Decks ({officialDecks.length})
+							📚 Official Decks ({filteredOfficialDecks.length})
 						</button>
 						<button
 							type="button"
@@ -128,14 +159,14 @@ export function DeckSelector({
 							}`}
 							onClick={() => setActiveTab("custom")}
 						>
-							💾 Custom Decks ({customDecks.length})
+							💾 Custom Decks ({filteredCustomDecks.length})
 						</button>
 					</div>
 
 					<div className={styles.deckList}>
 						{activeTab === "official" ? (
-							officialDecks.length > 0 ? (
-								officialDecks.map((deck) => (
+							filteredOfficialDecks.length > 0 ? (
+								filteredOfficialDecks.map((deck) => (
 									<button
 										key={deck.deckId}
 										type="button"
@@ -146,6 +177,9 @@ export function DeckSelector({
 									>
 										<div className={styles.deckInfo}>
 											<h3>{deck.name}</h3>
+											<p className={styles.deckLanguage}>
+												{deck.language.display}
+											</p>
 											<p>{deck.cardCount} cards</p>
 										</div>
 										<div className={styles.checkbox}>
@@ -155,11 +189,11 @@ export function DeckSelector({
 								))
 							) : (
 								<div className={styles.emptyState}>
-									<p>No official decks available</p>
+									<p>No official decks available for the selected language</p>
 								</div>
 							)
-						) : customDecks.length > 0 ? (
-							customDecks.map((deck) => (
+						) : filteredCustomDecks.length > 0 ? (
+							filteredCustomDecks.map((deck) => (
 								<button
 									key={deck.deckId}
 									type="button"
@@ -170,6 +204,9 @@ export function DeckSelector({
 								>
 									<div className={styles.deckInfo}>
 										<h3>{deck.name}</h3>
+										<p className={styles.deckLanguage}>
+											{deck.language.display}
+										</p>
 										<p>{deck.cardCount} cards</p>
 									</div>
 									<div className={styles.checkbox}>
@@ -179,7 +216,7 @@ export function DeckSelector({
 							))
 						) : (
 							<div className={styles.emptyState}>
-								<p>No custom decks available</p>
+								<p>No custom decks available for the selected language</p>
 								<p className={styles.emptyStateHint}>
 									Create custom decks in the Custom Deck Creator
 								</p>

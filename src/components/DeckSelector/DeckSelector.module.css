@@ -85,6 +85,36 @@
 	flex-wrap: wrap;
 }
 
+.languageFilter {
+	margin-bottom: 20px;
+}
+
+.languageFilter label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+	color: #374151;
+	font-size: 0.875rem;
+}
+
+.languageSelect {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	font-size: 0.875rem;
+	background: white;
+	color: #374151;
+	cursor: pointer;
+	transition: border-color 0.2s;
+}
+
+.languageSelect:focus {
+	outline: none;
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
 .actionButton {
 	background: #f3f4f6;
 	border: 1px solid #d1d5db;
@@ -174,6 +204,13 @@
 	margin: 0;
 	font-size: 0.875rem;
 	color: #6b7280;
+}
+
+.deckLanguage {
+	margin: 0;
+	font-size: 0.875rem;
+	color: #059669 !important;
+	font-weight: 500;
 }
 
 .checkbox {

@@ -129,6 +129,30 @@
 	text-align: center;
 }
 
+.languageSelect {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid #e0e0e0;
+	border-radius: 10px;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+	background: white;
+	color: #333;
+	cursor: pointer;
+}
+
+.languageSelect:focus {
+	outline: none;
+	border-color: #4ecdc4;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.languageSelect:disabled {
+	background: #f5f5f5;
+	color: #666;
+	cursor: not-allowed;
+}
+
 .errorMessage {
 	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
 	color: white;

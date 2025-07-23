@@ -1,4 +1,5 @@
 import type { Card } from "../components/Card/Card";
+import { Language } from "../data/language";
 
 interface GeminiResponse {
     candidates: Array<{
@@ -15,51 +16,43 @@ interface AIGeneratedCard {
     category: string;
 }
 
-export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 15): Promise<Card[]> {
+export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 30, language: Language = Language.universal()): Promise<Card[]> {
     const apiKey = userApiKey || import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
         throw new Error('Gemini API key not found. Please set VITE_GEMINI_API_KEY in your environment variables or provide it in the app.');
     }
 
+    const languageInstruction = language.code === "universal"
+        ? "Generate cards in the most appropriate language based on the topic. If the topic mentions a specific language, use that language. Otherwise, use English."
+        : `Generate all cards in ${language.display}. Use words and phrases that are common and well-known in ${language.display}.`;
+
     const prompt = `Generate ${cardCount} charades cards for the topic "${topic}". 
 	
-	IMPORTANT LANGUAGE INSTRUCTIONS:
-	- If the topic mentions a specific language (e.g., "Spanish", "French", "German", "Italian", "Portuguese", "Japanese", "Chinese", "Korean", "Russian", "Arabic", "Hindi", etc.), generate cards in that language
-	- If no specific language is mentioned, generate cards in English
-	- For non-English cards, provide both the word in the target language AND its English translation in the category field
-	- Example: For "Spanish animals" → {"word": "Elefante", "category": "Animals (Spanish)"}
+	LANGUAGE INSTRUCTION: ${languageInstruction}
 	
 	Requirements:
 	- Each card should have a word/phrase and a category
 	- Words should be appropriate for charades (can be acted out)
-	- Categories should be relevant to the topic and indicate the language if applicable
+	- Categories should be relevant to the topic
 	- Return as JSON array with format: [{"word": "example", "category": "category"}]
 	- Keep words simple and well-known in the target language
 	- Avoid offensive or inappropriate content
-	- For language-specific topics, use common, recognizable words in that language
 	- Generate exactly ${cardCount} cards
 	
 	Examples:
-	For "animals" (English):
+	For "animals" in English:
 	[
 		{"word": "Elephant", "category": "Animals"},
 		{"word": "Lion", "category": "Animals"},
 		{"word": "Penguin", "category": "Animals"}
 	]
 	
-	For "Spanish TV Series":
+	For "animals" in Spanish:
 	[
-		{"word": "La Casa de Papel", "category": "TV Series (Spanish)"},
-		{"word": "Élite", "category": "TV Series (Spanish)"},
-		{"word": "Narcos", "category": "TV Series (Spanish)"}
-	]
-	
-	For "French food":
-	[
-		{"word": "Croissant", "category": "Food (French)"},
-		{"word": "Baguette", "category": "Food (French)"},
-		{"word": "Ratatouille", "category": "Food (French)"}
+		{"word": "Elefante", "category": "Animals (Spanish)"},
+		{"word": "León", "category": "Animals (Spanish)"},
+		{"word": "Pingüino", "category": "Animals (Spanish)"}
 	]`;
 
     try {

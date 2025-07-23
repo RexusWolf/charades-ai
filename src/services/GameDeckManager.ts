@@ -20,7 +20,7 @@ export interface GameDeckManagerState {
 }
 
 // Default deck configuration
-const DEFAULT_DECK_ID = "act-it-out";
+const DEFAULT_DECK_ID = "famous-people";
 
 export class GameDeckManager {
     private state: GameDeckManagerState;

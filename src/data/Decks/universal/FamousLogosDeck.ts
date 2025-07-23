@@ -2,7 +2,7 @@ import { Language } from "../../language";
 import { Deck } from "../Deck";
 
 export const FAMOUS_LOGOS_BRANDS_DECK = new Deck({
-    id: "famous_logos_brands",
+    id: "famous-logos-brands",
     name: "🔥 Famous Logos & Brands",
     language: Language.universal(),
     cards: [

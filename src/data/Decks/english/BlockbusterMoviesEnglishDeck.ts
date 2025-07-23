@@ -2,7 +2,7 @@ import { Language } from "../../language";
 import { Deck } from "../Deck";
 
 export const BLOCKBUSTER_MOVIES_ENGLISH = new Deck({
-    id: "blockbuster_movies_en",
+    id: "blockbuster-movies-english",
     name: "🎬 Blockbuster Movies",
     language: Language.english(),
     cards: [

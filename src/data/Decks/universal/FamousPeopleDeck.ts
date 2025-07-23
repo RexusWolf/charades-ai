@@ -2,7 +2,7 @@ import { Language } from "../../language";
 import { Deck } from "../Deck";
 
 export const FAMOUS_PEOPLE_DECK = new Deck({
-    id: "famous_people",
+    id: "famous-people",
     name: "🌟 Famous People",
     language: Language.universal(),
     cards: [

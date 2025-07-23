@@ -2,7 +2,7 @@ import { Language } from "../../language";
 import { Deck } from "../Deck";
 
 export const POPULAR_SONGS_DECK = new Deck({
-    id: "popular_songs",
+    id: "popular-songs",
     name: "🎵 Popular Songs Worldwide",
     language: Language.universal(),
     cards: [

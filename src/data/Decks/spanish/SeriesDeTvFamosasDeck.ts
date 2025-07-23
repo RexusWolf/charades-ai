@@ -2,7 +2,7 @@ import { Language } from "../../language";
 import { Deck } from "../Deck";
 
 export const SERIES_FAMOSAS_SPANISH_DECK = new Deck({
-    id: "series_famosas_spanish",
+    id: "series-famosas-spanish",
     name: "📺 Series Famosas",
     language: Language.spanish(),
     cards: [

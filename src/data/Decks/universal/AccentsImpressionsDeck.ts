@@ -2,7 +2,7 @@ import { Language } from "../../language";
 import { Deck } from "../Deck";
 
 export const ACCENTS_IMPRESSIONS_DECK = new Deck({
-    id: "accents_impressions",
+    id: "accents-impressions",
     name: "🎭 Accents & Impressions",
     language: Language.universal(),
     cards: [

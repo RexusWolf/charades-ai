@@ -1,4 +1,4 @@
-import type { Player, Team } from "../types";
+import type { Player, Team } from "../../types";
 import styles from "./PlayerTurn.module.css";
 
 interface PlayerTurnProps {

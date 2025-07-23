@@ -1,4 +1,4 @@
-import type { Card } from '../types'
+import type { Card } from "../components/Card/Card"
 
 export const SAMPLE_DECK: Card[] = [
     { id: 1, word: "Elephant", category: "Animals" },

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { type SwipeEventData, useSwipeable } from "react-swipeable";
-import type { Card as CardType } from "../types";
-import styles from "./Card.module.css";
+import type { Card } from "./Card";
+import styles from "./CardComponent.module.css";
 
 interface CardProps {
-	card: CardType;
+	card: Card;
 	onSkip: () => void;
 	onCorrect: () => void;
 	isSwiping: boolean;
@@ -15,7 +15,7 @@ interface CardProps {
 
 const SWIPE_TRIGGER_THRESHOLD = 150;
 
-export function Card({
+export function CardComponent({
 	card,
 	onSkip,
 	onCorrect,

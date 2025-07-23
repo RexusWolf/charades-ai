@@ -1,8 +1,4 @@
-export interface Card {
-    id: number
-    word: string
-    category: string
-}
+import type { Card } from "./components/Card/Card"
 
 export interface Player {
     id: string

@@ -8,8 +8,8 @@ import {
 	loadDeck,
 	renameDeck,
 	type SavedDeck,
-} from "../data/savedDecks";
-import type { Card } from "../types";
+} from "../../data/savedDecks";
+import type { Card } from "../Card/Card";
 import styles from "./SavedDecksManager.module.css";
 
 interface SavedDecksManagerProps {

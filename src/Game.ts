@@ -1,4 +1,5 @@
-import type { Card, GameConfig, Player, Round, Team, Turn } from './types';
+import type { Card } from "./components/Card/Card";
+import type { GameConfig, Player, Round, Team, Turn } from './types';
 
 /**
  * Game class that manages the complete state of a charades game.

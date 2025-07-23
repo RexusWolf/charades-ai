@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SwipeEventData } from "react-swipeable";
-import { Game } from "../Game";
-import type { Card as CardType, GameConfig, Round, Team } from "../types";
-import { Card } from "./Card";
-import { GameHeader } from "./GameHeader";
+import { Game } from "../../Game";
+import type { GameConfig, Round, Team } from "../../types";
+import type { Card } from "../Card/Card";
+import { CardComponent } from "../Card/CardComponent";
+import { GameHeader } from "../GameHeader/GameHeader";
+import { NoCards } from "../NoCards/NoCards";
+import { PlayerTurn } from "../PlayerTurn/PlayerTurn";
 import styles from "./GameScreen.module.css";
-import { NoCards } from "./NoCards";
-import { PlayerTurn } from "./PlayerTurn";
 
 interface GameScreenProps {
-	deck: CardType[];
+	deck: Card[];
 	teams: Team[];
 	config: GameConfig;
 	onGameEnd: (rounds: Round[]) => void;
@@ -208,7 +209,7 @@ export function GameScreen({
 			) : (
 				<>
 					{currentCard ? (
-						<Card
+						<CardComponent
 							card={currentCard}
 							onSkip={handleSkip}
 							onCorrect={handleCorrect}

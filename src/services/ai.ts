@@ -1,4 +1,4 @@
-import type { Card } from '../types';
+import type { Card } from "../components/Card/Card";
 
 interface GeminiResponse {
     candidates: Array<{

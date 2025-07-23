@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { saveDeck } from "../data/savedDecks";
-import { generateDeckWithGemini } from "../services/ai";
-import type { Card } from "../types";
+import { saveDeck } from "../../data/savedDecks";
+import { generateDeckWithGemini } from "../../services/ai";
+import type { Card } from "../Card/Card";
 import styles from "./CustomDeckCreator.module.css";
 
 interface CustomDeckCreatorProps {

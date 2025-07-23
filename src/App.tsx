@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { CustomDeckCreator } from "./components/CustomDeckCreator";
-import { EndScreen } from "./components/EndScreen";
-import { GameConfigScreen } from "./components/GameConfig";
-import { GameScreen } from "./components/GameScreen";
-import { MainLayout } from "./components/MainLayout";
-import { SavedDecksManager } from "./components/SavedDecksManager";
-import { StartScreen } from "./components/StartScreen";
-import { TeamSetup } from "./components/TeamSetup";
+import type { Card } from "./components/Card/Card";
+import { CustomDeckCreator } from "./components/CustomDeckCreator/CustomDeckCreator";
+import { EndScreen } from "./components/EndScreen/EndScreen";
+import { GameConfigScreen } from "./components/GameConfig/GameConfig";
+import { GameScreen } from "./components/GameScreen/GameScreen";
+import { MainLayout } from "./components/MainLayout/MainLayout";
+import { SavedDecksManager } from "./components/SavedDecksManager/SavedDecksManager";
+import { StartScreen } from "./components/StartScreen/StartScreen";
+import { TeamSetup } from "./components/TeamSetup/TeamSetup";
 import { SAMPLE_DECK } from "./data/deck";
 import { Game } from "./Game";
-import type { Card, GameConfig, GameState, Round, Team } from "./types";
+import type { GameConfig, GameState, Round, Team } from "./types";
 
 function App() {
 	const [gameState, setGameState] = useState<GameState>("idle");

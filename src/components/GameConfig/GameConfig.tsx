@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DEFAULT_CONFIG, PRESET_CONFIGS } from "../data/config";
-import type { GameConfig } from "../types";
+import { DEFAULT_CONFIG, PRESET_CONFIGS } from "../../data/config";
+import type { GameConfig } from "../../types";
 import styles from "./GameConfig.module.css";
 
 interface GameConfigScreenProps {

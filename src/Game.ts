@@ -41,8 +41,7 @@ export class Game {
     private rounds: Round[]; // All rounds instantiated at game start
     private currentRoundIndex: number = 0;
     private currentTurn: Turn | null = null;
-    private currentTeamIndex: number = 0;
-    private currentPlayerIndex: number = 0;
+    private turnIndex: number = 0;
 
     constructor(config: GameConfig, teams: Team[], deck: GameCard[]) {
         this.config = config;
@@ -63,11 +62,13 @@ export class Game {
     }
 
     getCurrentPlayer(): Player | null {
-        const currentTeam = this.teams[this.currentTeamIndex];
-        if (!currentTeam || this.currentPlayerIndex >= currentTeam.players.length) {
-            return currentTeam.players[this.currentPlayerIndex % currentTeam.players.length];
-        }
-        return currentTeam.players[this.currentPlayerIndex];
+        const currentTeamIndex = this.turnIndex % this.teams.length;
+        const currentTeam = this.teams[currentTeamIndex];
+        if (!currentTeam) return null;
+
+        // Player index increments every time we cycle through all teams
+        const playerIndex = Math.floor(this.turnIndex / this.teams.length) % currentTeam.players.length;
+        return currentTeam.players[playerIndex];
     }
 
     getCurrentCard(): GameCard | null {
@@ -102,7 +103,7 @@ export class Game {
     }
 
     getCurrentPlayerIndex(): number {
-        return this.currentPlayerIndex;
+        return this.turnIndex;
     }
 
     getTotalCards(): number {
@@ -177,23 +178,11 @@ export class Game {
         const currentRound = this.getCurrentRound();
         if (!currentRound) return;
 
-        // Save the current turn
         currentRound.addTurn({ ...this.currentTurn });
 
-        // Move to next team
-        this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
+        this.turnIndex++;
 
-        // If we've cycled through all teams, move to next player
-        if (this.currentTeamIndex === 0) {
-            this.currentPlayerIndex++;
-        }
-
-        // Check if round is finished (no remaining cards)
-        if (currentRound.isFinished()) {
-            // Round is finished, but don't automatically start next round
-            // The RoundComplete view will handle starting the next round
-        } else {
-            // Start new turn for next player
+        if (!currentRound.isFinished()) {
             this.startNewTurn();
         }
     }
@@ -319,8 +308,7 @@ export class Game {
     reset(): void {
         this.currentRoundIndex = 0;
         this.currentTurn = null;
-        this.currentTeamIndex = 0;
-        this.currentPlayerIndex = 0;
+        this.turnIndex = 0;
         this.rounds = this.createRounds(); // Recreate all rounds
         this.startNewRound();
     }
@@ -328,8 +316,7 @@ export class Game {
     clone(): Game {
         const newGame = new Game(this.config, this.teams, this.deck);
         newGame.currentRoundIndex = this.currentRoundIndex;
-        newGame.currentTeamIndex = this.currentTeamIndex;
-        newGame.currentPlayerIndex = this.currentPlayerIndex;
+        newGame.turnIndex = this.turnIndex;
         if (this.currentTurn) {
             newGame.currentTurn = { ...this.currentTurn };
         }

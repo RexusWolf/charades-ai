@@ -2,6 +2,7 @@ import { useState } from "react";
 import { saveDeck } from "../data/savedDecks";
 import { generateDeckWithGemini } from "../services/ai";
 import type { Card } from "../types";
+import styles from "./CustomDeckCreator.module.css";
 
 interface CustomDeckCreatorProps {
 	onDeckCreated: (deck: Card[]) => void;
@@ -86,17 +87,17 @@ export function CustomDeckCreator({
 	};
 
 	return (
-		<div className="custom-deck-creator">
-			<div className="creator-header">
+		<div className={styles.customDeckCreator}>
+			<div className={styles.creatorHeader}>
 				<h2>🤖 AI Deck Creator</h2>
-				<p className="creator-description">
+				<p className={styles.creatorDescription}>
 					Generate a custom deck instantly using AI! Just describe what you want
 					to play with.
 				</p>
 			</div>
 
-			<div className="creator-form">
-				<div className="input-group">
+			<div className={styles.creatorForm}>
+				<div className={styles.inputGroup}>
 					<label htmlFor="topic">Deck Topic or Prompt:</label>
 					<input
 						id="topic"
@@ -104,14 +105,14 @@ export function CustomDeckCreator({
 						placeholder="e.g., 'animals', 'Spanish TV series', 'French food', 'German movies'..."
 						value={topic}
 						onChange={(e) => setTopic(e.target.value)}
-						className="topic-input"
+						className={styles.topicInput}
 						disabled={isGenerating}
 					/>
 				</div>
 
-				<div className="input-group">
+				<div className={styles.inputGroup}>
 					<label htmlFor="cardCount">Number of Cards:</label>
-					<div className="card-count-selector">
+					<div className={styles.cardCountSelector}>
 						<input
 							id="cardCount"
 							type="range"
@@ -120,25 +121,25 @@ export function CustomDeckCreator({
 							step="5"
 							value={cardCount}
 							onChange={(e) => setCardCount(parseInt(e.target.value))}
-							className="card-count-slider"
+							className={styles.cardCountSlider}
 							disabled={isGenerating}
 						/>
-						<span className="card-count-value">{cardCount} cards</span>
+						<span className={styles.cardCountValue}>{cardCount} cards</span>
 					</div>
 				</div>
 
-				{error && <div className="error-message">{error}</div>}
+				{error && <div className={styles.errorMessage}>{error}</div>}
 
-				<div className="creator-actions">
+				<div className={styles.creatorActions}>
 					<button
 						type="button"
-						className="generate-button"
+						className={styles.generateButton}
 						onClick={handleGenerateClick}
 						disabled={isGenerating || !topic.trim()}
 					>
 						{isGenerating ? (
 							<>
-								<span className="loading-spinner"></span>
+								<span className={styles.loadingSpinner}></span>
 								Generating...
 							</>
 						) : (
@@ -147,7 +148,7 @@ export function CustomDeckCreator({
 					</button>
 					<button
 						type="button"
-						className="cancel-button"
+						className={styles.cancelButton}
 						onClick={onCancel}
 						disabled={isGenerating}
 					>
@@ -157,38 +158,38 @@ export function CustomDeckCreator({
 			</div>
 
 			{generatedCards.length > 0 && (
-				<div className="generated-deck">
-					<div className="deck-header">
+				<div className={styles.generatedDeck}>
+					<div className={styles.deckHeader}>
 						<h3>Generated Deck ({generatedCards.length} cards)</h3>
 						<button
 							type="button"
-							className="regenerate-button"
+							className={styles.regenerateButton}
 							onClick={regenerateDeck}
 						>
 							🔄 Regenerate
 						</button>
 					</div>
 
-					<div className="cards-preview">
+					<div className={styles.cardsPreview}>
 						{generatedCards.map((card) => (
-							<div key={card.id} className="preview-card">
-								<div className="card-category">{card.category}</div>
-								<div className="card-word">{card.word}</div>
+							<div key={card.id} className={styles.previewCard}>
+								<div className={styles.cardCategory}>{card.category}</div>
+								<div className={styles.cardWord}>{card.word}</div>
 							</div>
 						))}
 					</div>
 
-					<div className="deck-actions">
+					<div className={styles.deckActions}>
 						<button
 							type="button"
-							className="save-deck-button"
+							className={styles.saveDeckButton}
 							onClick={() => setShowSaveDialog(true)}
 						>
 							💾 Save Deck
 						</button>
 						<button
 							type="button"
-							className="use-deck-button"
+							className={styles.useDeckButton}
 							onClick={handleUseDeck}
 						>
 							✅ Use This Deck
@@ -198,15 +199,15 @@ export function CustomDeckCreator({
 			)}
 
 			{isGenerating && (
-				<div className="generation-status">
-					<div className="status-content">
-						<div className="ai-thinking">
-							<div className="ai-avatar">🤖</div>
-							<div className="thinking-text">
+				<div className={styles.generationStatus}>
+					<div className={styles.statusContent}>
+						<div className={styles.aiThinking}>
+							<div className={styles.aiAvatar}>🤖</div>
+							<div className={styles.thinkingText}>
 								AI is thinking about your topic: <strong>"{topic}"</strong>
 							</div>
 						</div>
-						<div className="generation-tips">
+						<div className={styles.generationTips}>
 							<p>💡 Tips for better results:</p>
 							<ul>
 								<li>Be specific about the category you want</li>
@@ -226,21 +227,21 @@ export function CustomDeckCreator({
 
 			{/* API Key Input Dialog */}
 			{showApiKeyInput && (
-				<div className="api-key-dialog-overlay">
-					<div className="api-key-dialog">
-						<div className="api-key-dialog-header">
+				<div className={styles.apiKeyDialogOverlay}>
+					<div className={styles.apiKeyDialog}>
+						<div className={styles.apiKeyDialogHeader}>
 							<h3>🔑 API Key Required</h3>
 							<button
 								type="button"
-								className="close-dialog-btn"
+								className={styles.closeDialogBtn}
 								onClick={() => setShowApiKeyInput(false)}
 							>
 								×
 							</button>
 						</div>
-						<div className="api-key-dialog-content">
+						<div className={styles.apiKeyDialogContent}>
 							<p>To generate custom decks, you need a Google Gemini API key.</p>
-							<div className="api-key-instructions">
+							<div className={styles.apiKeyInstructions}>
 								<p>
 									<strong>How to get your API key:</strong>
 								</p>
@@ -260,7 +261,7 @@ export function CustomDeckCreator({
 									<li>Copy the generated key</li>
 								</ol>
 							</div>
-							<div className="input-group">
+							<div className={styles.inputGroup}>
 								<label htmlFor="apiKey">API Key:</label>
 								<input
 									id="apiKey"
@@ -268,20 +269,20 @@ export function CustomDeckCreator({
 									value={apiKey}
 									onChange={(e) => setApiKey(e.target.value)}
 									placeholder="Enter your Gemini API key"
-									className="api-key-input"
+									className={styles.apiKeyInput}
 								/>
 							</div>
-							<div className="api-key-dialog-actions">
+							<div className={styles.apiKeyDialogActions}>
 								<button
 									type="button"
-									className="cancel-api-key-btn"
+									className={styles.cancelApiKeyBtn}
 									onClick={() => setShowApiKeyInput(false)}
 								>
 									Cancel
 								</button>
 								<button
 									type="button"
-									className="confirm-api-key-btn"
+									className={styles.confirmApiKeyBtn}
 									onClick={handleApiKeySubmit}
 									disabled={!apiKey.trim()}
 								>
@@ -295,38 +296,38 @@ export function CustomDeckCreator({
 
 			{/* Save Dialog */}
 			{showSaveDialog && (
-				<div className="save-dialog-overlay">
-					<div className="save-dialog">
-						<div className="save-dialog-header">
+				<div className={styles.saveDialogOverlay}>
+					<div className={styles.saveDialog}>
+						<div className={styles.saveDialogHeader}>
 							<h3>💾 Save Deck</h3>
 							<button
 								type="button"
-								className="close-dialog-btn"
+								className={styles.closeDialogBtn}
 								onClick={() => setShowSaveDialog(false)}
 							>
 								×
 							</button>
 						</div>
-						<div className="save-dialog-content">
+						<div className={styles.saveDialogContent}>
 							<p>Give your deck a name:</p>
 							<input
 								type="text"
 								value={saveName}
 								onChange={(e) => setSaveName(e.target.value)}
 								placeholder={topic}
-								className="save-name-input"
+								className={styles.saveNameInput}
 							/>
-							<div className="save-dialog-actions">
+							<div className={styles.saveDialogActions}>
 								<button
 									type="button"
-									className="cancel-save-btn"
+									className={styles.cancelSaveBtn}
 									onClick={() => setShowSaveDialog(false)}
 								>
 									Cancel
 								</button>
 								<button
 									type="button"
-									className="confirm-save-btn"
+									className={styles.confirmSaveBtn}
 									onClick={handleSaveDeck}
 									disabled={!saveName.trim()}
 								>
@@ -340,10 +341,10 @@ export function CustomDeckCreator({
 
 			{/* Success Message */}
 			{showSuccessMessage && (
-				<div className="success-message">
-					<div className="success-content">
-						<div className="success-icon">✅</div>
-						<div className="success-text">
+				<div className={styles.successMessage}>
+					<div className={styles.successContent}>
+						<div className={styles.successIcon}>✅</div>
+						<div className={styles.successText}>
 							<h4>Deck Saved Successfully!</h4>
 							<p>Your deck "{saveName || topic}" has been saved.</p>
 						</div>

@@ -109,7 +109,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
         return cards.map((card, index) => ({
             id: Date.now() + index,
             word: card.word || `Generated ${index + 1}`,
-            category: card.category || topic
+            deckId: undefined // AI generated cards don't belong to a specific deck
         }));
 
     } catch (error) {

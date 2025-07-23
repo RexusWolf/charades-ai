@@ -1,4 +1,4 @@
-import { SAMPLE_DECK } from '../../src/data/deck';
+import { DEFAULT_DECK } from '../../src/data/deck';
 import { DeckManager } from '../../src/services/deckManager';
 
 describe('DeckManager', () => {
@@ -12,7 +12,7 @@ describe('DeckManager', () => {
         const state = deckManager.getState();
         expect(state.selectedDecks.length).toBe(1);
         expect(state.selectedDecks[0].deckId).toBe('animals');
-        expect(state.mixedCards.length).toBe(SAMPLE_DECK.length);
+        expect(state.mixedCards.length).toBe(DEFAULT_DECK.length);
     });
 
     test('should toggle deck selection', () => {
@@ -26,7 +26,7 @@ describe('DeckManager', () => {
         // The animals deck should still be selected due to fallback logic
         expect(newState.selectedDecks.length).toBe(1);
         expect(newState.selectedDecks[0].deckId).toBe('animals');
-        expect(newState.mixedCards.length).toBe(SAMPLE_DECK.length);
+        expect(newState.mixedCards.length).toBe(DEFAULT_DECK.length);
     });
 
     test('should select all decks', () => {
@@ -53,10 +53,10 @@ describe('DeckManager', () => {
 
     test('should get mixed cards', () => {
         const cards = deckManager.getMixedCards();
-        expect(cards.length).toBe(SAMPLE_DECK.length);
+        expect(cards.length).toBe(DEFAULT_DECK.length);
         expect(cards[0]).toHaveProperty('id');
         expect(cards[0]).toHaveProperty('word');
-        expect(cards[0]).toHaveProperty('category');
+        expect(cards[0]).toHaveProperty('deckId');
     });
 
     test('should get selected decks count', () => {
@@ -66,6 +66,6 @@ describe('DeckManager', () => {
 
     test('should get total available cards', () => {
         const total = deckManager.getTotalAvailableCards();
-        expect(total).toBe(SAMPLE_DECK.length);
+        expect(total).toBe(DEFAULT_DECK.length);
     });
 }); 

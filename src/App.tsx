@@ -9,7 +9,7 @@ import { MainLayout } from "./components/MainLayout/MainLayout";
 import { SavedDecksManager } from "./components/SavedDecksManager/SavedDecksManager";
 import { StartScreen } from "./components/StartScreen/StartScreen";
 import { TeamSetup } from "./components/TeamSetup/TeamSetup";
-import { SAMPLE_DECK } from "./data/deck";
+import { DEFAULT_DECK } from "./data/deck";
 import { migrateSavedDecks } from "./data/savedDecks";
 import type { GameConfig, GameState, Round, Team } from "./Game";
 import { Game } from "./Game";
@@ -24,7 +24,7 @@ function App() {
 	const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
 	const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
 	const [gameRounds, setGameRounds] = useState<Round[]>([]);
-	const [currentDeck, setCurrentDeck] = useState<Card[]>(SAMPLE_DECK);
+	const [currentDeck, setCurrentDeck] = useState<Card[]>(DEFAULT_DECK);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
 	const [showDeckSelector, setShowDeckSelector] = useState(false);
@@ -64,7 +64,7 @@ function App() {
 		setGameConfig(null);
 		setSelectedTeams([]);
 		setGameRounds([]);
-		setCurrentDeck(SAMPLE_DECK);
+		setCurrentDeck(DEFAULT_DECK);
 		setShowDeckCreator(false);
 		setShowSavedDecks(false);
 		setShowDeckSelector(false);

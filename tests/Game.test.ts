@@ -37,11 +37,11 @@ describe('Game', () => {
         ];
 
         deck = [
-            { id: 1, word: 'Elephant', category: 'Animals' },
-            { id: 2, word: 'Pizza', category: 'Food' },
-            { id: 3, word: 'Basketball', category: 'Sports' },
-            { id: 4, word: 'Computer', category: 'Technology' },
-            { id: 5, word: 'Beach', category: 'Places' },
+            { id: 1, word: 'Elephant', deckId: 'animals' },
+            { id: 2, word: 'Pizza', deckId: 'animals' },
+            { id: 3, word: 'Basketball', deckId: 'animals' },
+            { id: 4, word: 'Computer', deckId: 'animals' },
+            { id: 5, word: 'Beach', deckId: 'animals' },
         ];
     });
 

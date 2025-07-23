@@ -156,7 +156,12 @@ export class DeckManager {
             // Check if it's a library deck
             const libraryDeck = DECK_LIBRARY[selectedDeck.deckId as keyof typeof DECK_LIBRARY];
             if (libraryDeck) {
-                deckCards = [...libraryDeck.cards];
+                // Convert DeckCard to Card with generated IDs and deckId
+                deckCards = libraryDeck.cards.map((deckCard, index) => ({
+                    id: Date.now() + index,
+                    word: deckCard.word,
+                    deckId: libraryDeck.id
+                }));
             } else {
                 // Check if it's a saved deck
                 const loadedCards = loadDeck(selectedDeck.deckId);

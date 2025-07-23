@@ -437,14 +437,6 @@
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.previewCard .cardCategory {
-	font-size: 0.7rem;
-	opacity: 0.8;
-	margin-bottom: 0.25rem;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
 .previewCard .cardWord {
 	font-size: 0.9rem;
 	font-weight: bold;

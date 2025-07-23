@@ -29,18 +29,6 @@
 	transform: scale(0.98);
 }
 
-.cardCategory {
-	position: absolute;
-	top: 1rem;
-	left: 1rem;
-	background: rgba(0, 0, 0, 0.1);
-	color: #333;
-	padding: 0.5rem 1rem;
-	border-radius: 20px;
-	font-size: 0.9rem;
-	font-weight: 500;
-}
-
 .cardWord {
 	font-size: 3rem;
 	font-weight: bold;

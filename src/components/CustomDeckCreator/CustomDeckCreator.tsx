@@ -204,7 +204,6 @@ export function CustomDeckCreator({
 					<div className={styles.cardsPreview}>
 						{generatedCards.map((card) => (
 							<div key={card.id} className={styles.previewCard}>
-								<div className={styles.cardCategory}>{card.category}</div>
 								<div className={styles.cardWord}>{card.word}</div>
 							</div>
 						))}

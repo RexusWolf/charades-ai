@@ -14,8 +14,11 @@ export const DECK_LIBRARY = {
     "marvel-characters-spanish": MARVEL_CHARACTERS_SPANISH_DECK,
 };
 
-// Legacy support - keep the original SAMPLE_DECK for backward compatibility
-export const SAMPLE_DECK: Card[] = DECK_LIBRARY.animals.cards;
+export const DEFAULT_DECK: Card[] = DECK_LIBRARY.animals.cards.map((card, index) => ({
+    id: Date.now() + index,
+    word: card.word,
+    deckId: DECK_LIBRARY.animals.id
+}));
 
 // Helper function to get all available decks
 export function getAllDecks() {

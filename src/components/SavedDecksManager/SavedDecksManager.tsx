@@ -251,9 +251,6 @@ export function SavedDecksManager({
 										<div className={styles.previewCards}>
 											{deck.cards.slice(0, 3).map((card) => (
 												<div key={card.id} className={styles.previewCard}>
-													<div className={styles.cardCategory}>
-														{card.category}
-													</div>
 													<div className={styles.cardWord}>{card.word}</div>
 												</div>
 											))}

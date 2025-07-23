@@ -161,7 +161,7 @@ export function importDecks(importData: string): { success: boolean; message: st
                 cards: importedDeck.cards.map((card: Card, index: number) => ({
                     id: Date.now() + index + Math.random(),
                     word: card.word,
-                    category: card.category
+                    deckId: card.deckId
                 })),
                 createdAt: new Date(),
                 useCount: 0

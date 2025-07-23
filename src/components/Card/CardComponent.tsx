@@ -79,7 +79,6 @@ export function CardComponent({
 						: "none",
 				}}
 			>
-				<div className={styles.cardCategory}>{card.category}</div>
 				<div className={styles.cardWord}>{card.word}</div>
 				<div className={styles.cardInstructions}>
 					<div className={`${styles.swipeHint} ${styles.swipeHintLeft}`}>

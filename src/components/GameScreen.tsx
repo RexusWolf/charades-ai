@@ -4,6 +4,7 @@ import { Game } from "../Game";
 import type { Card as CardType, GameConfig, Round, Team } from "../types";
 import { Card } from "./Card";
 import { GameHeader } from "./GameHeader";
+import styles from "./GameScreen.module.css";
 import { NoCards } from "./NoCards";
 import { PlayerTurn } from "./PlayerTurn";
 
@@ -184,20 +185,20 @@ export function GameScreen({
 			)}
 
 			{turnState === "preparing" ? (
-				<div className="preparation-screen">
-					<div className="preparation-card">
+				<div className={styles.preparationScreen}>
+					<div className={styles.preparationCard}>
 						<h2>Get Ready!</h2>
 						<p>
 							It's your turn, <strong>{currentPlayer?.name}</strong>!
 						</p>
-						<div className="preparation-instructions">
+						<div className={styles.preparationInstructions}>
 							<p>• Take a moment to prepare</p>
 							<p>• Think about your acting strategy</p>
 							<p>• Click "Start Turn" when ready</p>
 						</div>
 						<button
 							type="button"
-							className="start-turn-button"
+							className={styles.startTurnButton}
 							onClick={handleStartTurn}
 						>
 							Start Turn
@@ -221,10 +222,10 @@ export function GameScreen({
 					)}
 
 					{turnState === "playing" && (
-						<div className="end-turn-container">
+						<div className={styles.endTurnContainer}>
 							<button
 								type="button"
-								className="end-turn-button"
+								className={styles.endTurnButton}
 								onClick={handleEndTurn}
 							>
 								End Turn Early

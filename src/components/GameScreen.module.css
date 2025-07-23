@@ -1,0 +1,104 @@
+/* Preparation Screen */
+.preparationScreen {
+	width: 100%;
+	max-width: 500px;
+	height: 400px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 2rem;
+}
+
+.preparationCard {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	padding: 2rem;
+	text-align: center;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	color: #333;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.preparationCard h2 {
+	font-size: 2rem;
+	margin-bottom: 1rem;
+	color: #333;
+}
+
+.preparationCard p {
+	font-size: 1.2rem;
+	margin-bottom: 1.5rem;
+	color: #666;
+}
+
+.preparationInstructions {
+	margin: 1.5rem 0;
+	text-align: left;
+}
+
+.preparationInstructions p {
+	margin: 0.5rem 0;
+	font-size: 1rem;
+	color: #555;
+}
+
+.startTurnButton {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	border: none;
+	padding: 15px 40px;
+	font-size: 1.2rem;
+	font-weight: bold;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	margin-top: 1rem;
+}
+
+.startTurnButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.startTurnButton:active {
+	transform: translateY(0);
+}
+
+/* End Turn Button */
+.endTurnContainer {
+	display: flex;
+	justify-content: center;
+	margin: 1rem 0;
+}
+
+.endTurnButton {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.endTurnButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.endTurnButton:active {
+	transform: translateY(0);
+}

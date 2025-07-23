@@ -1,5 +1,5 @@
 import { Game } from './Game';
-import type { Card, GameConfig, Player, Team } from './types';
+import type { Card, GameConfig, Team } from './types';
 
 describe('Game', () => {
     let config: GameConfig;

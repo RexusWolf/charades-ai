@@ -8,14 +8,14 @@ import { StartScreen } from "./components/StartScreen";
 import { TeamSetup } from "./components/TeamSetup";
 import { SAMPLE_DECK } from "./data/deck";
 import { Game } from "./Game";
-import type { Card, GameConfig, GameRound, GameState, Team } from "./types";
+import type { Card, GameConfig, GameState, Round, Team } from "./types";
 import "./App.css";
 
 function App() {
 	const [gameState, setGameState] = useState<GameState>("idle");
 	const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
 	const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
-	const [gameRounds, setGameRounds] = useState<GameRound[]>([]);
+	const [gameRounds, setGameRounds] = useState<Round[]>([]);
 	const [currentDeck, setCurrentDeck] = useState<Card[]>(SAMPLE_DECK);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
@@ -45,7 +45,7 @@ function App() {
 		}
 	}, [gameState, gameConfig, selectedTeams, currentDeck]);
 
-	const handleGameEnd = useCallback((rounds: GameRound[]) => {
+	const handleGameEnd = useCallback((rounds: Round[]) => {
 		setGameRounds(rounds);
 		setGameState("finished");
 	}, []);

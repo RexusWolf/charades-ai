@@ -12,10 +12,7 @@ interface PlayerTurnProps {
 export function PlayerTurn({
 	currentPlayer,
 	teams,
-	roundNumber,
-	totalRounds,
 	turnState,
-	onStartTurn,
 }: PlayerTurnProps) {
 	// Get the team for the current player
 	const currentTeam = teams?.find((team) => team.id === currentPlayer.teamId);

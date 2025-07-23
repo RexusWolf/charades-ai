@@ -1,0 +1,125 @@
+/* End Screen Team Results */
+.resultsSummary {
+	margin: 2rem 0;
+}
+
+.resultsSummary h2 {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	font-size: 1.5rem;
+}
+
+.teamResults {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.teamResult {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 1.5rem;
+	border-radius: 15px;
+	backdrop-filter: blur(10px);
+	position: relative;
+}
+
+.teamResult .teamHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.teamResult .teamHeader h3 {
+	margin: 0;
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+.winnerBadge {
+	background: linear-gradient(45deg, #ffd700, #ffed4e);
+	color: #333;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-weight: bold;
+	font-size: 0.9rem;
+}
+
+.teamStats {
+	display: flex;
+	gap: 2rem;
+	justify-content: center;
+}
+
+.statItem {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.playerResults {
+	margin: 2rem 0;
+}
+
+.playerResults h2 {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	font-size: 1.5rem;
+}
+
+.playerList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.playerResult {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 1rem;
+	border-radius: 10px;
+	backdrop-filter: blur(10px);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.playerInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.playerName {
+	font-weight: bold;
+	font-size: 1.1rem;
+}
+
+.teamName {
+	font-size: 0.9rem;
+	opacity: 0.8;
+}
+
+.playerStats {
+	display: flex;
+	gap: 1rem;
+}
+
+.playerStats .stat {
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.gameSummary {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 1rem;
+	border-radius: 15px;
+	margin: 1rem 0;
+	backdrop-filter: blur(10px);
+	text-align: center;
+}
+
+.gameSummary p {
+	margin: 0.5rem 0;
+	font-weight: 500;
+}

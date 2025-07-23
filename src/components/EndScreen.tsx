@@ -1,5 +1,6 @@
 import { getPlayerById, getTeamById } from "../data/teams";
 import type { Round, Team, Turn } from "../types";
+import styles from "./EndScreen.module.css";
 
 interface EndScreenProps {
 	rounds: Round[];
@@ -65,34 +66,34 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 			<div className="container">
 				<h1>🎭 Game Over!</h1>
 
-				<div className="results-summary">
+				<div className={styles.resultsSummary}>
 					<h2>Team Results</h2>
-					<div className="team-results">
+					<div className={styles.teamResults}>
 						{sortedTeams.map((teamScore, index) => (
-							<div key={teamScore.team.id} className="team-result">
+							<div key={teamScore.team.id} className={styles.teamResult}>
 								<div
-									className="team-header"
+									className={styles.teamHeader}
 									style={{ color: teamScore.team.color }}
 								>
 									<h3>{teamScore.team.name}</h3>
 									{index === 0 && (
-										<span className="winner-badge">🏆 Winner!</span>
+										<span className={styles.winnerBadge}>🏆 Winner!</span>
 									)}
 								</div>
-								<div className="team-stats">
-									<div className="stat-item">
+								<div className={styles.teamStats}>
+									<div className={styles.statItem}>
 										<span className="stat-label">Correct:</span>
 										<span className="stat-value correct">
 											{teamScore.totalCorrect}
 										</span>
 									</div>
-									<div className="stat-item">
+									<div className={styles.statItem}>
 										<span className="stat-label">Skipped:</span>
 										<span className="stat-value skipped">
 											{teamScore.totalSkipped}
 										</span>
 									</div>
-									<div className="stat-item">
+									<div className={styles.statItem}>
 										<span className="stat-label">Total:</span>
 										<span className="stat-value">{teamScore.totalCorrect}</span>
 									</div>
@@ -102,21 +103,24 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 					</div>
 				</div>
 
-				<div className="player-results">
+				<div className={styles.playerResults}>
 					<h2>Player Performance</h2>
-					<div className="player-list">
+					<div className={styles.playerList}>
 						{playerStats.map((stat, index) => (
-							<div key={stat.player?.id || index} className="player-result">
-								<div className="player-info">
-									<span className="player-name">{stat.player?.name}</span>
+							<div
+								key={stat.player?.id || index}
+								className={styles.playerResult}
+							>
+								<div className={styles.playerInfo}>
+									<span className={styles.playerName}>{stat.player?.name}</span>
 									<span
-										className="team-name"
+										className={styles.teamName}
 										style={{ color: stat.team?.color }}
 									>
 										{stat.team?.name}
 									</span>
 								</div>
-								<div className="player-stats">
+								<div className={styles.playerStats}>
 									<span className="stat correct">{stat.correct} correct</span>
 									<span className="stat skipped">{stat.skipped} skipped</span>
 								</div>
@@ -125,7 +129,7 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 					</div>
 				</div>
 
-				<div className="game-summary">
+				<div className={styles.gameSummary}>
 					<p>Total Cards Played: {totalCards}</p>
 					<p>Total Rounds: {rounds.length}</p>
 				</div>

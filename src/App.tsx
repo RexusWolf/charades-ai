@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Card } from "./components/Card/Card";
 import { CustomDeckCreator } from "./components/CustomDeckCreator/CustomDeckCreator";
+import { DeckSelector } from "./components/DeckSelector/DeckSelector";
 import { EndScreen } from "./components/EndScreen/EndScreen";
 import { GameConfigScreen } from "./components/GameConfig/GameConfig";
 import { GameScreen } from "./components/GameScreen/GameScreen";
@@ -9,8 +10,8 @@ import { SavedDecksManager } from "./components/SavedDecksManager/SavedDecksMana
 import { StartScreen } from "./components/StartScreen/StartScreen";
 import { TeamSetup } from "./components/TeamSetup/TeamSetup";
 import { SAMPLE_DECK } from "./data/deck";
+import type { GameConfig, GameState, Round, Team } from "./Game";
 import { Game } from "./Game";
-import type { GameConfig, GameState, Round, Team } from "./types";
 
 function App() {
 	const [gameState, setGameState] = useState<GameState>("idle");
@@ -20,6 +21,7 @@ function App() {
 	const [currentDeck, setCurrentDeck] = useState<Card[]>(SAMPLE_DECK);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
+	const [showDeckSelector, setShowDeckSelector] = useState(false);
 	const [gameInstance, setGameInstance] = useState<Game | null>(null);
 
 	const startGame = useCallback(() => {
@@ -59,6 +61,7 @@ function App() {
 		setCurrentDeck(SAMPLE_DECK);
 		setShowDeckCreator(false);
 		setShowSavedDecks(false);
+		setShowDeckSelector(false);
 		setGameInstance(null);
 	}, []);
 
@@ -80,6 +83,14 @@ function App() {
 		setShowSavedDecks(false);
 	}, []);
 
+	const handleDeckSelectorClose = useCallback(() => {
+		setShowDeckSelector(false);
+	}, []);
+
+	const handleDeckSelectionChange = useCallback((cards: Card[]) => {
+		setCurrentDeck(cards);
+	}, []);
+
 	if (gameState === "idle") {
 		return (
 			<MainLayout>
@@ -96,6 +107,7 @@ function App() {
 						onStartGame={handleConfigComplete}
 						onCreateCustomDeck={() => setShowDeckCreator(true)}
 						onShowSavedDecks={() => setShowSavedDecks(true)}
+						onShowDeckSelector={() => setShowDeckSelector(true)}
 					/>
 				</MainLayout>
 				{showDeckCreator && (
@@ -108,6 +120,12 @@ function App() {
 					<SavedDecksManager
 						onDeckSelected={handleSavedDeckSelected}
 						onClose={handleSavedDecksClose}
+					/>
+				)}
+				{showDeckSelector && (
+					<DeckSelector
+						onDeckSelectionChange={handleDeckSelectionChange}
+						onClose={handleDeckSelectorClose}
 					/>
 				)}
 			</>

@@ -1,4 +1,4 @@
-import type { GameConfig } from '../types'
+import type { GameConfig } from '../Game'
 
 export const DEFAULT_CONFIG: GameConfig = {
     secondsPerRound: 60,

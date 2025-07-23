@@ -102,7 +102,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
             // Clean the response in case it has markdown formatting
             const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
             cards = JSON.parse(cleanContent);
-        } catch (parseError) {
+        } catch {
             console.error('Failed to parse Gemini response:', content);
             throw new Error('Invalid response format from AI');
         }

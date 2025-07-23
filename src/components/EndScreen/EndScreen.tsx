@@ -1,5 +1,5 @@
 import { getPlayerById, getTeamById } from "../../data/teams";
-import type { Round, Team, Turn } from "../../types";
+import type { Round, Team, Turn } from "../../Game";
 import styles from "./EndScreen.module.css";
 
 interface EndScreenProps {

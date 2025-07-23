@@ -1,4 +1,4 @@
-import type { Player, Team } from '../types'
+import type { Player, Team } from '../Game'
 
 export const SAMPLE_TEAMS: Team[] = [
     {

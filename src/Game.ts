@@ -1,5 +1,41 @@
 import type { Card } from "./components/Card/Card";
-import type { GameConfig, Player, Round, Team, Turn } from './types';
+
+// Game-related types
+export interface Player {
+    id: string
+    name: string
+    teamId: string
+}
+
+export interface Team {
+    id: string
+    name: string
+    color: string
+    players: Player[]
+}
+
+export interface Turn {
+    playerId: string
+    teamId: string
+    remainingCards: Card[]
+    correctCards: Card[]
+    timeLeft: number
+}
+
+export interface Round {
+    remainingCards: Card[]
+    turns: Turn[]
+}
+
+export interface GameConfig {
+    secondsPerRound: number
+    maxCards: number
+    enablePreparationPhase: boolean
+    preparationTimeLimit: number
+    autoStartNextPlayer: boolean
+}
+
+export type GameState = 'idle' | 'config' | 'team-setup' | 'playing' | 'finished'
 
 /**
  * Game class that manages the complete state of a charades game.

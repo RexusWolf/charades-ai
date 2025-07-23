@@ -37,7 +37,7 @@ export function getSavedDecks(): SavedDeck[] {
 
         const decks = JSON.parse(stored);
         // Convert date strings back to Date objects
-        return decks.map((deck: any) => ({
+        return decks.map((deck: SavedDeck) => ({
             ...deck,
             createdAt: new Date(deck.createdAt),
             lastUsed: deck.lastUsed ? new Date(deck.lastUsed) : undefined
@@ -153,7 +153,7 @@ export function importDecks(importData: string): { success: boolean; message: st
                 id: `deck-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                 name: importedDeck.name,
                 topic: importedDeck.topic,
-                cards: importedDeck.cards.map((card: any, index: number) => ({
+                cards: importedDeck.cards.map((card: Card, index: number) => ({
                     id: Date.now() + index + Math.random(),
                     word: card.word,
                     category: card.category

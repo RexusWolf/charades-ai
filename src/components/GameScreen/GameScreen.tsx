@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SwipeEventData } from "react-swipeable";
+import type { GameConfig, Round, Team } from "../../Game";
 import { Game } from "../../Game";
-import type { GameConfig, Round, Team } from "../../types";
 import type { Card } from "../Card/Card";
 import { CardComponent } from "../Card/CardComponent";
 import { GameHeader } from "../GameHeader/GameHeader";

@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { DEFAULT_CONFIG, PRESET_CONFIGS } from "../../data/config";
-import type { GameConfig } from "../../types";
+import type { GameConfig } from "../../Game";
 import styles from "./GameConfig.module.css";
 
 interface GameConfigScreenProps {
 	onStartGame: (config: GameConfig) => void;
 	onCreateCustomDeck?: () => void;
 	onShowSavedDecks?: () => void;
+	onShowDeckSelector?: () => void;
 }
 
 export function GameConfigScreen({
 	onStartGame,
 	onCreateCustomDeck,
 	onShowSavedDecks,
+	onShowDeckSelector,
 }: GameConfigScreenProps) {
 	const [config, setConfig] = useState<GameConfig>(DEFAULT_CONFIG);
 	const [selectedPreset, setSelectedPreset] = useState<string>("standard");
@@ -187,6 +189,15 @@ export function GameConfigScreen({
 			</div>
 
 			<div className={styles.configActions}>
+				{onShowDeckSelector && (
+					<button
+						type="button"
+						className={styles.deckSelectorButton}
+						onClick={onShowDeckSelector}
+					>
+						🎴 Select Decks
+					</button>
+				)}
 				{onCreateCustomDeck && (
 					<button
 						type="button"

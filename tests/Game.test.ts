@@ -1,6 +1,6 @@
-import type { Card } from "./components/Card/Card";
-import { Game } from './Game';
-import type { GameConfig, Team } from './types';
+import type { Card } from "../src/components/Card/Card";
+import type { GameConfig, Team } from '../src/Game';
+import { Game } from '../src/Game';
 
 describe('Game', () => {
     let config: GameConfig;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SAMPLE_TEAMS } from "../../data/teams";
-import type { Player, Team } from "../../types";
+import type { Player, Team } from "../../Game";
 import styles from "./TeamSetup.module.css";
 
 interface TeamSetupProps {

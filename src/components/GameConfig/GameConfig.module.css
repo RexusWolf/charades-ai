@@ -219,6 +219,7 @@
 	margin-top: 2rem;
 }
 
+.deckSelectorButton,
 .customDeckButton,
 .savedDecksButton {
 	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
@@ -233,6 +234,7 @@
 	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.deckSelectorButton:hover,
 .customDeckButton:hover,
 .savedDecksButton:hover {
 	transform: translateY(-2px);

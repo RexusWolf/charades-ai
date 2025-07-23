@@ -63,7 +63,6 @@ export class Game {
     }
 
     getCurrentPlayer(): Player | null {
-        console.log('getCurrentPlayer', this.currentTeamIndex, this.currentPlayerIndex);
         const currentTeam = this.teams[this.currentTeamIndex];
         if (!currentTeam || this.currentPlayerIndex >= currentTeam.players.length) {
             return currentTeam.players[this.currentPlayerIndex % currentTeam.players.length];

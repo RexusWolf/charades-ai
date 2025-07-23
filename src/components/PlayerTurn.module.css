@@ -1,0 +1,79 @@
+/* Player Turn Styles */
+.playerTurn {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 1rem;
+	border-radius: 15px;
+	margin-bottom: 1rem;
+	backdrop-filter: blur(10px);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 2rem;
+}
+
+.playerInfo {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex: 1;
+}
+
+.teamInfo {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.playerLabel,
+.teamLabel {
+	font-size: 0.9rem;
+	opacity: 0.8;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.playerName,
+.teamName {
+	font-size: 1.1rem;
+	font-weight: bold;
+}
+
+.roundProgress {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.turnStatus {
+	font-size: 0.9rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	background: linear-gradient(45deg, #ffd43b, #fcc419);
+	color: #333;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	white-space: nowrap;
+}
+
+.turnStatus.preparing {
+	background: linear-gradient(45deg, #ffd43b, #fcc419);
+	color: #333;
+}
+
+.turnStatus.playing {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}

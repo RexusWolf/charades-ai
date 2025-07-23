@@ -959,64 +959,6 @@ h1 {
 	}
 }
 
-/* Player Turn Styles */
-.player-turn {
-	background: rgba(255, 255, 255, 0.1);
-	padding: 1rem;
-	border-radius: 15px;
-	margin-bottom: 1rem;
-	backdrop-filter: blur(10px);
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.turn-info {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
-
-.current-player,
-.current-team {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-}
-
-.player-label,
-.team-label {
-	font-size: 0.9rem;
-	opacity: 0.8;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-.player-name,
-.team-name {
-	font-size: 1.1rem;
-	font-weight: bold;
-}
-
-.round-progress {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.5rem;
-}
-
-.round-label {
-	font-size: 0.9rem;
-	opacity: 0.8;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-.round-number {
-	font-size: 1.2rem;
-	font-weight: bold;
-}
-
 /* Loading animation */
 @keyframes fadeIn {
 	from {

@@ -1,4 +1,5 @@
 import type { Player, Team } from "../types";
+import styles from "./PlayerTurn.module.css";
 
 interface PlayerTurnProps {
 	currentPlayer: Player;
@@ -18,25 +19,30 @@ export function PlayerTurn({
 	const currentTeam = teams?.find((team) => team.id === currentPlayer.teamId);
 
 	return (
-		<div className="player-turn">
-			<div className="player-info">
-				<span className="player-label">Current Player: </span>
-				<span className="player-name" style={{ color: currentTeam?.color }}>
+		<div className={styles.playerTurn}>
+			<div className={styles.playerInfo}>
+				<span className={styles.playerLabel}>Current Player: </span>
+				<span
+					className={styles.playerName}
+					style={{ color: currentTeam?.color }}
+				>
 					{currentPlayer.name}
 				</span>
-			</div>
-			<div className="team-info">
-				<span className="team-label">Team: </span>
-				<span className="team-name" style={{ color: currentTeam?.color }}>
+				<span className={styles.teamLabel}>Team: </span>
+				<span className={styles.teamName} style={{ color: currentTeam?.color }}>
 					{currentTeam?.name}
 				</span>
 			</div>
-			<div className="round-progress">
+			<div className={styles.roundProgress}>
 				{turnState === "preparing" && (
-					<span className="turn-status preparing">Preparing...</span>
+					<span className={`${styles.turnStatus} ${styles.preparing}`}>
+						Preparing...
+					</span>
 				)}
 				{turnState === "playing" && (
-					<span className="turn-status playing">Playing...</span>
+					<span className={`${styles.turnStatus} ${styles.playing}`}>
+						Playing...
+					</span>
 				)}
 			</div>
 		</div>

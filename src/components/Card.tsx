@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { type SwipeEventData, useSwipeable } from "react-swipeable";
 import type { Card as CardType } from "../types";
+import styles from "./Card.module.css";
 
 interface CardProps {
 	card: CardType;
@@ -59,14 +60,16 @@ export function Card({
 	});
 
 	const getCardClassName = () => {
-		if (!isSwiping) return "card";
-		if (swipeDirection === "left") return "card swiping-left";
-		if (swipeDirection === "right") return "card swiping-right";
-		return "card";
+		if (!isSwiping) return styles.card;
+		if (swipeDirection === "left")
+			return `${styles.card} ${styles.cardSwipingLeft}`;
+		if (swipeDirection === "right")
+			return `${styles.card} ${styles.cardSwipingRight}`;
+		return styles.card;
 	};
 
 	return (
-		<div className="card-container" {...handlers}>
+		<div className={styles.cardContainer} {...handlers}>
 			<div
 				className={getCardClassName()}
 				style={{
@@ -76,19 +79,29 @@ export function Card({
 						: "none",
 				}}
 			>
-				<div className="card-category">{card.category}</div>
-				<div className="card-word">{card.word}</div>
-				<div className="card-instructions">
-					<div className="swipe-hint left">← SKIP</div>
-					<div className="swipe-hint right">CORRECT →</div>
+				<div className={styles.cardCategory}>{card.category}</div>
+				<div className={styles.cardWord}>{card.word}</div>
+				<div className={styles.cardInstructions}>
+					<div className={`${styles.swipeHint} ${styles.swipeHintLeft}`}>
+						← SKIP
+					</div>
+					<div className={`${styles.swipeHint} ${styles.swipeHintRight}`}>
+						CORRECT →
+					</div>
 				</div>
 				{isSwiping && (
-					<div className={`swipe-overlay ${swipeDirection}`}>
+					<div className={styles.swipeOverlay}>
 						{swipeDirection === "left" && (
-							<span className="swipe-text skip">SKIP</span>
+							<span className={`${styles.swipeText} ${styles.swipeTextSkip}`}>
+								SKIP
+							</span>
 						)}
 						{swipeDirection === "right" && (
-							<span className="swipe-text correct">CORRECT</span>
+							<span
+								className={`${styles.swipeText} ${styles.swipeTextCorrect}`}
+							>
+								CORRECT
+							</span>
 						)}
 					</div>
 				)}

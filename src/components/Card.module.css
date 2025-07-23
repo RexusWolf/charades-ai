@@ -1,0 +1,162 @@
+/* Card container */
+.cardContainer {
+	width: 100%;
+	max-width: 500px;
+	height: 400px;
+	position: relative;
+	margin-bottom: 2rem;
+}
+
+.card {
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	position: relative;
+	overflow: hidden;
+	cursor: grab;
+	transition: transform 0.3s ease;
+}
+
+.card:active {
+	cursor: grabbing;
+	transform: scale(0.98);
+}
+
+.cardCategory {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	background: rgba(0, 0, 0, 0.1);
+	color: #333;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.cardWord {
+	font-size: 3rem;
+	font-weight: bold;
+	color: #333;
+	text-align: center;
+	margin-bottom: 2rem;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.cardInstructions {
+	position: absolute;
+	bottom: 1rem;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: space-between;
+	padding: 0 2rem;
+}
+
+.swipeHint {
+	background: rgba(0, 0, 0, 0.1);
+	color: #333;
+	padding: 0.5rem 1rem;
+	border-radius: 15px;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.swipeHintLeft {
+	color: #ff6b6b;
+}
+
+.swipeHintRight {
+	color: #51cf66;
+}
+
+/* Swipe animations */
+.cardSwipingLeft {
+	transform: translateX(-100px) rotate(-10deg);
+	opacity: 0.7;
+	background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+	color: white;
+}
+
+.cardSwipingRight {
+	transform: translateX(100px) rotate(10deg);
+	opacity: 0.7;
+	background: linear-gradient(135deg, #51cf66, #40c057);
+	color: white;
+}
+
+.cardSwipingLeft .cardWord,
+.cardSwipingRight .cardWord {
+	color: white;
+}
+
+.cardSwipingLeft .cardCategory,
+.cardSwipingRight .cardCategory {
+	background: rgba(255, 255, 255, 0.2);
+	color: white;
+}
+
+/* Swipe overlay */
+.swipeOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+	z-index: 10;
+}
+
+.swipeText {
+	font-size: 2rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+	animation: swipeTextPulse 0.5s ease-in-out;
+}
+
+.swipeTextSkip {
+	color: #ff6b6b;
+}
+
+.swipeTextCorrect {
+	color: #51cf66;
+}
+
+@keyframes swipeTextPulse {
+	0% {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.1);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+	.cardContainer {
+		height: 350px;
+	}
+
+	.cardWord {
+		font-size: 2.5rem;
+	}
+}

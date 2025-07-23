@@ -62,9 +62,9 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 	);
 
 	return (
-		<div className="app">
-			<div className="container">
-				<h1>🎭 Game Over!</h1>
+		<div className={styles.app}>
+			<div className={styles.container}>
+				<h1 className={styles.title}>🎭 Game Over!</h1>
 
 				<div className={styles.resultsSummary}>
 					<h2>Team Results</h2>
@@ -82,20 +82,22 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 								</div>
 								<div className={styles.teamStats}>
 									<div className={styles.statItem}>
-										<span className="stat-label">Correct:</span>
-										<span className="stat-value correct">
+										<span className={styles.statLabel}>Correct:</span>
+										<span className={`${styles.statValue} ${styles.correct}`}>
 											{teamScore.totalCorrect}
 										</span>
 									</div>
 									<div className={styles.statItem}>
-										<span className="stat-label">Skipped:</span>
-										<span className="stat-value skipped">
+										<span className={styles.statLabel}>Skipped:</span>
+										<span className={`${styles.statValue} ${styles.skipped}`}>
 											{teamScore.totalSkipped}
 										</span>
 									</div>
 									<div className={styles.statItem}>
-										<span className="stat-label">Total:</span>
-										<span className="stat-value">{teamScore.totalCorrect}</span>
+										<span className={styles.statLabel}>Total:</span>
+										<span className={styles.statValue}>
+											{teamScore.totalCorrect}
+										</span>
 									</div>
 								</div>
 							</div>
@@ -121,8 +123,12 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 									</span>
 								</div>
 								<div className={styles.playerStats}>
-									<span className="stat correct">{stat.correct} correct</span>
-									<span className="stat skipped">{stat.skipped} skipped</span>
+									<span className={`${styles.stat} ${styles.correct}`}>
+										{stat.correct} correct
+									</span>
+									<span className={`${styles.stat} ${styles.skipped}`}>
+										{stat.skipped} skipped
+									</span>
 								</div>
 							</div>
 						))}
@@ -134,7 +140,11 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 					<p>Total Rounds: {rounds.length}</p>
 				</div>
 
-				<button type="button" className="start-button" onClick={onPlayAgain}>
+				<button
+					type="button"
+					className={styles.startButton}
+					onClick={onPlayAgain}
+				>
 					Play Again
 				</button>
 			</div>

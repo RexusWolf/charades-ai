@@ -166,7 +166,7 @@ export function GameScreen({
 	const totalRounds = game.getTotalRounds();
 
 	return (
-		<div className="app">
+		<div className={styles.app}>
 			<GameHeader
 				timeLeft={timeLeft}
 				cardsLeftToGuess={game.getCurrentTurn()?.remainingCards.length ?? 0}

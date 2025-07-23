@@ -14,6 +14,7 @@ describe('Game', () => {
             enablePreparationPhase: false,
             preparationTimeLimit: 0,
             autoStartNextPlayer: false,
+            numberOfRounds: 1,
         };
 
         teams = [
@@ -53,18 +54,8 @@ describe('Game', () => {
             expect(game.getTeams()).toEqual(teams);
             expect(game.getDeck()).toEqual(deck);
             expect(game.getTotalCards()).toBe(5);
-            expect(game.getRemainingCards()).toBe(5);
+            expect(game.getCurrentRoundRemainingCards()).toBe(5);
             expect(game.isGameFinished()).toBe(false);
-        });
-
-        it('should create rotation order correctly', () => {
-            const game = new Game(config, teams, deck);
-            const rotationOrder = game.getRotationOrder();
-
-            expect(rotationOrder).toHaveLength(3);
-            expect(rotationOrder[0].name).toBe('Alice');
-            expect(rotationOrder[1].name).toBe('Charlie');
-            expect(rotationOrder[2].name).toBe('Bob');
         });
     });
 
@@ -78,7 +69,7 @@ describe('Game', () => {
             const currentPlayer = game.getCurrentPlayer();
 
             expect(currentRound).toBeTruthy();
-            expect(currentRound?.remainingCards).toHaveLength(5);
+            expect(currentRound?.getRemainingCardsCount()).toBe(5);
             expect(currentTurn).toBeTruthy();
             expect(currentTurn?.playerId).toBe(currentPlayer?.id);
             expect(currentTurn?.remainingCards).toHaveLength(5);
@@ -100,7 +91,7 @@ describe('Game', () => {
             expect(currentTurn?.correctCards).toHaveLength(1);
             expect(currentTurn?.correctCards[0].word).toBe('Elephant');
             expect(currentTurn?.remainingCards).toHaveLength(4);
-            expect(currentRound?.remainingCards).toHaveLength(4);
+            expect(currentRound?.getRemainingCardsCount()).toBe(4);
         });
 
         it('should mark cards as skipped correctly', () => {
@@ -117,7 +108,7 @@ describe('Game', () => {
 
             expect(currentTurn?.correctCards).toHaveLength(0);
             expect(currentTurn?.remainingCards).toHaveLength(4);
-            expect(currentRound?.remainingCards).toHaveLength(5); // Round still has all cards
+            expect(currentRound?.getRemainingCardsCount()).toBe(5); // Round still has all cards
         });
 
         it('should end turn and move to next player', () => {
@@ -134,8 +125,8 @@ describe('Game', () => {
             expect(secondPlayer?.name).toBe('Charlie');
 
             const currentRound = game.getCurrentRound();
-            expect(currentRound?.turns).toHaveLength(1);
-            expect(currentRound?.turns[0].playerId).toBe('player-1');
+            expect(currentRound?.getTurns()).toHaveLength(1);
+            expect(currentRound?.getTurns()[0].playerId).toBe('player-1');
         });
 
         it('should end round when no remaining cards', () => {
@@ -246,7 +237,7 @@ describe('Game', () => {
 
             expect(game.isGameFinished()).toBe(true);
             expect(game.getRounds()).toHaveLength(1);
-            expect(game.getRounds()[0].turns).toHaveLength(5);
+            expect(game.getRounds()[0].getTurns()).toHaveLength(5);
         });
 
         it('should reset game correctly', () => {
@@ -261,7 +252,7 @@ describe('Game', () => {
             expect(game.getCurrentRound()).toBeTruthy();
             expect(game.getCurrentTurn()).toBeTruthy();
             expect(game.getCurrentPlayerIndex()).toBe(0);
-            expect(game.getRemainingCards()).toBe(5);
+            expect(game.getCurrentRoundRemainingCards()).toBe(5);
         });
 
         it('should clone game correctly', () => {

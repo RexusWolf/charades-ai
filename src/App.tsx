@@ -10,10 +10,15 @@ import { SavedDecksManager } from "./components/SavedDecksManager/SavedDecksMana
 import { StartScreen } from "./components/StartScreen/StartScreen";
 import { TeamSetup } from "./components/TeamSetup/TeamSetup";
 import { migrateSavedDecks } from "./data/savedDecks";
-import type { GameConfig, GameState, Round, Team } from "./Game";
+import type { GameConfig, GameState, Team } from "./Game";
 import { Game } from "./Game";
+import type { Round } from "./Round";
+import { GameDeckManager } from "./services/GameDeckManager";
 
 function App() {
+	// Initialize deck manager
+	const [deckManager] = useState(() => new GameDeckManager());
+
 	// Run migration on app start
 	useEffect(() => {
 		migrateSavedDecks();
@@ -23,7 +28,9 @@ function App() {
 	const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
 	const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
 	const [gameRounds, setGameRounds] = useState<Round[]>([]);
-	const [currentDeck, setCurrentDeck] = useState<GameCard[]>([]);
+	const [currentDeck, setCurrentDeck] = useState<GameCard[]>(
+		deckManager.getMixedCards(),
+	);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
 	const [showDeckSelector, setShowDeckSelector] = useState(false);
@@ -63,12 +70,13 @@ function App() {
 		setGameConfig(null);
 		setSelectedTeams([]);
 		setGameRounds([]);
-		setCurrentDeck([]);
+		deckManager.resetToDefault();
+		setCurrentDeck(deckManager.getMixedCards());
 		setShowDeckCreator(false);
 		setShowSavedDecks(false);
 		setShowDeckSelector(false);
 		setGameInstance(null);
-	}, []);
+	}, [deckManager]);
 
 	const handleDeckCreated = useCallback((deck: GameCard[]) => {
 		setCurrentDeck(deck);

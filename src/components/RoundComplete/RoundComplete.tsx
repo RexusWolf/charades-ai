@@ -1,18 +1,26 @@
 import { getPlayerById, getTeamById } from "../../data/teams";
 import type { Team, Turn } from "../../Game";
 import type { Round } from "../../Round";
-import styles from "./EndScreen.module.css";
+import styles from "./RoundComplete.module.css";
 
-interface EndScreenProps {
+interface RoundCompleteProps {
 	rounds: Round[];
 	teams: Team[];
-	onPlayAgain: () => void;
+	currentRoundNumber: number;
+	totalRounds: number;
+	onNextRound: () => void;
 }
 
-export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
+export function RoundComplete({
+	rounds,
+	teams,
+	currentRoundNumber,
+	totalRounds,
+	onNextRound,
+}: RoundCompleteProps) {
 	// Flatten all turns from all rounds
 	const allTurns: Turn[] = rounds.flatMap((round) => round.getTurns());
-	const initialTurnCards = rounds[0]?.getRemainingCardsCount() ?? 0;
+	const initialTurnCards = rounds[0]?.getRemainingCards().length ?? 0;
 
 	// Calculate team scores
 	const teamScores = teams.map((team) => {
@@ -64,10 +72,16 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 
 	return (
 		<>
-			<h1 className={styles.title}>🎭 Game Over!</h1>
+			<h1 className={styles.title}>🎭 Round {currentRoundNumber} Complete!</h1>
+
+			<div className={styles.roundProgress}>
+				<p>
+					Round {currentRoundNumber} of {totalRounds}
+				</p>
+			</div>
 
 			<div className={styles.resultsSummary}>
-				<h2>Team Results</h2>
+				<h2>Current Team Results</h2>
 				<div className={styles.teamResults}>
 					{sortedTeams.map((teamScore, index) => (
 						<div key={teamScore.team.id} className={styles.teamResult}>
@@ -77,7 +91,7 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 							>
 								<h3>{teamScore.team.name}</h3>
 								{index === 0 && (
-									<span className={styles.winnerBadge}>🏆 Winner!</span>
+									<span className={styles.leaderBadge}>🥇 Leading!</span>
 								)}
 							</div>
 							<div className={styles.teamStats}>
@@ -134,15 +148,15 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 
 			<div className={styles.gameSummary}>
 				<p>Total Cards Played: {totalCards}</p>
-				<p>Total Rounds: {rounds.length}</p>
+				<p>Rounds Completed: {currentRoundNumber}</p>
 			</div>
 
 			<button
 				type="button"
-				className={styles.startButton}
-				onClick={onPlayAgain}
+				className={styles.nextRoundButton}
+				onClick={onNextRound}
 			>
-				Play Again
+				Next Round
 			</button>
 		</>
 	);

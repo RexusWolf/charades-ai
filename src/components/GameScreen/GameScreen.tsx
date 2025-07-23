@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SwipeEventData } from "react-swipeable";
-import type { GameConfig, Round, Team } from "../../Game";
+import type { GameConfig, Team } from "../../Game";
 import { Game } from "../../Game";
+import type { Round } from "../../Round";
 import { CardComponent } from "../Card/CardComponent";
 import type { GameCard } from "../Card/GameCard";
 import { GameHeader } from "../GameHeader/GameHeader";
 import { NoCards } from "../NoCards/NoCards";
 import { PlayerTurn } from "../PlayerTurn/PlayerTurn";
+import { RoundComplete } from "../RoundComplete/RoundComplete";
 import styles from "./GameScreen.module.css";
 
 interface GameScreenProps {
@@ -33,14 +35,14 @@ export function GameScreen({
 	);
 	const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>(null);
 	const [isSwiping, setIsSwiping] = useState(false);
+	const [showRoundComplete, setShowRoundComplete] = useState(false);
 
 	// Initialize the game
 	useEffect(() => {
-		game.startNewRound();
 		setTimeLeft(config.secondsPerRound);
 		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
 		setIsTimerRunning(!config.enablePreparationPhase);
-	}, [game, config]);
+	}, [config]);
 
 	const currentPlayer = game.getCurrentPlayer();
 	const currentCard = game.getCurrentCard();
@@ -61,7 +63,12 @@ export function GameScreen({
 		setTimeLeft(config.secondsPerRound);
 		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
 		setIsTimerRunning(!config.enablePreparationPhase);
-	}, [game, currentRound, timeLeft, config]);
+
+		// Check if game is finished after ending turn
+		if (game.isGameFinished()) {
+			onGameEnd(game.getRounds());
+		}
+	}, [game, currentRound, timeLeft, config, onGameEnd]);
 
 	const handleSkip = useCallback(() => {
 		if (currentCard && turnState === "playing") {
@@ -69,11 +76,17 @@ export function GameScreen({
 			setSwipeDirection(null);
 			setIsSwiping(false);
 
-			// If no cards left, end turn and game
-			if (game.getRemainingCards() === 0) {
+			// If no cards left in current turn, end turn
+			const currentTurn = game.getCurrentTurn();
+			if (currentTurn && currentTurn.remainingCards.length === 0) {
 				game.endCurrentTurn();
 				setIsTimerRunning(false);
-				onGameEnd(game.getRounds());
+
+				// Check if game is finished after ending turn
+				if (game.isGameFinished()) {
+					onGameEnd(game.getRounds());
+				}
+				// Note: Round completion will be detected by the useEffect that watches game.isRoundFinished()
 			}
 		}
 	}, [game, currentCard, turnState, onGameEnd]);
@@ -84,14 +97,30 @@ export function GameScreen({
 			setSwipeDirection(null);
 			setIsSwiping(false);
 
-			// If no cards left, end turn and game
-			if (game.getRemainingCards() === 0) {
+			// If no cards left in the round, end turn and check if round/game is finished
+			if (game.getCurrentRoundRemainingCards() === 0) {
 				game.endCurrentTurn();
 				setIsTimerRunning(false);
-				onGameEnd(game.getRounds());
+
+				// Check if game is finished after ending turn
+				if (game.isGameFinished()) {
+					onGameEnd(game.getRounds());
+				}
+
+				if (game.isRoundFinished()) {
+					setShowRoundComplete(true);
+				}
 			}
 		}
 	}, [game, currentCard, turnState, onGameEnd]);
+
+	const handleNextRound = useCallback(() => {
+		game.startNextRound();
+		setShowRoundComplete(false);
+		setTimeLeft(config.secondsPerRound);
+		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
+		setIsTimerRunning(!config.enablePreparationPhase);
+	}, [game, config]);
 
 	const handleSwiping = useCallback(
 		(eventData: SwipeEventData) => {
@@ -133,6 +162,12 @@ export function GameScreen({
 						);
 						setIsTimerRunning(!config.enablePreparationPhase);
 
+						// Check if game is finished after ending turn
+						if (game.isGameFinished()) {
+							onGameEnd(game.getRounds());
+						}
+						// Note: Round completion will be detected by the useEffect that watches game.isRoundFinished()
+
 						return config.secondsPerRound;
 					}
 					return prev - 1;
@@ -143,7 +178,15 @@ export function GameScreen({
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [isTimerRunning, timeLeft, currentRound, game, turnState, config]);
+	}, [
+		isTimerRunning,
+		timeLeft,
+		currentRound,
+		game,
+		turnState,
+		config,
+		onGameEnd,
+	]);
 
 	// Check if game is finished
 	useEffect(() => {
@@ -165,6 +208,19 @@ export function GameScreen({
 	}, [timeLeft, game, currentRound]);
 
 	const totalRounds = game.getTotalRounds();
+
+	// Show round complete screen if round is finished
+	if (showRoundComplete) {
+		return (
+			<RoundComplete
+				rounds={game.getRounds()}
+				teams={teams}
+				currentRoundNumber={game.getCurrentRoundNumber()}
+				totalRounds={totalRounds}
+				onNextRound={handleNextRound}
+			/>
+		);
+	}
 
 	return (
 		<>

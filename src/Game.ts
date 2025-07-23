@@ -1,4 +1,5 @@
 import type { GameCard } from "./components/Card/GameCard";
+import { Round } from "./Round";
 
 // Game-related types
 export interface Player {
@@ -22,116 +23,51 @@ export interface Turn {
     timeLeft: number
 }
 
-export interface Round {
-    remainingCards: GameCard[]
-    turns: Turn[]
-}
-
 export interface GameConfig {
     secondsPerRound: number
     maxCards: number
     enablePreparationPhase: boolean
     preparationTimeLimit: number
     autoStartNextPlayer: boolean
+    numberOfRounds: number
 }
 
 export type GameState = 'idle' | 'config' | 'team-setup' | 'playing' | 'finished'
 
-/**
- * Game class that manages the complete state of a charades game.
- * 
- * This class encapsulates:
- * - Game configuration (round duration, card limits, etc.)
- * - Teams and players
- * - Deck management
- * - Game state (current player, current card, rounds played)
- * - Statistics and scoring
- * 
- * @example
- * ```typescript
- * // Create a new game
- * const config: GameConfig = {
- *   secondsPerRound: 60,
- *   maxCards: 15,
- *   enablePreparationPhase: true,
- *   preparationTimeLimit: 0,
- *   autoStartNextPlayer: false
- * };
- * 
- * const teams: Team[] = [
- *   {
- *     id: 'team-1',
- *     name: 'Red Team',
- *     color: '#ff6b6b',
- *     players: [
- *       { id: 'player-1', name: 'Alice', teamId: 'team-1' },
- *       { id: 'player-2', name: 'Bob', teamId: 'team-1' }
- *     ]
- *   }
- * ];
- * 
- * const deck: Card[] = [
- *   { id: 1, word: 'Elephant', category: 'Animals' },
- *   { id: 2, word: 'Pizza', category: 'Food' }
- * ];
- * 
- * const game = new Game(config, teams, deck);
- * 
- * // Start the game
- * game.startNewRound();
- * 
- * // Get current player and card
- * const currentPlayer = game.getCurrentPlayer();
- * const currentCard = game.getCurrentCard();
- * 
- * // Mark card as correct or skipped
- * game.markCardCorrect();
- * // or
- * game.skipCard();
- * 
- * // End current player's turn
- * game.endCurrentTurn();
- * 
- * // Get statistics
- * const stats = game.getGameStats();
- * const playerStats = game.getPlayerStats('player-1');
- * const teamStats = game.getTeamStats('team-1');
- * ```
- */
 export class Game {
     private config: GameConfig;
     private teams: Team[];
     private deck: GameCard[];
-    private rounds: Round[] = [];
-    private currentRound: Round | null = null;
+    private rounds: Round[]; // All rounds instantiated at game start
+    private currentRoundIndex: number = 0;
     private currentTurn: Turn | null = null;
+    private currentTeamIndex: number = 0;
     private currentPlayerIndex: number = 0;
-    private rotationOrder: Player[] = [];
 
     constructor(config: GameConfig, teams: Team[], deck: GameCard[]) {
         this.config = config;
         this.teams = teams;
         this.deck = [...deck];
-        this.createRotationOrder();
+        this.rounds = this.createRounds(); // Initialize all rounds
+        this.startFirstRound(); // Start the first round
     }
 
-    private createRotationOrder(): void {
-        this.rotationOrder = [];
-        const maxPlayersPerTeam = Math.max(
-            ...this.teams.map((team) => team.players.length)
-        );
+    private createRounds(): Round[] {
+        const rounds: Round[] = [];
 
-        for (let playerIndex = 0; playerIndex < maxPlayersPerTeam; playerIndex++) {
-            for (const team of this.teams) {
-                if (team.players[playerIndex]) {
-                    this.rotationOrder.push(team.players[playerIndex]);
-                }
-            }
+        for (let i = 0; i < this.config.numberOfRounds; i++) {
+            rounds.push(new Round(this.deck, i + 1));
         }
+
+        return rounds;
     }
 
     getCurrentPlayer(): Player | null {
-        return this.rotationOrder[this.currentPlayerIndex] || null;
+        const currentTeam = this.teams[this.currentTeamIndex];
+        if (!currentTeam || this.currentPlayerIndex >= currentTeam.players.length) {
+            return null;
+        }
+        return currentTeam.players[this.currentPlayerIndex];
     }
 
     getCurrentCard(): GameCard | null {
@@ -142,7 +78,7 @@ export class Game {
     }
 
     getCurrentRound(): Round | null {
-        return this.currentRound;
+        return this.rounds[this.currentRoundIndex] || null;
     }
 
     getCurrentTurn(): Turn | null {
@@ -150,12 +86,7 @@ export class Game {
     }
 
     getRounds(): Round[] {
-        const rounds = [...this.rounds];
-        // Include current round if it exists and has turns
-        if (this.currentRound && this.currentRound.turns.length > 0) {
-            rounds.push({ ...this.currentRound });
-        }
-        return rounds;
+        return [...this.rounds];
     }
 
     getConfig(): GameConfig {
@@ -170,10 +101,6 @@ export class Game {
         return [...this.deck];
     }
 
-    getRotationOrder(): Player[] {
-        return [...this.rotationOrder];
-    }
-
     getCurrentPlayerIndex(): number {
         return this.currentPlayerIndex;
     }
@@ -182,42 +109,40 @@ export class Game {
         return this.deck.length;
     }
 
-    getRemainingCards(): number {
-        if (!this.currentRound) return this.deck.length;
-        return this.currentRound.remainingCards.length;
+    getCurrentRoundRemainingCards(): number {
+        const currentRound = this.getCurrentRound();
+        if (!currentRound) return 0;
+        return currentRound.getRemainingCardsCount();
     }
 
     isGameFinished(): boolean {
-        return this.rounds.length > 0 && this.currentRound === null;
+        // Game ends when all rounds are finished
+        return this.rounds.every(round => round.isFinished());
+    }
+
+    startFirstRound(): void {
+        // Start the first round (currentRoundIndex is already 0)
+        this.startNewTurn();
     }
 
     startNewRound(): void {
-        const currentPlayer = this.getCurrentPlayer();
-        if (!currentPlayer) return;
-
-        // If we have a current round, save it
-        if (this.currentRound) {
-            this.rounds.push({ ...this.currentRound });
+        if (this.currentRoundIndex < this.rounds.length) {
+            this.currentRoundIndex++;
+            // Don't reset player index - continue with next player in rotation
+            this.startNewTurn();
         }
-
-        // Create new round with remaining cards from deck
-        this.currentRound = {
-            remainingCards: [...this.deck],
-            turns: [],
-        };
-
-        this.startNewTurn();
     }
 
     startNewTurn(): void {
         const currentPlayer = this.getCurrentPlayer();
-        if (!currentPlayer || !this.currentRound) return;
+        const currentRound = this.getCurrentRound();
+        if (!currentPlayer || !currentRound) return;
 
         // Create new turn for current player with remaining cards from round
         this.currentTurn = {
             playerId: currentPlayer.id,
             teamId: currentPlayer.teamId,
-            remainingCards: [...this.currentRound.remainingCards],
+            remainingCards: [...currentRound.getRemainingCards()],
             correctCards: [],
             timeLeft: this.config.secondsPerRound,
         };
@@ -225,16 +150,16 @@ export class Game {
 
     markCardCorrect(): void {
         const currentCard = this.getCurrentCard();
-        if (!currentCard || !this.currentTurn || !this.currentRound) return;
+        if (!currentCard || !this.currentTurn) return;
 
         // Move card from turn's remaining to turn's correct
         this.currentTurn.remainingCards.shift();
         this.currentTurn.correctCards.push(currentCard);
 
         // Also remove from round's remaining cards
-        const roundCardIndex = this.currentRound.remainingCards.findIndex(card => card.id === currentCard.id);
-        if (roundCardIndex !== -1) {
-            this.currentRound.remainingCards.splice(roundCardIndex, 1);
+        const currentRound = this.getCurrentRound();
+        if (currentRound) {
+            currentRound.removeCard(currentCard.id);
         }
     }
 
@@ -247,22 +172,44 @@ export class Game {
     }
 
     endCurrentTurn(): void {
-        if (!this.currentTurn || !this.currentRound) return;
+        if (!this.currentTurn) return;
+
+        const currentRound = this.getCurrentRound();
+        if (!currentRound) return;
 
         // Save the current turn
-        this.currentRound.turns.push({ ...this.currentTurn });
+        currentRound.addTurn({ ...this.currentTurn });
 
-        // Move to next player
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.rotationOrder.length;
+        // Move to next player/team
+        this.currentPlayerIndex++;
+
+        // If we've gone through all players in the current team, move to next team
+        if (this.currentPlayerIndex >= this.teams[this.currentTeamIndex].players.length) {
+            this.currentPlayerIndex = 0;
+            this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
+        }
 
         // Check if round is finished (no remaining cards)
-        if (this.currentRound.remainingCards.length === 0) {
-            // Round is finished, save it
-            this.rounds.push({ ...this.currentRound });
-            this.currentRound = null;
-            this.currentTurn = null;
+        if (currentRound.isFinished()) {
+            // Round is finished, but don't automatically start next round
+            // The RoundComplete view will handle starting the next round
         } else {
             // Start new turn for next player
+            this.startNewTurn();
+        }
+    }
+
+    isRoundFinished(): boolean {
+        const currentRound = this.getCurrentRound();
+        if (!currentRound) return false;
+
+        return currentRound.isFinished();
+    }
+
+    startNextRound(): void {
+        if (this.currentRoundIndex < this.rounds.length) {
+            this.currentRoundIndex++;
+            // Don't reset player index - continue with next player in rotation
             this.startNewTurn();
         }
     }
@@ -288,8 +235,8 @@ export class Game {
         let skippedCards = 0;
         let totalTurns = 0;
 
-        this.getRounds().forEach(round => {
-            round.turns.forEach(turn => {
+        this.rounds.forEach(round => {
+            round.getTurns().forEach(turn => {
                 if (turn.playerId === playerId) {
                     correctCards += turn.correctCards.length;
                     // Skipped cards = cards that were in turn's remainingCards but not in correctCards
@@ -315,8 +262,8 @@ export class Game {
         let skippedCards = 0;
         let totalTurns = 0;
 
-        this.getRounds().forEach(round => {
-            round.turns.forEach(turn => {
+        this.rounds.forEach(round => {
+            round.getTurns().forEach(turn => {
                 if (turn.teamId === teamId) {
                     correctCards += turn.correctCards.length;
                     skippedCards += (this.deck.length - turn.correctCards.length - turn.remainingCards.length);
@@ -343,8 +290,8 @@ export class Game {
         let totalSkippedCards = 0;
         let totalTurns = 0;
 
-        this.getRounds().forEach(round => {
-            round.turns.forEach(turn => {
+        this.rounds.forEach(round => {
+            round.getTurns().forEach(turn => {
                 totalCorrectCards += turn.correctCards.length;
                 totalSkippedCards += (this.deck.length - turn.correctCards.length - turn.remainingCards.length);
                 totalTurns++;
@@ -354,36 +301,34 @@ export class Game {
         return {
             totalCorrectCards,
             totalSkippedCards,
-            totalRounds: this.getRounds().length,
+            totalRounds: this.rounds.length,
             totalTurns,
             averageCorrectPerTurn: totalTurns > 0 ? totalCorrectCards / totalTurns : 0,
         };
     }
 
     getCurrentRoundNumber(): number {
-        return this.getRounds().length + 1;
+        return this.currentRoundIndex + 1;
     }
 
     getTotalRounds(): number {
-        return Math.ceil(this.deck.length / this.rotationOrder.length);
+        return this.rounds.length;
     }
 
     reset(): void {
-        this.rounds = [];
-        this.currentRound = null;
+        this.currentRoundIndex = 0;
         this.currentTurn = null;
+        this.currentTeamIndex = 0;
         this.currentPlayerIndex = 0;
-        this.createRotationOrder();
+        this.rounds = this.createRounds(); // Recreate all rounds
         this.startNewRound();
     }
 
     clone(): Game {
         const newGame = new Game(this.config, this.teams, this.deck);
-        newGame.rounds = [...this.rounds];
+        newGame.currentRoundIndex = this.currentRoundIndex;
+        newGame.currentTeamIndex = this.currentTeamIndex;
         newGame.currentPlayerIndex = this.currentPlayerIndex;
-        if (this.currentRound) {
-            newGame.currentRound = { ...this.currentRound };
-        }
         if (this.currentTurn) {
             newGame.currentTurn = { ...this.currentTurn };
         }

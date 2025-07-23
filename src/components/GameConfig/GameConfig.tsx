@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { PRESET_CONFIGS } from "../../data/config";
 import type { GameConfig } from "../../Game";
+import type { GameCard } from "../Card/GameCard";
 import styles from "./GameConfig.module.css";
 
 interface GameConfigScreenProps {
+	currentDeck: GameCard[];
 	onStartGame: (config: GameConfig) => void;
 	onCreateCustomDeck?: () => void;
 	onShowSavedDecks?: () => void;
@@ -11,6 +13,7 @@ interface GameConfigScreenProps {
 }
 
 export function GameConfigScreen({
+	currentDeck,
 	onStartGame,
 	onCreateCustomDeck,
 	onShowSavedDecks,
@@ -196,6 +199,24 @@ export function GameConfigScreen({
 							{config.numberOfRounds} rounds
 						</span>
 					</div>
+					<div className={styles.summaryItem}>
+						<span className={styles.summaryLabel}>Selected Cards:</span>
+						<span className={styles.summaryValue}>
+							{currentDeck.length} cards
+						</span>
+					</div>
+					{currentDeck.length > 0 && (
+						<div className={styles.summaryItem}>
+							<span className={styles.summaryLabel}>Sample Cards:</span>
+							<span className={styles.summaryValue}>
+								{currentDeck
+									.slice(0, 3)
+									.map((card) => card.word)
+									.join(", ")}
+								{currentDeck.length > 3 && "..."}
+							</span>
+						</div>
+					)}
 					<div className={styles.summaryItem}>
 						<span className={styles.summaryLabel}>Preparation:</span>
 						<span className={styles.summaryValue}>

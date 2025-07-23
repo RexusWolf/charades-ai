@@ -117,6 +117,7 @@ function App() {
 			<>
 				<MainLayout>
 					<GameConfigScreen
+						currentDeck={currentDeck}
 						onStartGame={handleConfigComplete}
 						onCreateCustomDeck={() => setShowDeckCreator(true)}
 						onShowSavedDecks={() => setShowSavedDecks(true)}

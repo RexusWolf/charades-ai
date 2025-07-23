@@ -1,4 +1,4 @@
-import type { Card } from "../components/Card/Card";
+import type { DeckCard } from "../components/Card/Card";
 import { Language } from "../data/language";
 
 interface GeminiResponse {
@@ -16,7 +16,7 @@ interface AIGeneratedCard {
     category: string;
 }
 
-export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 30, language: Language = Language.universal()): Promise<Card[]> {
+export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 30, language: Language = Language.universal()): Promise<DeckCard[]> {
     const apiKey = userApiKey || import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -105,12 +105,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
             throw new Error('AI response is not an array');
         }
 
-        // Convert to Card format with IDs
-        return cards.map((card, index) => ({
-            id: Date.now() + index,
-            word: card.word || `Generated ${index + 1}`,
-            deckId: undefined // AI generated cards don't belong to a specific deck
-        }));
+        return cards.map((card) => card.word);
 
     } catch (error) {
         console.error('Gemini API error:', error);

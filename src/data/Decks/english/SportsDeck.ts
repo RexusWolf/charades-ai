@@ -1,25 +1,25 @@
-import type { DeckCard } from "../../../components/Card/Card";
 import { Language } from "../../language";
+import { Deck } from "../Deck";
 
-export const SPORTS_DECK = {
+export const SPORTS_DECK = new Deck({
     id: "sports",
     name: "⚽ Sports",
     language: Language.english(),
     cards: [
-        { word: "Basketball" },
-        { word: "Soccer" },
-        { word: "Tennis" },
-        { word: "Swimming" },
-        { word: "Baseball" },
-        { word: "Volleyball" },
-        { word: "Golf" },
-        { word: "Skiing" },
-        { word: "Boxing" },
-        { word: "Cycling" },
-        { word: "Running" },
-        { word: "Diving" },
-        { word: "Hockey" },
-        { word: "Rugby" },
-        { word: "Cricket" },
-    ] as DeckCard[]
-}; 
+        "Basketball",
+        "Soccer",
+        "Tennis",
+        "Swimming",
+        "Baseball",
+        "Volleyball",
+        "Golf",
+        "Skiing",
+        "Boxing",
+        "Cycling",
+        "Running",
+        "Diving",
+        "Hockey",
+        "Rugby",
+        "Cricket",
+    ]
+}); 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Language } from "../../data/language";
 import { saveDeck } from "../../data/savedDecks";
 import { generateDeckWithGemini } from "../../services/ai";
-import type { Card } from "../Card/Card";
+import type { Card, DeckCard } from "../Card/Card";
 import styles from "./CustomDeckCreator.module.css";
 
 interface CustomDeckCreatorProps {
@@ -18,7 +18,7 @@ export function CustomDeckCreator({
 	const [cardCount, setCardCount] = useState(30);
 	const [language, setLanguage] = useState<Language>(Language.universal());
 	const [isGenerating, setIsGenerating] = useState(false);
-	const [generatedCards, setGeneratedCards] = useState<Card[]>([]);
+	const [generatedCards, setGeneratedCards] = useState<DeckCard[]>([]);
 	const [error, setError] = useState("");
 	const [showSaveDialog, setShowSaveDialog] = useState(false);
 	const [saveName, setSaveName] = useState("");
@@ -56,7 +56,13 @@ export function CustomDeckCreator({
 
 	const handleUseDeck = () => {
 		if (generatedCards.length > 0) {
-			onDeckCreated(generatedCards);
+			onDeckCreated(
+				generatedCards.map((card) => ({
+					id: Date.now(),
+					word: card,
+					deckId: undefined,
+				})),
+			);
 		}
 	};
 
@@ -203,8 +209,8 @@ export function CustomDeckCreator({
 
 					<div className={styles.cardsPreview}>
 						{generatedCards.map((card) => (
-							<div key={card.id} className={styles.previewCard}>
-								<div className={styles.cardWord}>{card.word}</div>
+							<div key={card} className={styles.previewCard}>
+								<div className={styles.cardWord}>{card}</div>
 							</div>
 						))}
 					</div>

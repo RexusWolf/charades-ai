@@ -1,7 +1,5 @@
 // Simple card definition for deck files
-export interface DeckCard {
-    word: string;
-}
+export type DeckCard = string;
 
 // Game card with additional properties needed during gameplay
 export interface Card {

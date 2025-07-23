@@ -23,5 +23,5 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["src", "tests/Game.test.ts", "tests/services/deckManager.test.ts"]
+	"include": ["src", "tests"]
 }

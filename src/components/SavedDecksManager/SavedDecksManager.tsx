@@ -2,10 +2,10 @@ import { useRef, useState } from "react";
 import {
 	deleteDeck,
 	exportDecks,
+	getDeckCards,
 	getDeckStats,
 	getSavedDecks,
 	importDecks,
-	loadDeck,
 	renameDeck,
 	type SavedDeck,
 } from "../../data/savedDecks";
@@ -33,7 +33,7 @@ export function SavedDecksManager({
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleUseDeck = (deckId: string) => {
-		const cards = loadDeck(deckId);
+		const cards = getDeckCards(deckId);
 		if (cards) {
 			onDeckSelected(cards);
 			onClose();

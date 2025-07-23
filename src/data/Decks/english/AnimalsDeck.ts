@@ -1,25 +1,26 @@
-import type { DeckCard } from "../../../components/Card/Card";
-import { Language } from "../../language";
 
-export const ANIMALS_DECK = {
+import { Language } from "../../language";
+import { Deck } from "../Deck";
+
+export const ANIMALS_DECK = new Deck({
     id: "animals",
     name: "🐾 Animals",
     language: Language.english(),
     cards: [
-        { word: "Elephant" },
-        { word: "Lion" },
-        { word: "Giraffe" },
-        { word: "Penguin" },
-        { word: "Dolphin" },
-        { word: "Kangaroo" },
-        { word: "Panda" },
-        { word: "Tiger" },
-        { word: "Monkey" },
-        { word: "Zebra" },
-        { word: "Crocodile" },
-        { word: "Butterfly" },
-        { word: "Shark" },
-        { word: "Owl" },
-        { word: "Snake" },
-    ] as DeckCard[]
-}; 
+        "Elephant",
+        "Lion",
+        "Giraffe",
+        "Penguin",
+        "Dolphin",
+        "Kangaroo",
+        "Panda",
+        "Tiger",
+        "Monkey",
+        "Zebra",
+        "Crocodile",
+        "Butterfly",
+        "Shark",
+        "Owl",
+        "Snake",
+    ]
+}); 

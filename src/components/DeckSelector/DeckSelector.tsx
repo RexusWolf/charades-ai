@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Language } from "../../data/language";
-import { DeckManager } from "../../services/deckManager";
+import { GameDeckManager } from "../../services/GameDeckManager";
 import type { Card } from "../Card/Card";
 import styles from "./DeckSelector.module.css";
 
@@ -15,7 +15,7 @@ export function DeckSelector({
 	onDeckSelectionChange,
 	onClose,
 }: DeckSelectorProps) {
-	const [deckManager] = useState(() => new DeckManager());
+	const [deckManager] = useState(() => new GameDeckManager());
 	const [state, setState] = useState(deckManager.getState());
 	const [activeTab, setActiveTab] = useState<TabType>("official");
 	const [languageFilter, setLanguageFilter] = useState<string>("all");

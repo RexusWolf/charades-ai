@@ -16,7 +16,7 @@ export const DECK_LIBRARY = {
 
 export const DEFAULT_DECK: Card[] = DECK_LIBRARY.animals.cards.map((card, index) => ({
     id: Date.now() + index,
-    word: card.word,
+    word: card,
     deckId: DECK_LIBRARY.animals.id
 }));
 

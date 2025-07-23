@@ -56,4 +56,7 @@ export class Language {
         return Language.create("en", "🇺🇸 English");
     }
 
+    static spanish(): Language {
+        return Language.create("es", "🇪🇸 Spanish");
+    }
 }

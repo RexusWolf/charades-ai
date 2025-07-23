@@ -1,0 +1,64 @@
+/* Start Screen Styles */
+.app {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	color: white;
+}
+
+.container {
+	text-align: center;
+	max-width: 500px;
+	width: 100%;
+}
+
+.title {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.instructions {
+	font-size: 1.1rem;
+	margin-bottom: 2rem;
+	opacity: 0.9;
+	line-height: 1.5;
+}
+
+.startButton {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+	border: none;
+	padding: 15px 40px;
+	font-size: 1.2rem;
+	font-weight: bold;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.startButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.startButton:active {
+	transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+	.app {
+		padding: 10px;
+	}
+
+	.title {
+		font-size: 2.5rem;
+	}
+}

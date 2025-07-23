@@ -34,8 +34,7 @@ export function getSavedDecks(): Deck[] {
         if (!stored) return [];
 
         const decks = JSON.parse(stored);
-        // Convert date strings back to Date objects and ensure language property exists
-        return decks.map((deck: any) => ({
+        return decks.map((deck: LocalStorageDeck) => ({
             ...deck,
             language: deck.language ? Language.fromCode(deck.language.code) || Language.universal() : Language.universal(),
             // Ensure cards are strings

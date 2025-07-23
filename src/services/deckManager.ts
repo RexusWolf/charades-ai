@@ -1,5 +1,5 @@
 import type { Card } from "../components/Card/Card";
-import { SAMPLE_DECK } from "../data/deck";
+import { DECK_LIBRARY, getAllDecks } from "../data/deck";
 import { getSavedDecks, loadDeck } from "../data/savedDecks";
 
 // Deck management types
@@ -17,8 +17,13 @@ export interface DeckManagerState {
     isMixed: boolean
 }
 
+// Default deck configuration
+const DEFAULT_DECK_ID = "animals";
+
 export class DeckManager {
     private state: DeckManagerState;
+    private officialDecks: DeckSelection[] = [];
+    private customDecks: DeckSelection[] = [];
 
     constructor() {
         this.state = {
@@ -32,24 +37,42 @@ export class DeckManager {
 
     private initializeAvailableDecks(): void {
         const savedDecks = getSavedDecks();
-        const availableDecks: DeckSelection[] = [
-            {
-                deckId: "sample",
-                name: "Sample Deck",
-                cardCount: SAMPLE_DECK.length,
-                isSelected: true
-            },
-            ...savedDecks.map(deck => ({
-                deckId: deck.id,
-                name: deck.name,
-                cardCount: deck.cards.length,
-                isSelected: false
-            }))
-        ];
+        const libraryDecks = getAllDecks();
 
-        this.state.availableDecks = availableDecks;
-        this.state.selectedDecks = [availableDecks[0]]; // Start with sample deck selected
+        // Separate official and custom decks
+        this.officialDecks = libraryDecks.map(deck => ({
+            deckId: deck.id,
+            name: deck.name,
+            cardCount: deck.cards.length,
+            isSelected: false
+        }));
+
+        this.customDecks = savedDecks.map(deck => ({
+            deckId: deck.id,
+            name: deck.name,
+            cardCount: deck.cards.length,
+            isSelected: false
+        }));
+
+        // Combine all decks for the main state
+        this.state.availableDecks = [...this.officialDecks, ...this.customDecks];
+
+        // Start with default deck selected
+        const defaultDeck = this.state.availableDecks.find(d => d.deckId === DEFAULT_DECK_ID);
+        if (defaultDeck) {
+            defaultDeck.isSelected = true;
+            this.state.selectedDecks = [defaultDeck];
+        }
+
         this.mixSelectedDecks();
+    }
+
+    public getOfficialDecks(): DeckSelection[] {
+        return [...this.officialDecks];
+    }
+
+    public getCustomDecks(): DeckSelection[] {
+        return [...this.customDecks];
     }
 
     public getState(): DeckManagerState {
@@ -72,10 +95,10 @@ export class DeckManager {
 
         // Ensure at least one deck is selected
         if (this.state.selectedDecks.length === 0) {
-            const sampleDeck = this.state.availableDecks.find(d => d.deckId === "sample");
-            if (sampleDeck) {
-                sampleDeck.isSelected = true;
-                this.state.selectedDecks = [sampleDeck];
+            const defaultDeck = this.state.availableDecks.find(d => d.deckId === DEFAULT_DECK_ID);
+            if (defaultDeck) {
+                defaultDeck.isSelected = true;
+                this.state.selectedDecks = [defaultDeck];
             }
         }
 
@@ -96,21 +119,21 @@ export class DeckManager {
         });
         this.state.selectedDecks = [];
 
-        // Ensure at least one deck is selected (fallback to sample)
-        const sampleDeck = this.state.availableDecks.find(d => d.deckId === "sample");
-        if (sampleDeck) {
-            sampleDeck.isSelected = true;
-            this.state.selectedDecks = [sampleDeck];
+        // Ensure at least one deck is selected (fallback to default)
+        const defaultDeck = this.state.availableDecks.find(d => d.deckId === DEFAULT_DECK_ID);
+        if (defaultDeck) {
+            defaultDeck.isSelected = true;
+            this.state.selectedDecks = [defaultDeck];
         }
 
         this.mixSelectedDecks();
     }
 
-    public selectSampleDeckOnly(): void {
+    public selectDefaultDeckOnly(): void {
         this.state.availableDecks.forEach(deck => {
-            deck.isSelected = deck.deckId === "sample";
+            deck.isSelected = deck.deckId === DEFAULT_DECK_ID;
         });
-        this.state.selectedDecks = this.state.availableDecks.filter(d => d.deckId === "sample");
+        this.state.selectedDecks = this.state.availableDecks.filter(d => d.deckId === DEFAULT_DECK_ID);
         this.mixSelectedDecks();
     }
 
@@ -126,9 +149,12 @@ export class DeckManager {
         for (const selectedDeck of this.state.selectedDecks) {
             let deckCards: Card[] = [];
 
-            if (selectedDeck.deckId === "sample") {
-                deckCards = [...SAMPLE_DECK];
+            // Check if it's a library deck
+            const libraryDeck = DECK_LIBRARY[selectedDeck.deckId as keyof typeof DECK_LIBRARY];
+            if (libraryDeck) {
+                deckCards = [...libraryDeck.cards];
             } else {
+                // Check if it's a saved deck
                 const loadedCards = loadDeck(selectedDeck.deckId);
                 if (loadedCards) {
                     deckCards = loadedCards;
@@ -171,25 +197,26 @@ export class DeckManager {
 
     public refreshAvailableDecks(): void {
         const savedDecks = getSavedDecks();
-        const currentDeckIds = new Set(this.state.availableDecks.map(d => d.deckId));
+        const libraryDecks = getAllDecks();
 
-        // Add new decks
-        for (const savedDeck of savedDecks) {
-            if (!currentDeckIds.has(savedDeck.id)) {
-                this.state.availableDecks.push({
-                    deckId: savedDeck.id,
-                    name: savedDeck.name,
-                    cardCount: savedDeck.cards.length,
-                    isSelected: false
-                });
-            }
-        }
+        // Update official decks
+        this.officialDecks = libraryDecks.map(deck => ({
+            deckId: deck.id,
+            name: deck.name,
+            cardCount: deck.cards.length,
+            isSelected: false
+        }));
 
-        // Remove decks that no longer exist
-        const existingDeckIds = new Set(savedDecks.map(d => d.id));
-        this.state.availableDecks = this.state.availableDecks.filter(deck =>
-            deck.deckId === "sample" || existingDeckIds.has(deck.deckId)
-        );
+        // Update custom decks
+        this.customDecks = savedDecks.map(deck => ({
+            deckId: deck.id,
+            name: deck.name,
+            cardCount: deck.cards.length,
+            isSelected: false
+        }));
+
+        // Update the combined available decks
+        this.state.availableDecks = [...this.officialDecks, ...this.customDecks];
 
         // Update selected decks to only include existing ones
         this.state.selectedDecks = this.state.selectedDecks.filter(selectedDeck =>

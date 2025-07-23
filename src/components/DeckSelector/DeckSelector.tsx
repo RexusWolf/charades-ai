@@ -8,12 +8,15 @@ interface DeckSelectorProps {
 	onClose: () => void;
 }
 
+type TabType = "official" | "custom";
+
 export function DeckSelector({
 	onDeckSelectionChange,
 	onClose,
 }: DeckSelectorProps) {
 	const [deckManager] = useState(() => new DeckManager());
 	const [state, setState] = useState(deckManager.getState());
+	const [activeTab, setActiveTab] = useState<TabType>("official");
 
 	useEffect(() => {
 		// Notify parent of current mixed cards
@@ -38,8 +41,8 @@ export function DeckSelector({
 		onDeckSelectionChange(deckManager.getMixedCards());
 	};
 
-	const handleSelectSampleOnly = () => {
-		deckManager.selectSampleDeckOnly();
+	const handleSelectDefaultOnly = () => {
+		deckManager.selectDefaultDeckOnly();
 		setState(deckManager.getState());
 		onDeckSelectionChange(deckManager.getMixedCards());
 	};
@@ -49,6 +52,9 @@ export function DeckSelector({
 		setState(deckManager.getState());
 		onDeckSelectionChange(deckManager.getMixedCards());
 	};
+
+	const officialDecks = deckManager.getOfficialDecks();
+	const customDecks = deckManager.getCustomDecks();
 
 	return (
 		<div className={styles.overlay}>
@@ -92,9 +98,9 @@ export function DeckSelector({
 						<button
 							type="button"
 							className={styles.actionButton}
-							onClick={handleSelectSampleOnly}
+							onClick={handleSelectDefaultOnly}
 						>
-							Sample Only
+							Default Only
 						</button>
 						<button
 							type="button"
@@ -105,25 +111,80 @@ export function DeckSelector({
 						</button>
 					</div>
 
+					<div className={styles.tabs}>
+						<button
+							type="button"
+							className={`${styles.tab} ${
+								activeTab === "official" ? styles.activeTab : ""
+							}`}
+							onClick={() => setActiveTab("official")}
+						>
+							📚 Official Decks ({officialDecks.length})
+						</button>
+						<button
+							type="button"
+							className={`${styles.tab} ${
+								activeTab === "custom" ? styles.activeTab : ""
+							}`}
+							onClick={() => setActiveTab("custom")}
+						>
+							💾 Custom Decks ({customDecks.length})
+						</button>
+					</div>
+
 					<div className={styles.deckList}>
-						{state.availableDecks.map((deck) => (
-							<button
-								key={deck.deckId}
-								type="button"
-								className={`${styles.deckItem} ${
-									deck.isSelected ? styles.selected : ""
-								}`}
-								onClick={() => handleToggleDeck(deck.deckId)}
-							>
-								<div className={styles.deckInfo}>
-									<h3>{deck.name}</h3>
-									<p>{deck.cardCount} cards</p>
+						{activeTab === "official" ? (
+							officialDecks.length > 0 ? (
+								officialDecks.map((deck) => (
+									<button
+										key={deck.deckId}
+										type="button"
+										className={`${styles.deckItem} ${
+											deck.isSelected ? styles.selected : ""
+										}`}
+										onClick={() => handleToggleDeck(deck.deckId)}
+									>
+										<div className={styles.deckInfo}>
+											<h3>{deck.name}</h3>
+											<p>{deck.cardCount} cards</p>
+										</div>
+										<div className={styles.checkbox}>
+											{deck.isSelected && <span>✓</span>}
+										</div>
+									</button>
+								))
+							) : (
+								<div className={styles.emptyState}>
+									<p>No official decks available</p>
 								</div>
-								<div className={styles.checkbox}>
-									{deck.isSelected && <span>✓</span>}
-								</div>
-							</button>
-						))}
+							)
+						) : customDecks.length > 0 ? (
+							customDecks.map((deck) => (
+								<button
+									key={deck.deckId}
+									type="button"
+									className={`${styles.deckItem} ${
+										deck.isSelected ? styles.selected : ""
+									}`}
+									onClick={() => handleToggleDeck(deck.deckId)}
+								>
+									<div className={styles.deckInfo}>
+										<h3>{deck.name}</h3>
+										<p>{deck.cardCount} cards</p>
+									</div>
+									<div className={styles.checkbox}>
+										{deck.isSelected && <span>✓</span>}
+									</div>
+								</button>
+							))
+						) : (
+							<div className={styles.emptyState}>
+								<p>No custom decks available</p>
+								<p className={styles.emptyStateHint}>
+									Create custom decks in the Custom Deck Creator
+								</p>
+							</div>
+						)}
 					</div>
 
 					{state.selectedDecks.length > 0 && (

@@ -8,10 +8,10 @@ describe('DeckManager', () => {
         deckManager = new DeckManager();
     });
 
-    test('should initialize with sample deck selected', () => {
+    test('should initialize with animals deck selected', () => {
         const state = deckManager.getState();
         expect(state.selectedDecks.length).toBe(1);
-        expect(state.selectedDecks[0].deckId).toBe('sample');
+        expect(state.selectedDecks[0].deckId).toBe('animals');
         expect(state.mixedCards.length).toBe(SAMPLE_DECK.length);
     });
 
@@ -19,13 +19,13 @@ describe('DeckManager', () => {
         const initialState = deckManager.getState();
         const firstDeck = initialState.availableDecks[0];
 
-        // Toggle the first deck (should be sample deck)
+        // Toggle the first deck (should be animals deck)
         deckManager.toggleDeckSelection(firstDeck.deckId);
 
         const newState = deckManager.getState();
-        // The sample deck should still be selected due to fallback logic
+        // The animals deck should still be selected due to fallback logic
         expect(newState.selectedDecks.length).toBe(1);
-        expect(newState.selectedDecks[0].deckId).toBe('sample');
+        expect(newState.selectedDecks[0].deckId).toBe('animals');
         expect(newState.mixedCards.length).toBe(SAMPLE_DECK.length);
     });
 
@@ -36,19 +36,19 @@ describe('DeckManager', () => {
         expect(state.mixedCards.length).toBeGreaterThan(0);
     });
 
-    test('should deselect all decks and fallback to sample', () => {
+    test('should deselect all decks and fallback to animals', () => {
         deckManager.deselectAllDecks();
         const state = deckManager.getState();
         expect(state.selectedDecks.length).toBe(1);
-        expect(state.selectedDecks[0].deckId).toBe('sample');
+        expect(state.selectedDecks[0].deckId).toBe('animals');
     });
 
-    test('should select sample deck only', () => {
+    test('should select default deck only', () => {
         deckManager.selectAllDecks();
-        deckManager.selectSampleDeckOnly();
+        deckManager.selectDefaultDeckOnly();
         const state = deckManager.getState();
         expect(state.selectedDecks.length).toBe(1);
-        expect(state.selectedDecks[0].deckId).toBe('sample');
+        expect(state.selectedDecks[0].deckId).toBe('animals');
     });
 
     test('should get mixed cards', () => {

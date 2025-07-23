@@ -1,0 +1,502 @@
+/* Saved Decks Manager Styles */
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	backdrop-filter: blur(10px);
+	padding: 20px;
+}
+
+.modal {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 15px;
+	padding: 2rem;
+	min-width: 300px;
+	max-width: 90vw;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	text-align: center;
+}
+
+.savedDecksModal {
+	background: white;
+	border-radius: 20px;
+	max-width: 800px;
+	width: 100%;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modalHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 2rem 2rem 1rem 2rem;
+	border-bottom: 2px solid #f0f0f0;
+}
+
+.modalHeader h2 {
+	margin: 0;
+	color: #333;
+	font-size: 1.8rem;
+}
+
+.modalHeaderActions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.importExportBtn {
+	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.importExportBtn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton {
+	background: none;
+	border: none;
+	font-size: 2rem;
+	cursor: pointer;
+	color: #666;
+	transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+	color: #333;
+}
+
+.emptyState {
+	text-align: center;
+	padding: 3rem 2rem;
+	color: #666;
+}
+
+.emptyIcon {
+	font-size: 4rem;
+	margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+	margin: 0 0 0.5rem 0;
+	color: #333;
+	font-size: 1.5rem;
+}
+
+.emptyState p {
+	margin: 0.5rem 0;
+	font-size: 1rem;
+}
+
+.emptyStateActions {
+	margin-top: 2rem;
+}
+
+.importDecksBtn {
+	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.importDecksBtn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Import/Export Dialog Styles */
+.importExportDialogOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1003;
+	backdrop-filter: blur(10px);
+}
+
+.importExportDialog {
+	background: white;
+	border-radius: 20px;
+	padding: 2rem;
+	max-width: 600px;
+	width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.importExportDialogHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
+}
+
+.importExportDialogHeader h3 {
+	margin: 0;
+	color: #333;
+	font-size: 1.5rem;
+}
+
+.importExportDialogContent {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.exportSection,
+.importSection {
+	padding: 1.5rem;
+	background: #f8f9fa;
+	border-radius: 15px;
+	border: 2px solid #e9ecef;
+}
+
+.exportSection h4,
+.importSection h4 {
+	margin: 0 0 0.5rem 0;
+	color: #333;
+	font-size: 1.2rem;
+}
+
+.exportSection p,
+.importSection p {
+	margin: 0 0 1rem 0;
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.exportBtn {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.exportBtn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.fileInput {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid #e0e0e0;
+	border-radius: 10px;
+	font-size: 1rem;
+	background: white;
+	color: #333;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.fileInput:focus {
+	outline: none;
+	border-color: #4ecdc4;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.fileInput:hover {
+	border-color: #4ecdc4;
+}
+
+.importMessage {
+	padding: 12px 16px;
+	border-radius: 8px;
+	margin-top: 1rem;
+	font-weight: bold;
+}
+
+.importMessage.success {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+}
+
+.importMessage.error {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+}
+
+.importExportTips {
+	padding: 1.5rem;
+	background: #fff3cd;
+	border-radius: 15px;
+	border: 2px solid #ffeaa7;
+}
+
+.importExportTips h4 {
+	margin: 0 0 0.5rem 0;
+	color: #856404;
+	font-size: 1.1rem;
+}
+
+.importExportTips ul {
+	margin: 0;
+	padding-left: 1.5rem;
+	color: #856404;
+}
+
+.importExportTips li {
+	margin-bottom: 0.25rem;
+	font-size: 0.9rem;
+}
+
+.statsSection {
+	display: flex;
+	gap: 2rem;
+	padding: 1rem 2rem;
+	background: #f8f9fa;
+	border-bottom: 2px solid #f0f0f0;
+	flex-wrap: wrap;
+}
+
+.statItem {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.statLabel {
+	font-size: 0.9rem;
+	color: #666;
+	font-weight: bold;
+}
+
+.statValue {
+	font-size: 1.2rem;
+	color: #333;
+	font-weight: bold;
+}
+
+.decksList {
+	padding: 1rem 2rem 2rem 2rem;
+}
+
+.savedDeckItem {
+	background: #f8f9fa;
+	border-radius: 15px;
+	padding: 1.5rem;
+	margin-bottom: 1rem;
+	border: 2px solid transparent;
+	transition: all 0.3s ease;
+}
+
+.savedDeckItem:hover {
+	border-color: #4ecdc4;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.deckInfo {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.deckHeader {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex: 1;
+}
+
+.deckHeader h3 {
+	margin: 0;
+	color: #333;
+	font-size: 1.3rem;
+}
+
+.deckActions {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.renameBtn,
+.deleteBtn,
+.saveRenameBtn,
+.cancelRenameBtn {
+	background: none;
+	border: none;
+	font-size: 1.2rem;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: 50%;
+	transition: all 0.3s ease;
+}
+
+.renameBtn:hover {
+	background: #e3f2fd;
+	color: #1976d2;
+}
+
+.deleteBtn:hover {
+	background: #ffebee;
+	color: #d32f2f;
+}
+
+.saveRenameBtn:hover {
+	background: #e8f5e8;
+	color: #2e7d32;
+}
+
+.cancelRenameBtn:hover {
+	background: #ffebee;
+	color: #d32f2f;
+}
+
+.renameInput {
+	padding: 0.5rem;
+	border: 2px solid #4ecdc4;
+	border-radius: 8px;
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: #333;
+}
+
+.renameInput:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.deckDetails {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	font-size: 0.9rem;
+	color: #666;
+}
+
+.deckTopic,
+.deckCards,
+.deckCreated,
+.deckUsed,
+.deckUses {
+	margin: 0;
+}
+
+.deckPreview {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+}
+
+.previewCards {
+	display: flex;
+	gap: 0.5rem;
+	flex: 1;
+}
+
+.previewCard {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	padding: 0.75rem;
+	border-radius: 8px;
+	text-align: center;
+	min-width: 80px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.previewCard .cardCategory {
+	font-size: 0.7rem;
+	opacity: 0.8;
+	margin-bottom: 0.25rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.previewCard .cardWord {
+	font-size: 0.9rem;
+	font-weight: bold;
+}
+
+.moreCards {
+	background: #e0e0e0;
+	color: #666;
+	padding: 0.75rem;
+	border-radius: 8px;
+	text-align: center;
+	min-width: 80px;
+	font-size: 0.9rem;
+	font-weight: bold;
+}
+
+.useDeckBtn {
+	background: linear-gradient(45deg, #51cf66, #40c057);
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	font-size: 0.9rem;
+	font-weight: bold;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	white-space: nowrap;
+}
+
+.useDeckBtn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.deckInfo {
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.deckPreview {
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.previewCards {
+		justify-content: center;
+	}
+
+	.statsSection {
+		flex-direction: column;
+		gap: 1rem;
+	}
+}

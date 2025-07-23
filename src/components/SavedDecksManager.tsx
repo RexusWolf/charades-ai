@@ -10,6 +10,7 @@ import {
 	type SavedDeck,
 } from "../data/savedDecks";
 import type { Card } from "../types";
+import styles from "./SavedDecksManager.module.css";
 
 interface SavedDecksManagerProps {
 	onDeckSelected: (deck: Card[]) => void;
@@ -111,34 +112,38 @@ export function SavedDecksManager({
 	};
 
 	return (
-		<div className="modal-overlay">
-			<div className="modal saved-decks-modal">
-				<div className="modal-header">
+		<div className={styles.modalOverlay}>
+			<div className={`${styles.modal} ${styles.savedDecksModal}`}>
+				<div className={styles.modalHeader}>
 					<h2>💾 Saved Decks</h2>
-					<div className="modal-header-actions">
+					<div className={styles.modalHeaderActions}>
 						<button
 							type="button"
-							className="import-export-btn"
+							className={styles.importExportBtn}
 							onClick={() => setShowImportExport(true)}
 						>
-							📥📤 Import/Export
+							📥 Import / 📤 Export
 						</button>
-						<button type="button" className="close-button" onClick={onClose}>
+						<button
+							type="button"
+							className={styles.closeButton}
+							onClick={onClose}
+						>
 							×
 						</button>
 					</div>
 				</div>
 
 				{savedDecks.length === 0 ? (
-					<div className="empty-state">
-						<div className="empty-icon">📚</div>
+					<div className={styles.emptyState}>
+						<div className={styles.emptyIcon}>📚</div>
 						<h3>No Saved Decks</h3>
 						<p>You haven't saved any custom decks yet.</p>
 						<p>Generate a deck and save it to see it here!</p>
-						<div className="empty-state-actions">
+						<div className={styles.emptyStateActions}>
 							<button
 								type="button"
-								className="import-decks-btn"
+								className={styles.importDecksBtn}
 								onClick={() => setShowImportExport(true)}
 							>
 								📥 Import Decks
@@ -147,44 +152,46 @@ export function SavedDecksManager({
 					</div>
 				) : (
 					<>
-						<div className="stats-section">
-							<div className="stat-item">
-								<span className="stat-label">Total Decks:</span>
-								<span className="stat-value">{stats.total}</span>
+						<div className={styles.statsSection}>
+							<div className={styles.statItem}>
+								<span className={styles.statLabel}>Total Decks:</span>
+								<span className={styles.statValue}>{stats.total}</span>
 							</div>
-							<div className="stat-item">
-								<span className="stat-label">Total Cards:</span>
-								<span className="stat-value">{stats.totalCards}</span>
+							<div className={styles.statItem}>
+								<span className={styles.statLabel}>Total Cards:</span>
+								<span className={styles.statValue}>{stats.totalCards}</span>
 							</div>
 							{stats.mostUsed && (
-								<div className="stat-item">
-									<span className="stat-label">Most Used:</span>
-									<span className="stat-value">{stats.mostUsed.name}</span>
+								<div className={styles.statItem}>
+									<span className={styles.statLabel}>Most Used:</span>
+									<span className={styles.statValue}>
+										{stats.mostUsed.name}
+									</span>
 								</div>
 							)}
 						</div>
 
-						<div className="decks-list">
+						<div className={styles.decksList}>
 							{savedDecks.map((deck) => (
-								<div key={deck.id} className="saved-deck-item">
-									<div className="deck-info">
-										<div className="deck-header">
+								<div key={deck.id} className={styles.savedDeckItem}>
+									<div className={styles.deckInfo}>
+										<div className={styles.deckHeader}>
 											{editingDeckId === deck.id ? (
 												<input
 													type="text"
 													value={editName}
 													onChange={(e) => setEditName(e.target.value)}
-													className="rename-input"
+													className={styles.renameInput}
 												/>
 											) : (
 												<h3>{deck.name}</h3>
 											)}
-											<div className="deck-actions">
+											<div className={styles.deckActions}>
 												{editingDeckId === deck.id ? (
 													<>
 														<button
 															type="button"
-															className="save-rename-btn"
+															className={styles.saveRenameBtn}
 															onClick={() => handleSaveRename(deck.id)}
 															disabled={!editName.trim()}
 														>
@@ -192,7 +199,7 @@ export function SavedDecksManager({
 														</button>
 														<button
 															type="button"
-															className="cancel-rename-btn"
+															className={styles.cancelRenameBtn}
 															onClick={handleCancelRename}
 														>
 															✗
@@ -202,14 +209,14 @@ export function SavedDecksManager({
 													<>
 														<button
 															type="button"
-															className="rename-btn"
+															className={styles.renameBtn}
 															onClick={() => handleStartRename(deck)}
 														>
 															✏️
 														</button>
 														<button
 															type="button"
-															className="delete-btn"
+															className={styles.deleteBtn}
 															onClick={() => handleDeleteDeck(deck.id)}
 														>
 															🗑️
@@ -218,40 +225,44 @@ export function SavedDecksManager({
 												)}
 											</div>
 										</div>
-										<div className="deck-details">
-											<p className="deck-topic">Topic: {deck.topic}</p>
-											<p className="deck-cards">{deck.cards.length} cards</p>
-											<p className="deck-created">
+										<div className={styles.deckDetails}>
+											<p className={styles.deckTopic}>Topic: {deck.topic}</p>
+											<p className={styles.deckCards}>
+												{deck.cards.length} cards
+											</p>
+											<p className={styles.deckCreated}>
 												Created: {formatDate(deck.createdAt)}
 											</p>
 											{deck.lastUsed && (
-												<p className="deck-used">
+												<p className={styles.deckUsed}>
 													Last used: {formatDate(deck.lastUsed)}
 												</p>
 											)}
-											<p className="deck-uses">
+											<p className={styles.deckUses}>
 												Used {deck.useCount} time
 												{deck.useCount !== 1 ? "s" : ""}
 											</p>
 										</div>
 									</div>
-									<div className="deck-preview">
-										<div className="preview-cards">
+									<div className={styles.deckPreview}>
+										<div className={styles.previewCards}>
 											{deck.cards.slice(0, 3).map((card) => (
-												<div key={card.id} className="preview-card">
-													<div className="card-category">{card.category}</div>
-													<div className="card-word">{card.word}</div>
+												<div key={card.id} className={styles.previewCard}>
+													<div className={styles.cardCategory}>
+														{card.category}
+													</div>
+													<div className={styles.cardWord}>{card.word}</div>
 												</div>
 											))}
 											{deck.cards.length > 3 && (
-												<div className="more-cards">
+												<div className={styles.moreCards}>
 													+{deck.cards.length - 3} more
 												</div>
 											)}
 										</div>
 										<button
 											type="button"
-											className="use-deck-btn"
+											className={styles.useDeckBtn}
 											onClick={() => handleUseDeck(deck.id)}
 										>
 											Use This Deck
@@ -265,13 +276,13 @@ export function SavedDecksManager({
 
 				{/* Import/Export Dialog */}
 				{showImportExport && (
-					<div className="import-export-dialog-overlay">
-						<div className="import-export-dialog">
-							<div className="import-export-dialog-header">
+					<div className={styles.importExportDialogOverlay}>
+						<div className={styles.importExportDialog}>
+							<div className={styles.importExportDialogHeader}>
 								<h3>📥📤 Import/Export Decks</h3>
 								<button
 									type="button"
-									className="close-dialog-btn"
+									className={styles.closeButton}
 									onClick={() => {
 										setShowImportExport(false);
 										setImportMessage("");
@@ -280,20 +291,20 @@ export function SavedDecksManager({
 									×
 								</button>
 							</div>
-							<div className="import-export-dialog-content">
-								<div className="export-section">
+							<div className={styles.importExportDialogContent}>
+								<div className={styles.exportSection}>
 									<h4>📤 Export Decks</h4>
 									<p>Download all your saved decks as a JSON file.</p>
 									<button
 										type="button"
-										className="export-btn"
+										className={styles.exportBtn}
 										onClick={handleExportDecks}
 									>
 										📥 Export All Decks
 									</button>
 								</div>
 
-								<div className="import-section">
+								<div className={styles.importSection}>
 									<h4>📥 Import Decks</h4>
 									<p>Import decks from a previously exported JSON file.</p>
 									<input
@@ -301,18 +312,18 @@ export function SavedDecksManager({
 										type="file"
 										accept=".json"
 										onChange={handleImportDecks}
-										className="file-input"
+										className={styles.fileInput}
 									/>
 									{importMessage && (
 										<div
-											className={`import-message ${importSuccess ? "success" : "error"}`}
+											className={`${styles.importMessage} ${importSuccess ? styles.success : styles.error}`}
 										>
 											{importMessage}
 										</div>
 									)}
 								</div>
 
-								<div className="import-export-tips">
+								<div className={styles.importExportTips}>
 									<h4>💡 Tips</h4>
 									<ul>
 										<li>Exported files contain all your deck data</li>

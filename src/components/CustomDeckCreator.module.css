@@ -5,18 +5,21 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0, 0, 0, 0.8);
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	z-index: 1000;
 	backdrop-filter: blur(10px);
 	padding: 20px;
+	overflow-y: auto;
 }
 
 .creatorHeader {
 	text-align: center;
 	margin-bottom: 2rem;
+	margin-top: 2rem;
 }
 
 .creatorHeader h2 {
@@ -36,9 +39,10 @@
 	background: rgba(255, 255, 255, 0.95);
 	border-radius: 20px;
 	padding: 2rem;
-	max-width: 500px;
+	max-width: 600px;
 	width: 100%;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	margin-bottom: 2rem;
 }
 
 .inputGroup {
@@ -185,9 +189,12 @@
 }
 
 .generatedDeck {
-	margin-top: 2rem;
-	padding-top: 2rem;
-	border-top: 2px solid #e0e0e0;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	padding: 2rem;
+	max-width: 600px;
+	width: 100%;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .deckHeader {
@@ -223,11 +230,12 @@
 
 .cardsPreview {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	gap: 1rem;
 	margin-bottom: 1.5rem;
-	max-height: 300px;
+	max-height: 400px;
 	overflow-y: auto;
+	padding: 0.5rem;
 }
 
 .previewCard {

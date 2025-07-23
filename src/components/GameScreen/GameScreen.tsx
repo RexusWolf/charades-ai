@@ -172,6 +172,7 @@ export function GameScreen({
 				timeLeft={timeLeft}
 				cardsLeftToGuess={game.getCurrentTurn()?.remainingCards.length ?? 0}
 				totalCards={game.getTotalCards()}
+				maxTime={config.secondsPerRound}
 			/>
 
 			{currentPlayer && (

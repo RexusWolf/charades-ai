@@ -4,11 +4,11 @@
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	max-width: 500px;
+	max-width: 600px;
 	margin-bottom: 2rem;
-	padding: 1rem;
+	padding: 1.5rem;
 	background: rgba(255, 255, 255, 0.1);
-	border-radius: 15px;
+	border-radius: 20px;
 	backdrop-filter: blur(10px);
 }
 
@@ -20,17 +20,61 @@
 	gap: 0.5rem;
 }
 
+.circularTimer {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 120px;
+	height: 120px;
+}
+
+.timerSvg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 120px;
+	height: 120px;
+}
+
+.timerBackground {
+	fill: none;
+	stroke: rgba(255, 255, 255, 0.2);
+	stroke-width: 6;
+}
+
+.timerProgress {
+	fill: none;
+	stroke: #4caf50;
+	stroke-linecap: round;
+	stroke-width: 6;
+	transition: stroke-dashoffset 0.3s ease;
+}
+
+.timerProgress.urgent {
+	stroke: #ff6b6b;
+	animation: pulse 1s infinite;
+}
+
+.timerText {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 1;
+}
+
 .timerLabel,
 .progressLabel {
-	font-size: 0.9rem;
+	font-size: 1rem;
 	opacity: 0.8;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
+	font-weight: 500;
 }
 
 .timerValue,
 .progressValue {
-	font-size: 1.5rem;
+	font-size: 2rem;
 	font-weight: bold;
 }
 

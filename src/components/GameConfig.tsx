@@ -35,10 +35,10 @@ export function GameConfigScreen({
 	};
 
 	return (
-		<div className="app">
-			<div className="container">
-				<h1>🎭 Game Configuration</h1>
-				<p className="instructions">
+		<div className={styles.app}>
+			<div className={styles.container}>
+				<h1 className={styles.title}>🎭 Game Configuration</h1>
+				<p className={styles.instructions}>
 					Customize your game settings or choose a preset
 				</p>
 
@@ -110,7 +110,7 @@ export function GameConfigScreen({
 						</div>
 
 						<div className={`${styles.configItem} ${styles.checkbox}`}>
-							<label className="checkbox-label">
+							<label className={styles.checkboxLabel}>
 								<input
 									type="checkbox"
 									checked={config.enablePreparationPhase}
@@ -151,7 +151,7 @@ export function GameConfigScreen({
 						)}
 
 						<div className={`${styles.configItem} ${styles.checkbox}`}>
-							<label className="checkbox-label">
+							<label className={styles.checkboxLabel}>
 								<input
 									type="checkbox"
 									checked={config.autoStartNextPlayer}
@@ -219,7 +219,7 @@ export function GameConfigScreen({
 					)}
 					<button
 						type="button"
-						className="start-button"
+						className={styles.startButton}
 						onClick={handleStartGame}
 					>
 						Continue to Team Setup

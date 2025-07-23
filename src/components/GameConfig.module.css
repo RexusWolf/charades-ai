@@ -1,12 +1,80 @@
-/* Game Configuration Styles */
+/* Game Config Styles */
+.app {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	color: white;
+}
+
+.container {
+	text-align: center;
+	max-width: 500px;
+	width: 100%;
+}
+
+.title {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.instructions {
+	font-size: 1.1rem;
+	margin-bottom: 2rem;
+	opacity: 0.9;
+	line-height: 1.5;
+}
+
+.checkboxLabel {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.checkboxLabel input[type="checkbox"] {
+	margin: 0;
+	width: 1.2rem;
+	height: 1.2rem;
+	cursor: pointer;
+}
+
+.startButton {
+	background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+	color: white;
+	border: none;
+	padding: 15px 40px;
+	font-size: 1.2rem;
+	font-weight: bold;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.startButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.startButton:active {
+	transform: translateY(0);
+}
+
 .configSection {
-	margin: 2rem 0;
+	margin-bottom: 2rem;
 }
 
 .configSection h2 {
-	text-align: center;
-	margin-bottom: 1.5rem;
+	margin-bottom: 1rem;
 	font-size: 1.5rem;
+	color: white;
 }
 
 .presetGrid {
@@ -17,37 +85,39 @@
 }
 
 .presetCard {
-	background: rgba(255, 255, 255, 0.95);
-	border: 3px solid transparent;
+	background: rgba(255, 255, 255, 0.1);
+	border: 2px solid transparent;
 	border-radius: 15px;
 	padding: 1.5rem;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	text-align: center;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(10px);
+	text-align: left;
 }
 
 .presetCard:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .presetCard.selected {
-	border-color: #51cf66;
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+	border-color: #4ecdc4;
+	background: rgba(78, 205, 196, 0.2);
 }
 
 .presetCard h3 {
 	margin: 0 0 1rem 0;
 	font-size: 1.2rem;
-	font-weight: bold;
-	color: #333;
+	color: white;
+}
+
+.presetDetails {
+	font-size: 0.9rem;
+	opacity: 0.8;
 }
 
 .presetDetails p {
 	margin: 0.25rem 0;
-	font-size: 0.9rem;
-	color: #666;
 }
 
 .configGrid {
@@ -57,50 +127,53 @@
 }
 
 .configItem {
-	background: rgba(255, 255, 255, 0.1);
-	padding: 1.5rem;
-	border-radius: 15px;
-	backdrop-filter: blur(10px);
-}
-
-.configItem.checkbox {
 	display: flex;
-	align-items: center;
+	flex-direction: column;
+	gap: 0.5rem;
+	text-align: left;
 }
 
 .configItem label {
-	display: block;
-	margin-bottom: 0.5rem;
 	font-weight: 500;
 	color: white;
 }
 
-.configItem.checkbox label {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	margin-bottom: 0;
+.configItem input[type="range"] {
+	width: 100%;
+	height: 8px;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.2);
+	outline: none;
 	cursor: pointer;
 }
 
-.configItem input[type="range"] {
-	width: 100%;
-	margin: 0.5rem 0;
+.configItem input[type="range"]::-webkit-slider-thumb {
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #4ecdc4;
+	cursor: pointer;
 }
 
-.configItem input[type="checkbox"] {
-	width: 18px;
-	height: 18px;
-	accent-color: #51cf66;
+.configItem input[type="range"]::-moz-range-thumb {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #4ecdc4;
+	cursor: pointer;
+	border: none;
 }
 
 .configValue {
-	display: block;
-	text-align: center;
 	font-weight: bold;
+	color: #4ecdc4;
 	font-size: 1.1rem;
-	color: #51cf66;
-	margin-top: 0.5rem;
+}
+
+.checkbox {
+	flex-direction: row;
+	align-items: center;
 }
 
 .configSummary {
@@ -112,8 +185,8 @@
 }
 
 .configSummary h3 {
-	text-align: center;
-	margin-bottom: 1.5rem;
+	margin: 0 0 1rem 0;
+	color: white;
 	font-size: 1.3rem;
 }
 
@@ -137,23 +210,23 @@
 
 .summaryLabel {
 	font-weight: 500;
-	opacity: 0.9;
+	opacity: 0.8;
 }
 
 .summaryValue {
 	font-weight: bold;
-	color: #51cf66;
+	color: #4ecdc4;
 }
 
 .configActions {
 	display: flex;
+	flex-direction: column;
 	gap: 1rem;
-	justify-content: center;
 	margin-top: 2rem;
-	flex-wrap: wrap;
 }
 
-.customDeckButton {
+.customDeckButton,
+.savedDecksButton {
 	background: linear-gradient(45deg, #6c5ce7, #5f3dc4);
 	color: white;
 	border: none;
@@ -166,25 +239,31 @@
 	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.customDeckButton:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.savedDecksButton {
-	background: linear-gradient(45deg, #ffd93d, #fcc419);
-	color: #333;
-	border: none;
-	padding: 12px 24px;
-	font-size: 1rem;
-	font-weight: bold;
-	border-radius: 25px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
+.customDeckButton:hover,
 .savedDecksButton:hover {
 	transform: translateY(-2px);
 	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+	.app {
+		padding: 10px;
+	}
+
+	.title {
+		font-size: 2.5rem;
+	}
+
+	.presetGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.summaryGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.configActions {
+		align-items: center;
+	}
 }

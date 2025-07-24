@@ -135,7 +135,7 @@ export function CustomDeckCreator({
 							id="cardCount"
 							type="range"
 							min="10"
-							max="150"
+							max="200"
 							step="5"
 							value={cardCount}
 							onChange={(e) => setCardCount(parseInt(e.target.value))}

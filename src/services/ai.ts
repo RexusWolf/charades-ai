@@ -1,17 +1,17 @@
 import type { DeckCard } from "../components/Card/DeckCard";
 import { Language } from "../data/language";
+import { ResponseMapper } from "./ResponseMapper";
 
-interface GeminiResponse {
+export interface GeminiResponse {
     candidates: Array<{
         content: {
             parts: Array<{
                 text: string;
             }>;
         };
+        finishReason?: string;
     }>;
 }
-
-type AIGeneratedCard = string;
 
 export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 30, language: Language = Language.universal()): Promise<DeckCard[]> {
     const apiKey = userApiKey || import.meta.env.VITE_GEMINI_API_KEY;
@@ -68,48 +68,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
         }
 
         const data: GeminiResponse = await response.json();
-        const content = data.candidates[0]?.content?.parts[0]?.text;
-
-        if (!content) {
-            throw new Error('No response content from Gemini');
-        }
-
-        // Try to parse the JSON response
-        let cards: AIGeneratedCard[];
-        try {
-            // Clean the response in case it has markdown formatting
-            let cleanContent = content.trim();
-
-            // Remove markdown code blocks
-            if (cleanContent.startsWith('```json')) {
-                cleanContent = cleanContent.replace(/^```json\n?/, '');
-            }
-            if (cleanContent.startsWith('```')) {
-                cleanContent = cleanContent.replace(/^```\n?/, '');
-            }
-            if (cleanContent.endsWith('```')) {
-                cleanContent = cleanContent.replace(/\n?```$/, '');
-            }
-
-            // Remove any trailing text after the JSON array
-            const jsonMatch = cleanContent.match(/\[[\s\S]*\]/);
-            if (jsonMatch) {
-                cleanContent = jsonMatch[0];
-            }
-
-            cards = JSON.parse(cleanContent);
-        } catch (error) {
-            console.error('Failed to parse Gemini response:', content);
-            console.error('Parse error:', error);
-            throw new Error('Invalid response format from AI');
-        }
-
-        // Validate and convert to Card format
-        if (!Array.isArray(cards)) {
-            throw new Error('AI response is not an array');
-        }
-
-        return cards;
+        return ResponseMapper.mapGeminiResponseToCards(data);
 
     } catch (error) {
         console.error('Gemini API error:', error);

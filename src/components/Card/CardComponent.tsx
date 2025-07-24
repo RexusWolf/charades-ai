@@ -11,6 +11,7 @@ interface CardProps {
 	swipeDirection: "left" | "right" | null;
 	onSwiping: (eventData: SwipeEventData) => void;
 	onSwiped: () => void;
+	showActionButtons?: boolean;
 }
 
 const SWIPE_TRIGGER_THRESHOLD = 150;
@@ -23,6 +24,7 @@ export function CardComponent({
 	swipeDirection,
 	onSwiping,
 	onSwiped,
+	showActionButtons = true,
 }: CardProps) {
 	const [swipeX, setSwipeX] = useState(0);
 	const [isAnimating, setIsAnimating] = useState(false);
@@ -69,7 +71,9 @@ export function CardComponent({
 	};
 
 	return (
-		<div className={styles.cardContainer}>
+		<div
+			className={`${styles.cardContainer} ${!showActionButtons ? styles.noActionButtons : ""}`}
+		>
 			<div
 				className={getCardClassName()}
 				style={{
@@ -99,22 +103,24 @@ export function CardComponent({
 				)}
 			</div>
 
-			<div className={styles.actionButtons}>
-				<button
-					type="button"
-					className={`${styles.actionButton} ${styles.skipButton}`}
-					onClick={onSkip}
-				>
-					← SKIP
-				</button>
-				<button
-					type="button"
-					className={`${styles.actionButton} ${styles.correctButton}`}
-					onClick={onCorrect}
-				>
-					CORRECT →
-				</button>
-			</div>
+			{showActionButtons && (
+				<div className={styles.actionButtons}>
+					<button
+						type="button"
+						className={`${styles.actionButton} ${styles.skipButton}`}
+						onClick={onSkip}
+					>
+						← SKIP
+					</button>
+					<button
+						type="button"
+						className={`${styles.actionButton} ${styles.correctButton}`}
+						onClick={onCorrect}
+					>
+						CORRECT →
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }

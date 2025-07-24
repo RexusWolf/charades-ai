@@ -1,58 +1,85 @@
 import { useEffect, useState } from "react";
 import { Language } from "../../data/language";
+import type { GameDeckManagerState } from "../../services/GameDeckManager";
 import { GameDeckManager } from "../../services/GameDeckManager";
 import type { GameCard } from "../Card/GameCard";
+import { DeckExplorer } from "../DeckExplorer/DeckExplorer";
 import styles from "./DeckSelector.module.css";
 
 interface DeckSelectorProps {
-	onDeckSelectionChange: (cards: GameCard[]) => void;
+	currentDeckState: GameDeckManagerState;
+	onDeckStateChange: (newState: GameDeckManagerState) => void;
 	onClose: () => void;
 }
 
 type TabType = "official" | "custom";
 
 export function DeckSelector({
-	onDeckSelectionChange,
+	currentDeckState,
+	onDeckStateChange,
 	onClose,
 }: DeckSelectorProps) {
 	const [deckManager] = useState(() => new GameDeckManager());
-	const [state, setState] = useState(deckManager.getState());
 	const [activeTab, setActiveTab] = useState<TabType>("official");
 	const [languageFilter, setLanguageFilter] = useState<string>("all");
+	const [showDeckExplorer, setShowDeckExplorer] = useState(false);
 
+	// Sync the deck manager with the current state from App
 	useEffect(() => {
-		// Notify parent of current mixed cards
-		onDeckSelectionChange(deckManager.getMixedCards());
-	}, [deckManager, onDeckSelectionChange]);
+		deckManager.refreshAvailableDecks();
+
+		// Get the IDs of currently selected decks from the App state
+		const selectedDeckIds = new Set(
+			currentDeckState.selectedDecks.map((deck) => deck.deckId),
+		);
+
+		// Sync all available decks with the App state
+		deckManager.getOfficialDecks().forEach((deck) => {
+			deckManager.setDeckSelection(
+				deck.deckId,
+				selectedDeckIds.has(deck.deckId),
+			);
+		});
+
+		deckManager.getCustomDecks().forEach((deck) => {
+			deckManager.setDeckSelection(
+				deck.deckId,
+				selectedDeckIds.has(deck.deckId),
+			);
+		});
+	}, [currentDeckState.selectedDecks, deckManager]);
 
 	const handleToggleDeck = (deckId: string) => {
 		deckManager.toggleDeckSelection(deckId);
-		setState(deckManager.getState());
-		onDeckSelectionChange(deckManager.getMixedCards());
+		onDeckStateChange(deckManager.getState());
 	};
 
 	const handleSelectAll = () => {
 		deckManager.selectAllDecks();
-		setState(deckManager.getState());
-		onDeckSelectionChange(deckManager.getMixedCards());
+		onDeckStateChange(deckManager.getState());
 	};
 
 	const handleDeselectAll = () => {
 		deckManager.deselectAllDecks();
-		setState(deckManager.getState());
-		onDeckSelectionChange(deckManager.getMixedCards());
+		onDeckStateChange(deckManager.getState());
 	};
 
 	const handleSelectDefaultOnly = () => {
 		deckManager.selectDefaultDeckOnly();
-		setState(deckManager.getState());
-		onDeckSelectionChange(deckManager.getMixedCards());
+		onDeckStateChange(deckManager.getState());
 	};
 
 	const handleRefresh = () => {
 		deckManager.refreshAvailableDecks();
-		setState(deckManager.getState());
-		onDeckSelectionChange(deckManager.getMixedCards());
+		onDeckStateChange(deckManager.getState());
+	};
+
+	const handleViewCards = () => {
+		setShowDeckExplorer(true);
+	};
+
+	const handleDeckExplorerClose = () => {
+		setShowDeckExplorer(false);
 	};
 
 	const officialDecks = deckManager.getOfficialDecks();
@@ -68,6 +95,17 @@ export function DeckSelector({
 		languageFilter === "all"
 			? customDecks
 			: customDecks.filter((deck) => deck.language.code === languageFilter);
+
+	if (showDeckExplorer) {
+		return (
+			<DeckExplorer
+				cards={currentDeckState.mixedCards}
+				currentDeckState={currentDeckState}
+				onDeckStateChange={onDeckStateChange}
+				onClose={handleDeckExplorerClose}
+			/>
+		);
+	}
 
 	return (
 		<div className={styles.overlay}>
@@ -86,10 +124,12 @@ export function DeckSelector({
 				<div className={styles.content}>
 					<div className={styles.summary}>
 						<p>
-							<strong>{state.selectedDecks.length}</strong> deck(s) selected
+							<strong>{currentDeckState.selectedDecks.length}</strong> deck(s)
+							selected
 						</p>
 						<p>
-							<strong>{state.mixedCards.length}</strong> total cards available
+							<strong>{currentDeckState.mixedCards.length}</strong> total cards
+							available
 						</p>
 					</div>
 
@@ -122,6 +162,15 @@ export function DeckSelector({
 						>
 							Refresh
 						</button>
+						{currentDeckState.selectedDecks.length > 0 && (
+							<button
+								type="button"
+								className={styles.viewCardsButton}
+								onClick={handleViewCards}
+							>
+								👁️ View Cards
+							</button>
+						)}
 					</div>
 
 					<div className={styles.languageFilter}>
@@ -224,11 +273,11 @@ export function DeckSelector({
 						)}
 					</div>
 
-					{state.selectedDecks.length > 0 && (
+					{currentDeckState.selectedDecks.length > 0 && (
 						<div className={styles.selectedSummary}>
 							<h3>Selected Decks:</h3>
 							<ul>
-								{state.selectedDecks.map((deck) => (
+								{currentDeckState.selectedDecks.map((deck) => (
 									<li key={deck.deckId}>
 										{deck.name} ({deck.cardCount} cards)
 									</li>

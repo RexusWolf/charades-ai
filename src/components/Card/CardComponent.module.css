@@ -9,6 +9,10 @@
 	flex-direction: column;
 }
 
+.cardContainer.noActionButtons {
+	height: 400px;
+}
+
 .card {
 	width: 100%;
 	height: 400px;

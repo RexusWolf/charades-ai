@@ -109,6 +109,35 @@ export class GameDeckManager {
         this.mixSelectedDecks();
     }
 
+    public setDeckSelection(deckId: string, isSelected: boolean): void {
+        const deckIndex = this.state.availableDecks.findIndex(deck => deck.deckId === deckId);
+        if (deckIndex === -1) return;
+
+        const deck = this.state.availableDecks[deckIndex];
+        deck.isSelected = isSelected;
+
+        // Update selected decks
+        if (isSelected) {
+            // Only add if not already in the list
+            if (!this.state.selectedDecks.some(d => d.deckId === deckId)) {
+                this.state.selectedDecks.push(deck);
+            }
+        } else {
+            this.state.selectedDecks = this.state.selectedDecks.filter(d => d.deckId !== deckId);
+        }
+
+        // Ensure at least one deck is selected
+        if (this.state.selectedDecks.length === 0) {
+            const defaultDeck = this.state.availableDecks.find(deck => deck.deckId === DEFAULT_DECK_ID);
+            if (defaultDeck) {
+                defaultDeck.isSelected = true;
+                this.state.selectedDecks = [defaultDeck];
+            }
+        }
+
+        this.mixSelectedDecks();
+    }
+
     public selectAllDecks(): void {
         this.state.availableDecks.forEach(deck => {
             deck.isSelected = true;

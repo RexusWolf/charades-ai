@@ -13,11 +13,15 @@ import { migrateSavedDecks } from "./data/savedDecks";
 import type { GameConfig, GameState, Team } from "./Game";
 import { Game } from "./Game";
 import type { Round } from "./Round";
+import type { GameDeckManagerState } from "./services/GameDeckManager";
 import { GameDeckManager } from "./services/GameDeckManager";
 
 function App() {
 	// Initialize deck manager
 	const [deckManager] = useState(() => new GameDeckManager());
+	const [deckState, setDeckState] = useState<GameDeckManagerState>(() =>
+		deckManager.getState(),
+	);
 
 	// Run migration on app start
 	useEffect(() => {
@@ -28,9 +32,6 @@ function App() {
 	const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
 	const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
 	const [gameRounds, setGameRounds] = useState<Round[]>([]);
-	const [currentDeck, setCurrentDeck] = useState<GameCard[]>(
-		deckManager.getMixedCards(),
-	);
 	const [showDeckCreator, setShowDeckCreator] = useState(false);
 	const [showSavedDecks, setShowSavedDecks] = useState(false);
 	const [showDeckSelector, setShowDeckSelector] = useState(false);
@@ -54,11 +55,11 @@ function App() {
 	useEffect(() => {
 		if (gameState === "playing" && gameConfig && selectedTeams.length > 0) {
 			// Limit the deck based on config
-			const limitedDeck = currentDeck.slice(0, gameConfig.maxCards);
+			const limitedDeck = deckState.mixedCards.slice(0, gameConfig.maxCards);
 			const game = new Game(gameConfig, selectedTeams, limitedDeck);
 			setGameInstance(game);
 		}
-	}, [gameState, gameConfig, selectedTeams, currentDeck]);
+	}, [gameState, gameConfig, selectedTeams, deckState.mixedCards]);
 
 	const handleGameEnd = useCallback((rounds: Round[]) => {
 		setGameRounds(rounds);
@@ -71,26 +72,38 @@ function App() {
 		setSelectedTeams([]);
 		setGameRounds([]);
 		deckManager.resetToDefault();
-		setCurrentDeck(deckManager.getMixedCards());
+		setDeckState(deckManager.getState());
 		setShowDeckCreator(false);
 		setShowSavedDecks(false);
 		setShowDeckSelector(false);
 		setGameInstance(null);
 	}, [deckManager]);
 
-	const handleDeckCreated = useCallback((deck: GameCard[]) => {
-		setCurrentDeck(deck);
-		setShowDeckCreator(false);
-	}, []);
+	const handleDeckCreated = useCallback(
+		(deck: GameCard[]) => {
+			// When a custom deck is created, we need to update the deck manager
+			// For now, we'll just update the mixed cards directly
+			deckManager.refreshAvailableDecks();
+			setDeckState(deckManager.getState());
+			setShowDeckCreator(false);
+		},
+		[deckManager],
+	);
 
 	const handleDeckCreatorCancel = useCallback(() => {
 		setShowDeckCreator(false);
 	}, []);
 
-	const handleSavedDeckSelected = useCallback((deck: GameCard[]) => {
-		setCurrentDeck(deck);
-		setShowSavedDecks(false);
-	}, []);
+	const handleSavedDeckSelected = useCallback(
+		(deck: GameCard[]) => {
+			// When a saved deck is selected, we need to update the deck manager
+			// For now, we'll just update the mixed cards directly
+			deckManager.refreshAvailableDecks();
+			setDeckState(deckManager.getState());
+			setShowSavedDecks(false);
+		},
+		[deckManager],
+	);
 
 	const handleSavedDecksClose = useCallback(() => {
 		setShowSavedDecks(false);
@@ -100,9 +113,12 @@ function App() {
 		setShowDeckSelector(false);
 	}, []);
 
-	const handleDeckSelectionChange = useCallback((cards: GameCard[]) => {
-		setCurrentDeck(cards);
-	}, []);
+	const handleDeckStateChange = useCallback(
+		(newDeckState: GameDeckManagerState) => {
+			setDeckState(newDeckState);
+		},
+		[],
+	);
 
 	if (gameState === "idle") {
 		return (
@@ -117,7 +133,7 @@ function App() {
 			<>
 				<MainLayout>
 					<GameConfigScreen
-						currentDeck={currentDeck}
+						currentDeck={deckState.mixedCards}
 						onStartGame={handleConfigComplete}
 						onCreateCustomDeck={() => setShowDeckCreator(true)}
 						onShowSavedDecks={() => setShowSavedDecks(true)}
@@ -138,7 +154,8 @@ function App() {
 				)}
 				{showDeckSelector && (
 					<DeckSelector
-						onDeckSelectionChange={handleDeckSelectionChange}
+						currentDeckState={deckState}
+						onDeckStateChange={handleDeckStateChange}
 						onClose={handleDeckSelectorClose}
 					/>
 				)}

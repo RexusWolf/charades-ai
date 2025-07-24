@@ -119,9 +119,10 @@
 	background: #f3f4f6;
 	border: 1px solid #d1d5db;
 	color: #374151;
-	padding: 8px 12px;
+	padding: 8px 16px;
 	border-radius: 6px;
 	font-size: 0.875rem;
+	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s;
 }
@@ -129,6 +130,24 @@
 .actionButton:hover {
 	background: #e5e7eb;
 	border-color: #9ca3af;
+}
+
+.viewCardsButton {
+	background: linear-gradient(45deg, #667eea, #764ba2);
+	border: 1px solid #667eea;
+	color: white;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.viewCardsButton:hover {
+	background: linear-gradient(45deg, #5a67d8, #6b46c1);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .tabs {

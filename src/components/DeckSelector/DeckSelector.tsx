@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Language } from "../../data/language";
 import type { GameDeckManagerState } from "../../services/GameDeckManager";
 import { GameDeckManager } from "../../services/GameDeckManager";
-import type { GameCard } from "../Card/GameCard";
 import { DeckExplorer } from "../DeckExplorer/DeckExplorer";
 import styles from "./DeckSelector.module.css";
 

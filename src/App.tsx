@@ -80,7 +80,7 @@ function App() {
 	}, [deckManager]);
 
 	const handleDeckCreated = useCallback(
-		(deck: GameCard[]) => {
+		(_deck: GameCard[]) => {
 			// When a custom deck is created, we need to update the deck manager
 			// For now, we'll just update the mixed cards directly
 			deckManager.refreshAvailableDecks();
@@ -95,7 +95,7 @@ function App() {
 	}, []);
 
 	const handleSavedDeckSelected = useCallback(
-		(deck: GameCard[]) => {
+		(_deck: GameCard[]) => {
 			// When a saved deck is selected, we need to update the deck manager
 			// For now, we'll just update the mixed cards directly
 			deckManager.refreshAvailableDecks();

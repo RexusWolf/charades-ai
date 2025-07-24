@@ -134,8 +134,8 @@ export function CustomDeckCreator({
 						<input
 							id="cardCount"
 							type="range"
-							min="5"
-							max="50"
+							min="10"
+							max="200"
 							step="5"
 							value={cardCount}
 							onChange={(e) => setCardCount(parseInt(e.target.value))}

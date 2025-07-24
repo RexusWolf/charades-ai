@@ -11,10 +11,7 @@ interface GeminiResponse {
     }>;
 }
 
-interface AIGeneratedCard {
-    word: string;
-    category: string;
-}
+type AIGeneratedCard = string;
 
 export async function generateDeckWithGemini(topic: string, userApiKey?: string, cardCount: number = 30, language: Language = Language.universal()): Promise<DeckCard[]> {
     const apiKey = userApiKey || import.meta.env.VITE_GEMINI_API_KEY;
@@ -32,28 +29,15 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
 	LANGUAGE INSTRUCTION: ${languageInstruction}
 	
 	Requirements:
-	- Each card should have a word/phrase and a category
-	- Words should be appropriate for charades (can be acted out)
-	- Categories should be relevant to the topic
-	- Return as JSON array with format: [{"word": "example", "category": "category"}]
+	- Return ONLY a simple JSON array like: ["word1","word2","word3"]
+	- No formatting, no newlines, no extra text
 	- Keep words simple and well-known in the target language
 	- Avoid offensive or inappropriate content
-	- Generate exactly ${cardCount} cards
+	- Generate up to ${cardCount} cards, but return less if the topic is too specific or narrow
 	
 	Examples:
-	For "animals" in English:
-	[
-		{"word": "Elephant", "category": "Animals"},
-		{"word": "Lion", "category": "Animals"},
-		{"word": "Penguin", "category": "Animals"}
-	]
-	
-	For "animals" in Spanish:
-	[
-		{"word": "Elefante", "category": "Animals (Spanish)"},
-		{"word": "León", "category": "Animals (Spanish)"},
-		{"word": "Pingüino", "category": "Animals (Spanish)"}
-	]`;
+	For "animals" in English: ["Elephant","Lion","Penguin"]
+	For "animals" in Spanish: ["Elefante","León","Pingüino"]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
@@ -66,7 +50,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
                     {
                         parts: [
                             {
-                                text: `You are a helpful assistant that generates charades cards. Always respond with valid JSON arrays. ${prompt}`
+                                text: `You are a helpful assistant that generates charades cards. Always respond with valid arrays. ${prompt}`
                             }
                         ]
                     }
@@ -93,10 +77,29 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
         let cards: AIGeneratedCard[];
         try {
             // Clean the response in case it has markdown formatting
-            const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
+            let cleanContent = content.trim();
+
+            // Remove markdown code blocks
+            if (cleanContent.startsWith('```json')) {
+                cleanContent = cleanContent.replace(/^```json\n?/, '');
+            }
+            if (cleanContent.startsWith('```')) {
+                cleanContent = cleanContent.replace(/^```\n?/, '');
+            }
+            if (cleanContent.endsWith('```')) {
+                cleanContent = cleanContent.replace(/\n?```$/, '');
+            }
+
+            // Remove any trailing text after the JSON array
+            const jsonMatch = cleanContent.match(/\[[\s\S]*\]/);
+            if (jsonMatch) {
+                cleanContent = jsonMatch[0];
+            }
+
             cards = JSON.parse(cleanContent);
-        } catch {
+        } catch (error) {
             console.error('Failed to parse Gemini response:', content);
+            console.error('Parse error:', error);
             throw new Error('Invalid response format from AI');
         }
 
@@ -105,7 +108,7 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
             throw new Error('AI response is not an array');
         }
 
-        return cards.map((card) => card.word);
+        return cards;
 
     } catch (error) {
         console.error('Gemini API error:', error);

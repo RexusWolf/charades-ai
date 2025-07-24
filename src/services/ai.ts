@@ -33,7 +33,8 @@ export async function generateDeckWithGemini(topic: string, userApiKey?: string,
 	- No formatting, no newlines, no extra text
 	- Keep words simple and well-known in the target language
 	- Avoid offensive or inappropriate content
-	- Generate up to ${cardCount} cards, but return less if the topic is too specific or narrow
+	- Generate a maximum of ${cardCount} cards.
+    If the topic is too specific or narrow, less than ${cardCount} cards are allowed.
 	
 	Examples:
 	For "animals" in English: ["Elephant","Lion","Penguin"]

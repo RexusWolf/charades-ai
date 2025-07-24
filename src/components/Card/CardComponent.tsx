@@ -69,7 +69,7 @@ export function CardComponent({
 	};
 
 	return (
-		<div className={styles.cardContainer} {...handlers}>
+		<div className={styles.cardContainer}>
 			<div
 				className={getCardClassName()}
 				style={{
@@ -78,16 +78,9 @@ export function CardComponent({
 						? "transform 0.3s cubic-bezier(.23,1.12,.67,1.01)"
 						: "none",
 				}}
+				{...handlers}
 			>
 				<div className={styles.cardWord}>{card.word}</div>
-				<div className={styles.cardInstructions}>
-					<div className={`${styles.swipeHint} ${styles.swipeHintLeft}`}>
-						← SKIP
-					</div>
-					<div className={`${styles.swipeHint} ${styles.swipeHintRight}`}>
-						CORRECT →
-					</div>
-				</div>
 				{isSwiping && (
 					<div className={styles.swipeOverlay}>
 						{swipeDirection === "left" && (
@@ -104,6 +97,23 @@ export function CardComponent({
 						)}
 					</div>
 				)}
+			</div>
+
+			<div className={styles.actionButtons}>
+				<button
+					type="button"
+					className={`${styles.actionButton} ${styles.skipButton}`}
+					onClick={onSkip}
+				>
+					← SKIP
+				</button>
+				<button
+					type="button"
+					className={`${styles.actionButton} ${styles.correctButton}`}
+					onClick={onCorrect}
+				>
+					CORRECT →
+				</button>
 			</div>
 		</div>
 	);

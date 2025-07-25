@@ -44,6 +44,14 @@ export class Round {
         }
     }
 
+    moveCardToEnd(cardId: number): void {
+        const cardIndex = this.remainingCards.findIndex(card => card.id === cardId);
+        if (cardIndex !== -1) {
+            const card = this.remainingCards.splice(cardIndex, 1)[0];
+            this.remainingCards.push(card);
+        }
+    }
+
     hasRemainingCards(): boolean {
         return this.remainingCards.length > 0;
     }

@@ -178,6 +178,12 @@ export class Game {
         const currentRound = this.getCurrentRound();
         if (!currentRound) return;
 
+        // Move the current card to the end of the round's remaining cards if there is one
+        const currentCard = this.getCurrentCard();
+        if (currentCard) {
+            currentRound.moveCardToEnd(currentCard.id);
+        }
+
         currentRound.addTurn({ ...this.currentTurn });
 
         this.turnIndex++;

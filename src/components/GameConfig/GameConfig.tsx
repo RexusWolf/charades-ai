@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { PRESET_CONFIGS } from "../../data/config";
 import type { GameConfig } from "../../Game";
+import { useGameConfig } from "../../shared/hooks/useGameConfig";
 import type { GameCard } from "../Card/GameCard";
 import styles from "./GameConfig.module.css";
 
@@ -19,24 +18,31 @@ export function GameConfigScreen({
 	onShowSavedDecks,
 	onShowDeckSelector,
 }: GameConfigScreenProps) {
-	const [config, setConfig] = useState<GameConfig>(PRESET_CONFIGS.standard);
-	const [selectedPreset, setSelectedPreset] = useState<string>("standard");
+	const {
+		config,
+		selectedPreset,
+		selectPreset,
+		updateConfig,
+		getPresetNames,
+		getPresetConfig,
+		isValid,
+	} = useGameConfig();
 
 	const handlePresetChange = (presetName: string) => {
-		setSelectedPreset(presetName);
-		setConfig(PRESET_CONFIGS[presetName]);
+		selectPreset(presetName as any);
 	};
 
 	const handleConfigChange = (
 		key: keyof GameConfig,
 		value: number | boolean,
 	) => {
-		setConfig((prev) => ({ ...prev, [key]: value }));
-		setSelectedPreset("custom");
+		updateConfig(key, value);
 	};
 
 	const handleStartGame = () => {
-		onStartGame(config);
+		if (isValid) {
+			onStartGame(config);
+		}
 	};
 
 	return (
@@ -49,26 +55,29 @@ export function GameConfigScreen({
 			<div className={styles.configSection}>
 				<h2>Presets</h2>
 				<div className={styles.presetGrid}>
-					{Object.entries(PRESET_CONFIGS).map(([name, presetConfig]) => (
-						<button
-							key={name}
-							type="button"
-							className={`${styles.presetCard} ${selectedPreset === name ? styles.selected : ""}`}
-							onClick={() => handlePresetChange(name)}
-						>
-							<h3>{name.charAt(0).toUpperCase() + name.slice(1)}</h3>
-							<div className={styles.presetDetails}>
-								<p>{presetConfig.secondsPerRound}s per round</p>
-								<p>{presetConfig.maxCards} cards</p>
-								<p>{presetConfig.numberOfRounds} rounds</p>
-								<p>
-									{presetConfig.enablePreparationPhase
-										? "With prep"
-										: "No prep"}
-								</p>
-							</div>
-						</button>
-					))}
+					{getPresetNames().map((name) => {
+						const presetConfig = getPresetConfig(name);
+						return (
+							<button
+								key={name}
+								type="button"
+								className={`${styles.presetCard} ${selectedPreset === name ? styles.selected : ""}`}
+								onClick={() => handlePresetChange(name)}
+							>
+								<h3>{name.charAt(0).toUpperCase() + name.slice(1)}</h3>
+								<div className={styles.presetDetails}>
+									<p>{presetConfig.secondsPerRound}s per round</p>
+									<p>{presetConfig.maxCards} cards</p>
+									<p>{presetConfig.numberOfRounds} rounds</p>
+									<p>
+										{presetConfig.enablePreparationPhase
+											? "With prep"
+											: "No prep"}
+									</p>
+								</div>
+							</button>
+						);
+					})}
 				</div>
 			</div>
 

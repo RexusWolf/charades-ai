@@ -6,6 +6,7 @@ import { SPORTS_DECK } from "./Decks/english/SportsDeck";
 import { ACTUALO_DECK } from "./Decks/spanish/ActualoDeck";
 import { BLOCKBUSTER_MOVIES_SPANISH } from "./Decks/spanish/BlockbusterMoviesSpanishDeck";
 import { MARVEL_CHARACTERS_SPANISH_DECK } from "./Decks/spanish/MarvelCharactersSpanishDeck";
+import { POPURRI_SPANISH_DECK } from "./Decks/spanish/PopurriDeck";
 import { SERIES_FAMOSAS_SPANISH_DECK } from "./Decks/spanish/SeriesDeTvFamosasDeck";
 import { ACCENTS_IMPRESSIONS_DECK } from "./Decks/universal/AccentsImpressionsDeck";
 import { FAMOUS_LOGOS_BRANDS_DECK } from "./Decks/universal/FamousLogosDeck";
@@ -38,6 +39,7 @@ export const DECK_LIBRARY = {
     "series-famosas-spanish": SERIES_FAMOSAS_SPANISH_DECK,
     "marvel-characters-spanish": MARVEL_CHARACTERS_SPANISH_DECK,
     "blockbuster-movies-spanish": BLOCKBUSTER_MOVIES_SPANISH,
+    "popurri-spanish": POPURRI_SPANISH_DECK,
 };
 
 // Helper function to get all available decks

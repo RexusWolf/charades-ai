@@ -1,102 +1,44 @@
 import { useState } from "react";
 import { SAMPLE_TEAMS } from "../../data/teams";
-import type { Player, Team } from "../../Game";
+import type { Team } from "../../Game";
+import { useTeamManager } from "../../shared/hooks/useTeamManager";
 import styles from "./TeamSetup.module.css";
 
 interface TeamSetupProps {
 	onStartGame: (teams: Team[]) => void;
 }
 
-const TEAM_COLORS = [
-	"#ff6b6b",
-	"#0527e2",
-	"#51cf66",
-	"#ffd93d",
-	"#6c5ce7",
-	"#fd79a8",
-	"#00b894",
-	"#fdcb6e",
-	"#e17055",
-	"#74b9ff",
-];
-
 export function TeamSetup({ onStartGame }: TeamSetupProps) {
-	const [teams, setTeams] = useState<Team[]>(SAMPLE_TEAMS);
+	const {
+		teams,
+		addTeam,
+		removeTeam,
+		addPlayer,
+		removePlayer,
+		balanceTeams,
+		totalPlayers,
+	} = useTeamManager(SAMPLE_TEAMS);
+
 	const [newTeamName, setNewTeamName] = useState("");
 	const [newPlayerName, setNewPlayerName] = useState("");
 	const [selectedTeamId, setSelectedTeamId] = useState<string>("");
 	const [showAddTeam, setShowAddTeam] = useState(false);
 	const [showAddPlayer, setShowAddPlayer] = useState(false);
 
-	const addTeam = () => {
+	const handleAddTeam = () => {
 		if (newTeamName.trim()) {
-			const newTeam: Team = {
-				id: `team-${Date.now()}`,
-				name: newTeamName.trim(),
-				color: TEAM_COLORS[teams.length % TEAM_COLORS.length],
-				players: [],
-			};
-			setTeams([...teams, newTeam]);
+			addTeam(newTeamName.trim());
 			setNewTeamName("");
 			setShowAddTeam(false);
 		}
 	};
 
-	const removeTeam = (teamId: string) => {
-		setTeams(teams.filter((team) => team.id !== teamId));
-	};
-
-	const addPlayer = () => {
+	const handleAddPlayer = () => {
 		if (newPlayerName.trim() && selectedTeamId) {
-			const newPlayer: Player = {
-				id: `player-${Date.now()}`,
-				name: newPlayerName.trim(),
-				teamId: selectedTeamId,
-			};
-
-			setTeams(
-				teams.map((team) =>
-					team.id === selectedTeamId
-						? { ...team, players: [...team.players, newPlayer] }
-						: team,
-				),
-			);
+			addPlayer(selectedTeamId, newPlayerName.trim());
 			setNewPlayerName("");
 			setShowAddPlayer(false);
 		}
-	};
-
-	const removePlayer = (teamId: string, playerId: string) => {
-		setTeams(
-			teams.map((team) =>
-				team.id === teamId
-					? { ...team, players: team.players.filter((p) => p.id !== playerId) }
-					: team,
-			),
-		);
-	};
-
-	const balanceTeams = () => {
-		const allPlayers = teams.flatMap((team) => team.players);
-		if (allPlayers.length === 0) return;
-
-		// Clear all teams
-		const balancedTeams: Team[] = teams.map((team) => ({
-			...team,
-			players: [],
-		}));
-
-		// Distribute players evenly
-		allPlayers.forEach((player, index) => {
-			const teamIndex = index % balancedTeams.length;
-			const updatedPlayer: Player = {
-				...player,
-				teamId: balancedTeams[teamIndex].id,
-			};
-			balancedTeams[teamIndex].players.push(updatedPlayer);
-		});
-
-		setTeams(balancedTeams);
 	};
 
 	const handleStartGame = () => {
@@ -106,10 +48,6 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 		}
 	};
 
-	const totalPlayers = teams.reduce(
-		(sum, team) => sum + team.players.length,
-		0,
-	);
 	const teamsWithPlayers = teams.filter((team) => team.players.length > 0);
 
 	return (
@@ -144,7 +82,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 						<button
 							type="button"
 							className={styles.saveButton}
-							onClick={addTeam}
+							onClick={handleAddTeam}
 							disabled={!newTeamName.trim()}
 						>
 							Add Team
@@ -241,7 +179,7 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 							<button
 								type="button"
 								className={styles.saveButton}
-								onClick={addPlayer}
+								onClick={handleAddPlayer}
 								disabled={!newPlayerName.trim()}
 							>
 								Add Player

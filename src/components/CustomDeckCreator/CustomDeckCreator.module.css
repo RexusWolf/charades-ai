@@ -35,6 +35,42 @@
 	line-height: 1.5;
 }
 
+/* Mode Selector Styles */
+.modeSelector {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 2rem;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 15px;
+	padding: 0.5rem;
+	backdrop-filter: blur(10px);
+}
+
+.modeButton {
+	background: rgba(255, 255, 255, 0.2);
+	color: white;
+	border: 2px solid transparent;
+	padding: 12px 24px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 12px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	backdrop-filter: blur(10px);
+}
+
+.modeButton:hover {
+	background: rgba(255, 255, 255, 0.3);
+	transform: translateY(-1px);
+}
+
+.modeButton.activeMode {
+	background: rgba(255, 255, 255, 0.9);
+	color: #333;
+	border-color: rgba(255, 255, 255, 0.5);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
 .creatorForm {
 	background: rgba(255, 255, 255, 0.95);
 	border-radius: 20px;
@@ -77,6 +113,32 @@
 .topicInput:disabled {
 	background: #f5f5f5;
 	color: #666;
+}
+
+/* Word Input Textarea Styles */
+.wordInput {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid #e0e0e0;
+	border-radius: 10px;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+	background: white;
+	color: #333;
+	font-family: inherit;
+	resize: vertical;
+	min-height: 120px;
+}
+
+.wordInput:focus {
+	outline: none;
+	border-color: #4ecdc4;
+	box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+}
+
+.wordInput::placeholder {
+	color: #999;
+	font-style: italic;
 }
 
 .cardCountSelector {
@@ -705,4 +767,34 @@
 .cancelButton:hover {
 	transform: translateY(-2px);
 	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.creatorHeader h2 {
+		font-size: 2rem;
+	}
+
+	.modeSelector {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.modeButton {
+		padding: 10px 20px;
+		font-size: 0.9rem;
+	}
+
+	.creatorForm {
+		padding: 1.5rem;
+	}
+
+	.cardsPreview {
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	}
+
+	.deckActions {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
 }

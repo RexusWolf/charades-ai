@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { PRESET_CONFIGS } from '../src/data/config';
 import type { GameConfig } from '../src/Game';
 import { useGameConfig } from '../src/shared/hooks/useGameConfig';

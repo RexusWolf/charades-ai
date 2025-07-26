@@ -6,9 +6,7 @@ const TEAM_COLORS = [
     '#fd79a8', '#00b894', '#fdcb6e', '#e17055', '#74b9ff',
 ];
 
-interface UseTeamManagerProps {
-    initialTeams?: Team[];
-}
+
 
 export function useTeamManager(initialTeams: Team[] = []) {
     const [teams, setTeams] = useState<Team[]>(initialTeams);

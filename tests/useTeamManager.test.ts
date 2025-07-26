@@ -162,7 +162,7 @@ describe('useTeamManager', () => {
             const { result } = renderHook(() => useTeamManager(mockTeams));
 
             act(() => {
-                const newPlayer = result.current.addPlayer('team1', 'New Player');
+                result.current.addPlayer('team1', 'New Player');
             });
 
             const team = result.current.getTeamById('team1');

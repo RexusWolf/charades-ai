@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SAMPLE_TEAMS } from "../../data/teams";
-import type { Player, Team } from "../../Game";
+import type { Team } from "../../Game";
 import { useTeamManager } from "../../shared/hooks/useTeamManager";
 import styles from "./TeamSetup.module.css";
 
@@ -17,8 +17,6 @@ export function TeamSetup({ onStartGame }: TeamSetupProps) {
 		removePlayer,
 		balanceTeams,
 		totalPlayers,
-		hasTeams,
-		hasPlayers,
 	} = useTeamManager(SAMPLE_TEAMS);
 
 	const [newTeamName, setNewTeamName] = useState("");

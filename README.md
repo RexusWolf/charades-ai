@@ -113,8 +113,8 @@ src/
 ### Game Settings
 - **Round Duration**: 15-180 seconds per round
 - **Card Count**: 5-50 cards per game
-- **Preparation Phase**: Enable/disable preparation time
-- **Auto-start**: Automatically start next player
+- **Number of Rounds** 1-10 rounds per game
+- **Deck Management** Play with one or multiple decks
 
 ## 📝 License
 

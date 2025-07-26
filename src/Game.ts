@@ -26,9 +26,6 @@ export interface Turn {
 export interface GameConfig {
     secondsPerRound: number
     maxCards: number
-    enablePreparationPhase: boolean
-    preparationTimeLimit: number
-    autoStartNextPlayer: boolean
     numberOfRounds: number
 }
 

@@ -30,9 +30,7 @@ export function GameScreen({
 	const [game] = useState(() => new Game(config, teams, deck));
 	const [timeLeft, setTimeLeft] = useState(config.secondsPerRound);
 	const [isTimerRunning, setIsTimerRunning] = useState(false);
-	const [turnState, setTurnState] = useState<TurnState>(
-		config.enablePreparationPhase ? "preparing" : "playing",
-	);
+	const [turnState, setTurnState] = useState<TurnState>("preparing");
 	const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>(null);
 	const [isSwiping, setIsSwiping] = useState(false);
 	const [showRoundComplete, setShowRoundComplete] = useState(false);
@@ -40,8 +38,8 @@ export function GameScreen({
 	// Initialize the game
 	useEffect(() => {
 		setTimeLeft(config.secondsPerRound);
-		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
-		setIsTimerRunning(!config.enablePreparationPhase);
+		setTurnState("preparing");
+		setIsTimerRunning(false);
 	}, [config]);
 
 	const currentPlayer = game.getCurrentPlayer();
@@ -61,8 +59,8 @@ export function GameScreen({
 
 		game.endCurrentTurn();
 		setTimeLeft(config.secondsPerRound);
-		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
-		setIsTimerRunning(!config.enablePreparationPhase);
+		setTurnState("preparing");
+		setIsTimerRunning(false);
 
 		// Check if game is finished after ending turn
 		if (game.isGameFinished()) {
@@ -118,8 +116,8 @@ export function GameScreen({
 		game.startNextRound();
 		setShowRoundComplete(false);
 		setTimeLeft(config.secondsPerRound);
-		setTurnState(config.enablePreparationPhase ? "preparing" : "playing");
-		setIsTimerRunning(!config.enablePreparationPhase);
+		setTurnState("preparing");
+		setIsTimerRunning(false);
 	}, [game, config]);
 
 	const handleSwiping = useCallback(
@@ -157,10 +155,8 @@ export function GameScreen({
 						}
 						game.endCurrentTurn();
 						setTimeLeft(config.secondsPerRound);
-						setTurnState(
-							config.enablePreparationPhase ? "preparing" : "playing",
-						);
-						setIsTimerRunning(!config.enablePreparationPhase);
+						setTurnState("preparing");
+						setIsTimerRunning(false);
 
 						// Check if game is finished after ending turn
 						if (game.isGameFinished()) {

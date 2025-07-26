@@ -64,9 +64,7 @@ export function useGameConfig(initialConfig?: GameConfig, initialPreset: PresetN
             errors.push('Number of rounds must be between 1 and 10');
         }
 
-        if (config.enablePreparationPhase && config.preparationTimeLimit < 0) {
-            errors.push('Preparation time limit must be non-negative');
-        }
+
 
         return {
             isValid: errors.length === 0,
@@ -79,10 +77,7 @@ export function useGameConfig(initialConfig?: GameConfig, initialPreset: PresetN
             duration: `${config.secondsPerRound}s per round`,
             cards: `${config.maxCards} cards`,
             rounds: `${config.numberOfRounds} rounds`,
-            preparation: config.enablePreparationPhase
-                ? `With ${config.preparationTimeLimit}s prep`
-                : 'No preparation phase',
-            autoStart: config.autoStartNextPlayer ? 'Auto-start' : 'Manual start'
+
         };
     }, [config]);
 

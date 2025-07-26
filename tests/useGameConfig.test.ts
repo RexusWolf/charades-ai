@@ -8,9 +8,6 @@ describe('useGameConfig', () => {
     const mockConfig: GameConfig = {
         secondsPerRound: 45,
         maxCards: 10,
-        enablePreparationPhase: true,
-        preparationTimeLimit: 15,
-        autoStartNextPlayer: false,
         numberOfRounds: 3,
     };
 
@@ -117,14 +114,14 @@ describe('useGameConfig', () => {
             expect(result.current.selectedPreset).toBe('custom');
         });
 
-        it('should update boolean config values', () => {
+        it('should update number config values', () => {
             const { result } = renderHook(() => useGameConfig());
 
             act(() => {
-                result.current.updateConfig('autoStartNextPlayer', true);
+                result.current.updateConfig('maxCards', 25);
             });
 
-            expect(result.current.config.autoStartNextPlayer).toBe(true);
+            expect(result.current.config.maxCards).toBe(25);
             expect(result.current.selectedPreset).toBe('custom');
         });
     });
@@ -174,18 +171,7 @@ describe('useGameConfig', () => {
             expect(validation.errors).toContain('Number of rounds must be between 1 and 10');
         });
 
-        it('should detect invalid preparation time limit', () => {
-            const invalidConfig: GameConfig = {
-                ...mockConfig,
-                enablePreparationPhase: true,
-                preparationTimeLimit: -5, // Negative
-            };
-            const { result } = renderHook(() => useGameConfig(invalidConfig));
 
-            const validation = result.current.validateConfig();
-            expect(validation.isValid).toBe(false);
-            expect(validation.errors).toContain('Preparation time limit must be non-negative');
-        });
 
         it('should handle multiple validation errors', () => {
             const invalidConfig: GameConfig = {
@@ -213,31 +199,13 @@ describe('useGameConfig', () => {
             expect(summary.duration).toBe('60s per round');
             expect(summary.cards).toBe('15 cards');
             expect(summary.rounds).toBe('3 rounds');
-            expect(summary.preparation).toBe('With 0s prep');
-            expect(summary.autoStart).toBe('Manual start');
+
+
         });
 
-        it('should generate correct summary for config without preparation', () => {
-            const configWithoutPrep: GameConfig = {
-                ...mockConfig,
-                enablePreparationPhase: false,
-            };
-            const { result } = renderHook(() => useGameConfig(configWithoutPrep));
 
-            const summary = result.current.getConfigSummary();
-            expect(summary.preparation).toBe('No preparation phase');
-        });
 
-        it('should generate correct summary for auto-start config', () => {
-            const autoStartConfig: GameConfig = {
-                ...mockConfig,
-                autoStartNextPlayer: true,
-            };
-            const { result } = renderHook(() => useGameConfig(autoStartConfig));
 
-            const summary = result.current.getConfigSummary();
-            expect(summary.autoStart).toBe('Auto-start');
-        });
     });
 
     describe('Utility Functions', () => {
@@ -304,9 +272,6 @@ describe('useGameConfig', () => {
             const boundaryConfig: GameConfig = {
                 secondsPerRound: 15, // Minimum valid value
                 maxCards: 1, // Minimum valid value
-                enablePreparationPhase: true,
-                preparationTimeLimit: 0, // Minimum valid value
-                autoStartNextPlayer: false,
                 numberOfRounds: 1, // Minimum valid value
             };
             const { result } = renderHook(() => useGameConfig(boundaryConfig));
@@ -318,9 +283,6 @@ describe('useGameConfig', () => {
             const maxBoundaryConfig: GameConfig = {
                 secondsPerRound: 180, // Maximum valid value
                 maxCards: 100, // Maximum valid value
-                enablePreparationPhase: true,
-                preparationTimeLimit: 60,
-                autoStartNextPlayer: true,
                 numberOfRounds: 10, // Maximum valid value
             };
             const { result } = renderHook(() => useGameConfig(maxBoundaryConfig));

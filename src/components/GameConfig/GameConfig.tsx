@@ -69,11 +69,7 @@ export function GameConfigScreen({
 									<p>{presetConfig.secondsPerRound}s per round</p>
 									<p>{presetConfig.maxCards} cards</p>
 									<p>{presetConfig.numberOfRounds} rounds</p>
-									<p>
-										{presetConfig.enablePreparationPhase
-											? "With prep"
-											: "No prep"}
-									</p>
+									<p>With prep</p>
 								</div>
 							</button>
 						);
@@ -135,57 +131,6 @@ export function GameConfigScreen({
 							{config.numberOfRounds} rounds
 						</span>
 					</div>
-
-					<div className={`${styles.configItem} ${styles.checkbox}`}>
-						<label className={styles.checkboxLabel}>
-							<input
-								type="checkbox"
-								checked={config.enablePreparationPhase}
-								onChange={(e) =>
-									handleConfigChange("enablePreparationPhase", e.target.checked)
-								}
-							/>
-							Enable Preparation Phase
-						</label>
-					</div>
-
-					{config.enablePreparationPhase && (
-						<div className={styles.configItem}>
-							<label htmlFor="preparationTimeLimit">
-								Preparation Time Limit:
-							</label>
-							<input
-								id="preparationTimeLimit"
-								type="range"
-								min="0"
-								max="60"
-								step="5"
-								value={config.preparationTimeLimit}
-								onChange={(e) =>
-									handleConfigChange(
-										"preparationTimeLimit",
-										parseInt(e.target.value),
-									)
-								}
-							/>
-							<span className={styles.configValue}>
-								{config.preparationTimeLimit}s
-							</span>
-						</div>
-					)}
-
-					<div className={`${styles.configItem} ${styles.checkbox}`}>
-						<label className={styles.checkboxLabel}>
-							<input
-								type="checkbox"
-								checked={config.autoStartNextPlayer}
-								onChange={(e) =>
-									handleConfigChange("autoStartNextPlayer", e.target.checked)
-								}
-							/>
-							Auto-start Next Player
-						</label>
-					</div>
 				</div>
 			</div>
 
@@ -223,20 +168,6 @@ export function GameConfigScreen({
 									.map((card) => card.word)
 									.join(", ")}
 								{currentDeck.length > 3 && "..."}
-							</span>
-						</div>
-					)}
-					<div className={styles.summaryItem}>
-						<span className={styles.summaryLabel}>Preparation:</span>
-						<span className={styles.summaryValue}>
-							{config.enablePreparationPhase ? "Enabled" : "Disabled"}
-						</span>
-					</div>
-					{config.enablePreparationPhase && config.preparationTimeLimit > 0 && (
-						<div className={styles.summaryItem}>
-							<span className={styles.summaryLabel}>Prep Time Limit:</span>
-							<span className={styles.summaryValue}>
-								{config.preparationTimeLimit} seconds
 							</span>
 						</div>
 					)}

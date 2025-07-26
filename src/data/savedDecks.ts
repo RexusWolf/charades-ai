@@ -115,7 +115,7 @@ export function importDecks(importData: string): { success: boolean; message: st
 
         for (const importedDeck of data.decks) {
             // Validate deck structure
-            if (!importedDeck.name || !importedDeck.topic || !importedDeck.cards || !Array.isArray(importedDeck.cards)) {
+            if (!importedDeck.name || !importedDeck.cards || !Array.isArray(importedDeck.cards)) {
                 skippedCount++;
                 continue;
             }

@@ -1,15 +1,14 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { Deck } from "../../data/Decks/Deck";
 import {
 	deleteDeck,
-	exportDecks,
 	getDeckCards,
 	getDeckStats,
 	getSavedDecks,
-	importDecks,
 	renameDeck,
 } from "../../data/savedDecks";
 import type { GameCard } from "../Card/GameCard";
+import { ImportExportDialog } from "../ImportExportDialog/ImportExportDialog";
 import styles from "./SavedDecksManager.module.css";
 
 interface SavedDecksManagerProps {
@@ -26,9 +25,6 @@ export function SavedDecksManager({
 	const [editName, setEditName] = useState("");
 	const [stats] = useState(() => getDeckStats());
 	const [showImportExport, setShowImportExport] = useState(false);
-	const [importMessage, setImportMessage] = useState("");
-	const [importSuccess, setImportSuccess] = useState(false);
-	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleUseDeck = (deckId: string) => {
 		const cards = getDeckCards(deckId);
@@ -68,41 +64,8 @@ export function SavedDecksManager({
 		setEditName("");
 	};
 
-	const handleExportDecks = () => {
-		const exportData = exportDecks();
-		const blob = new Blob([exportData], { type: "application/json" });
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = `charades-decks-${new Date().toISOString().split("T")[0]}.json`;
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		URL.revokeObjectURL(url);
-	};
-
-	const handleImportDecks = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0];
-		if (!file) return;
-
-		const reader = new FileReader();
-		reader.onload = (e) => {
-			const content = e.target?.result as string;
-			const result = importDecks(content);
-
-			setImportSuccess(result.success);
-			setImportMessage(result.message);
-
-			if (result.success) {
-				setSavedDecks(getSavedDecks());
-			}
-
-			// Clear the file input
-			if (fileInputRef.current) {
-				fileInputRef.current.value = "";
-			}
-		};
-		reader.readAsText(file);
+	const handleImportSuccess = () => {
+		setSavedDecks(getSavedDecks());
 	};
 
 	return (
@@ -253,67 +216,10 @@ export function SavedDecksManager({
 
 				{/* Import/Export Dialog */}
 				{showImportExport && (
-					<div className={styles.importExportDialogOverlay}>
-						<div className={styles.importExportDialog}>
-							<div className={styles.importExportDialogHeader}>
-								<h3>📥📤 Import/Export Decks</h3>
-								<button
-									type="button"
-									className={styles.closeButton}
-									onClick={() => {
-										setShowImportExport(false);
-										setImportMessage("");
-									}}
-								>
-									×
-								</button>
-							</div>
-							<div className={styles.importExportDialogContent}>
-								<div className={styles.exportSection}>
-									<h4>📤 Export Decks</h4>
-									<p>Download all your saved decks as a JSON file.</p>
-									<button
-										type="button"
-										className={styles.exportBtn}
-										onClick={handleExportDecks}
-									>
-										📥 Export All Decks
-									</button>
-								</div>
-
-								<div className={styles.importSection}>
-									<h4>📥 Import Decks</h4>
-									<p>Import decks from a previously exported JSON file.</p>
-									<input
-										ref={fileInputRef}
-										type="file"
-										accept=".json"
-										onChange={handleImportDecks}
-										className={styles.fileInput}
-									/>
-									{importMessage && (
-										<div
-											className={`${styles.importMessage} ${importSuccess ? styles.success : styles.error}`}
-										>
-											{importMessage}
-										</div>
-									)}
-								</div>
-
-								<div className={styles.importExportTips}>
-									<h4>💡 Tips</h4>
-									<ul>
-										<li>Exported files contain all your deck data</li>
-										<li>
-											Import files should be in the same format as exports
-										</li>
-										<li>Duplicate deck names will be automatically renamed</li>
-										<li>You can share exported files with friends</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
+					<ImportExportDialog
+						onClose={() => setShowImportExport(false)}
+						onImportSuccess={handleImportSuccess}
+					/>
 				)}
 			</div>
 		</div>

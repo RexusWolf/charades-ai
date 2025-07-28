@@ -34,7 +34,7 @@ export function RoundComplete({
 				sum +
 				(initialTurnCards -
 					turn.correctCards.length -
-					turn.remainingCards.length),
+					turn.skippedCards.length),
 			0,
 		);
 
@@ -55,7 +55,7 @@ export function RoundComplete({
 		const player = getPlayerById(turn.playerId);
 		const team = getTeamById(turn.teamId);
 		const skipped =
-			initialTurnCards - turn.correctCards.length - turn.remainingCards.length;
+			initialTurnCards - turn.correctCards.length - turn.skippedCards.length;
 
 		return {
 			player,

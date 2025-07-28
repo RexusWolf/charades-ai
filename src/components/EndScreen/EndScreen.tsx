@@ -26,7 +26,7 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 				sum +
 				(initialTurnCards -
 					turn.correctCards.length -
-					turn.remainingCards.length),
+					turn.skippedCards.length),
 			0,
 		);
 
@@ -47,7 +47,7 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 		const player = getPlayerById(turn.playerId);
 		const team = getTeamById(turn.teamId);
 		const skipped =
-			initialTurnCards - turn.correctCards.length - turn.remainingCards.length;
+			initialTurnCards - turn.correctCards.length - turn.skippedCards.length;
 
 		return {
 			player,

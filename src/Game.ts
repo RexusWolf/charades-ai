@@ -18,7 +18,7 @@ export interface Team {
 export interface Turn {
     playerId: string
     teamId: string
-    remainingCards: GameCard[]
+    skippedCards: GameCard[]
     correctCards: GameCard[]
     timeLeft: number
 }
@@ -72,10 +72,18 @@ export class Game {
     }
 
     getCurrentCard(): GameCard | null {
-        if (!this.currentTurn || this.currentTurn.remainingCards.length === 0) {
+        if (!this.currentTurn) {
+            console.log("No current turn");
             return null;
         }
-        return this.currentTurn.remainingCards[0];
+        const currentRoundRemainingCards = this.getCurrentRound()?.getRemainingCards();
+        if (!currentRoundRemainingCards || currentRoundRemainingCards.length === 0) {
+            console.log("No remaining cards in round");
+            return null;
+        }
+
+        console.log(`Current card: ${currentRoundRemainingCards[0].word}, Total remaining: ${currentRoundRemainingCards.length}`);
+        return currentRoundRemainingCards[0];
     }
 
     getCurrentRound(): Round | null {
@@ -143,21 +151,24 @@ export class Game {
         this.currentTurn = {
             playerId: currentPlayer.id,
             teamId: currentPlayer.teamId,
-            remainingCards: [...currentRound.getRemainingCards()],
+            skippedCards: [],
             correctCards: [],
             timeLeft: this.config.secondsPerRound,
         };
+
+        // Ensure there are cards available for the new turn
+        if (currentRound.getRemainingCardsCount() === 0) {
+            console.warn("No cards remaining in round for new turn");
+        }
     }
 
     markCardCorrect(): void {
         const currentCard = this.getCurrentCard();
         if (!currentCard || !this.currentTurn) return;
 
-        // Move card from turn's remaining to turn's correct
-        this.currentTurn.remainingCards.shift();
         this.currentTurn.correctCards.push(currentCard);
 
-        // Also remove from round's remaining cards
+        // Remove the card from the round's remaining cards
         const currentRound = this.getCurrentRound();
         if (currentRound) {
             currentRound.removeCard(currentCard.id);
@@ -168,8 +179,13 @@ export class Game {
         const currentCard = this.getCurrentCard();
         if (!currentCard || !this.currentTurn) return;
 
-        // Remove card from turn's remaining cards (skipped cards are not tracked)
-        this.currentTurn.remainingCards.shift();
+        this.currentTurn.skippedCards.push(currentCard);
+
+        // Remove the card from the round's remaining cards
+        const currentRound = this.getCurrentRound();
+        if (currentRound) {
+            currentRound.removeCard(currentCard.id);
+        }
     }
 
     endCurrentTurn(): void {
@@ -178,12 +194,20 @@ export class Game {
         const currentRound = this.getCurrentRound();
         if (!currentRound) return;
 
-        // Move the current card to the end of the round's remaining cards if there is one
+        // Add the current card to skipped cards if there is one
         const currentCard = this.getCurrentCard();
         if (currentCard) {
-            currentRound.moveCardToEnd(currentCard.id);
+            this.currentTurn.skippedCards.push(currentCard);
+            // Remove the card from the round's remaining cards
+            currentRound.removeCard(currentCard.id);
         }
 
+        // move skipped cards to the end of the round's remaining cards
+        this.currentTurn.skippedCards.forEach(card => {
+            currentRound.pushCardToEnd(card);
+        });
+
+        // add turn to round
         currentRound.addTurn({ ...this.currentTurn });
 
         this.turnIndex++;
@@ -235,8 +259,7 @@ export class Game {
             round.getTurns().forEach(turn => {
                 if (turn.playerId === playerId) {
                     correctCards += turn.correctCards.length;
-                    // Skipped cards = cards that were in turn's remainingCards but not in correctCards
-                    skippedCards += (this.deck.length - turn.correctCards.length - turn.remainingCards.length);
+                    skippedCards += turn.skippedCards.length;
                     totalTurns++;
                 }
             });
@@ -262,7 +285,7 @@ export class Game {
             round.getTurns().forEach(turn => {
                 if (turn.teamId === teamId) {
                     correctCards += turn.correctCards.length;
-                    skippedCards += (this.deck.length - turn.correctCards.length - turn.remainingCards.length);
+                    skippedCards += turn.skippedCards.length;
                     totalTurns++;
                 }
             });
@@ -289,7 +312,7 @@ export class Game {
         this.rounds.forEach(round => {
             round.getTurns().forEach(turn => {
                 totalCorrectCards += turn.correctCards.length;
-                totalSkippedCards += (this.deck.length - turn.correctCards.length - turn.remainingCards.length);
+                totalSkippedCards += turn.skippedCards.length;
                 totalTurns++;
             });
         });

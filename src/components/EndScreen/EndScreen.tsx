@@ -12,7 +12,6 @@ interface EndScreenProps {
 export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 	// Flatten all turns from all rounds
 	const allTurns: Turn[] = rounds.flatMap((round) => round.getTurns());
-	const initialTurnCards = rounds[0]?.getRemainingCardsCount() ?? 0;
 
 	// Calculate team scores
 	const teamScores = teams.map((team) => {
@@ -22,11 +21,7 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 			0,
 		);
 		const totalSkipped = teamTurns.reduce(
-			(sum, turn) =>
-				sum +
-				(initialTurnCards -
-					turn.correctCards.length -
-					turn.skippedCards.length),
+			(sum, turn) => sum + turn.skippedCards.length,
 			0,
 		);
 
@@ -46,14 +41,12 @@ export function EndScreen({ rounds, teams, onPlayAgain }: EndScreenProps) {
 	const playerStats = allTurns.map((turn) => {
 		const player = getPlayerById(turn.playerId);
 		const team = getTeamById(turn.teamId);
-		const skipped =
-			initialTurnCards - turn.correctCards.length - turn.skippedCards.length;
 
 		return {
 			player,
 			team,
 			correct: turn.correctCards.length,
-			skipped,
+			skipped: turn.skippedCards.length,
 		};
 	});
 

@@ -54,14 +54,12 @@ export function RoundComplete({
 	const playerStats = allTurns.map((turn) => {
 		const player = getPlayerById(turn.playerId);
 		const team = getTeamById(turn.teamId);
-		const skipped =
-			initialTurnCards - turn.correctCards.length - turn.skippedCards.length;
 
 		return {
 			player,
 			team,
 			correct: turn.correctCards.length,
-			skipped,
+			skipped: turn.skippedCards.length,
 		};
 	});
 
